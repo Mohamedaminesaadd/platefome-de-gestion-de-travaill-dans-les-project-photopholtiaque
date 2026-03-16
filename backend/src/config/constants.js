@@ -1,1 +1,1 @@
-export const BD_NAME = 'my_database';
+export const BD_NAME = 'pfa1';
