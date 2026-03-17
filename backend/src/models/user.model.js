@@ -34,10 +34,9 @@ const userSchema = new Schema(
 );
 
 // Middleware avant sauvegarde pour hasher le mot de passe
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return; // pas besoin de next
   this.password = await bcrypt.hash(this.password, 10);
-  next();
 });
 
 const User = mongoose.model("User", userSchema);
