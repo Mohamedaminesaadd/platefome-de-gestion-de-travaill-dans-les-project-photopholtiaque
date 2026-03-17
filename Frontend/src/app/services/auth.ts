@@ -1,39 +1,41 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class Auth{
-
-  private apiUrl = 'http://localhost:3000/api';
+export class Auth {
+  private apiUrl = 'http://localhost:3000/api/users';
+  private tokenKey = 'jwtToken'; // clé pour stocker le token
 
   constructor(private http: HttpClient) {}
 
-  // Fonction login
-  login(credentials: { username: string, password: string }) {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials)
-      .pipe(
-        tap(res => {
-          // 🔑 Stocker le token dans localStorage
-          localStorage.setItem('token', res.token);
-        })
-      );
+  register(username: string, email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, { username, email, password });
   }
 
-  // Vérifier si connecté
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+  login(username: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, { username, password });
   }
 
-  // Logout
-  logout() {
-    localStorage.removeItem('token');
+  
+
+  saveToken(token: string) {
+    localStorage.setItem(this.tokenKey, token);
   }
 
-  // Récupérer le token
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem(this.tokenKey);
+  }
+  logout() {
+    localStorage.removeItem(this.tokenKey);
+  }
+
+  getProfile(): Observable<any> {
+    const token = this.getToken();
+    if (!token) throw new Error('No token found');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get(`${this.apiUrl}/profile`, { headers });
   }
 }

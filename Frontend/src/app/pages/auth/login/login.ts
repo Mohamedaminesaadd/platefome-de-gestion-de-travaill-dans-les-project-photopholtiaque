@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-login',
@@ -11,19 +13,27 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login.css',
 })
 export class Login {
-    loginData = {
-    username: '',
-    password: ''
-  };
+     loginData = { username: '', password: '' };
+      errorMessage = '';
 
- onSubmit(loginForm: NgForm): void {
+    constructor(private authService: Auth, private router: Router) {}
+
+  onSubmit(loginForm: NgForm) {
     if (loginForm.invalid) return;
 
-    console.log('Login attempted with:', this.loginData);
-    console.log('Username:', loginForm.value.username);
-    console.log('Password:', loginForm.value.password);
-    // Ajoutez ici votre logique d'authentification
-    // Exemple : this.authService.login(this.loginData).subscribe(...)
+    // Appel du service Auth pour login
+    this.authService.login(this.loginData.username, this.loginData.password)
+      .subscribe({
+        next: (res) => {
+          // ✅ stocker le JWT
+          this.authService.saveToken(res.token);
+          // ✅ rediriger vers profile
+          this.router.navigate(['/profile']);
+        },
+        error: (err) => {
+          this.errorMessage = err.error.message || 'Login failed';
+        }
+      });
   }
 
   isValidUsername(username: string): boolean {
