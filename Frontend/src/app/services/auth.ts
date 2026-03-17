@@ -38,4 +38,8 @@ export class Auth {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get(`${this.apiUrl}/profile`, { headers });
   }
+
+  forgotPassword(email: string) {
+  return this.http.post(`${this.apiUrl}/forget-password`, { email });
+  }
 }
