@@ -1,5 +1,4 @@
 <div class="container">
-  <!-- Image section -->
   <div class="image-section">
     <img src="https://energika.com.tn/wp-content/uploads/2022/02/bann-1-scaled.jpg" alt="Login image">
   </div>
@@ -9,59 +8,57 @@
       <h1>LOG IN</h1>
     </div>
 
-    <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
+    <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm" novalidate>
 
-      <!-- Username -->
       <div class="form-group">
         <label for="username">User name</label>
-          <input
+        <input
           type="text"
           id="username"
           name="username"
           [(ngModel)]="loginData.username"
           #username="ngModel"
           required
-          minlength="3"
-          pattern="^@[a-zA-Z0-9_]+$">
-
-        <!-- Erreur : champ vide -->
-        <div class="invalid" *ngIf="username.errors?.['required'] && username.touched">
-          Le nom d'utilisateur est requis.
-        </div>
-
-        <!-- Erreur : format invalide -->
-        <div class="invalid" *ngIf="username.errors?.['pattern'] && username.touched">
+          placeholder="@username"
+          pattern="^@[a-zA-Z0-9_]+$"> <div class="invalid-feedback" *ngIf="username.invalid && (username.dirty || username.touched)">
+          <small *ngIf="username.errors?.['required']">Le nom d'utilisateur est requis.</small>
+          <small *ngIf="username.errors?.['pattern']">L'identifiant doit commencer par @ (ex: @hajerayed).</small>
         </div>
       </div>
 
-      <!-- Password -->
       <div class="form-group">
         <label for="password">Password</label>
-          <input
+        <input
           type="password"
           id="password"
           name="password"
           [(ngModel)]="loginData.password"
           #password="ngModel"
           required
-          minlength="8">
+          minlength="8"
+          placeholder="••••••••">
 
-        <!-- Erreur : champ vide -->
-        <div class="invalid" *ngIf="password.errors?.['required'] && password.touched">
-          Le mot de passe est requis.
-        </div>
-
-        <!-- Erreur : trop court -->
-        <div class="invalid" *ngIf="password.errors?.['minlength'] && password.touched">
+        <div class="invalid-feedback" *ngIf="password.invalid && (password.dirty || password.touched)">
+          <small *ngIf="password.errors?.['required']">Le mot de passe est requis.</small>
+          <small *ngIf="password.errors?.['minlength']">Minimum 8 caractères.</small>
         </div>
       </div>
 
       <div class="forget-password">
         <a routerLink="/forget-password">Mot de passe oublié ?</a>
-        
       </div>
 
-      <button  [disabled]="loginForm.invalid" class="submit-btn">SUBMIT</button>
+      <div class="error-banner" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button 
+        type="submit" 
+        [disabled]="loginForm.invalid || isLoading" 
+        class="submit-btn">
+        <span *ngIf="!isLoading">SUBMIT</span>
+        <span *ngIf="isLoading" class="spinner">Chargement...</span>
+      </button>
 
     </form>
 
@@ -69,10 +66,10 @@
       <p>Social media</p>
       <div class="social-login">
         <div class="social-btn" (click)="onGoogleLogin()">
-          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z' fill='%234285F4'/%3E%3C/svg%3E" alt="Google">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
         </div>
         <div class="social-btn" (click)="onFacebookLogin()">
-          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12,2C6.477,2,2,6.477,2,12c0,5.013,3.693,9.153,8.505,9.876V14.65H8.031v-2.629h2.474v-1.749 c0-2.896,1.411-4.167,3.818-4.167c1.153,0,1.762,0.085,2.051,0.124v2.294h-1.642c-1.022,0-1.379,0.969-1.379,2.061v1.437h2.995 l-0.406,2.629h-2.588v7.226C18.307,21.153,22,17.013,22,12C22,6.477,17.523,2,12,2z' fill='%231877F2'/%3E%3C/svg%3E" alt="Facebook">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg" alt="Facebook">
         </div>
       </div>
     </div>
