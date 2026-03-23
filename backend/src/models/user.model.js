@@ -1,44 +1,31 @@
-import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+// user.model.js
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
-const { Schema } = mongoose;
+export const ROLES = {
+  ADMIN:           'admin',
+  DIRECTOR:        'director',
+  TECHNICIAN:      'technician',
+  PROJECT_MANAGER: 'project_manager',
+};
 
-const userSchema = new Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-      lowercase: true,
-      unique: true,
-      trim: true,
-      minlength: 3,
-      maxlength: 50,
-    },
-    password: {
-      type: String,
-      required: true,
-      minlength: 6,
-      maxlength: 50,
-    },
-    email: {
-      type: String,
-      required: true,
-      lowercase: true,
-      trim: true,
-      unique: true, // optionnel mais conseillé
-    },
+const userSchema = new mongoose.Schema({
+  username: String,
+  email: String,
+  password: String,
+  role: {
+  type: String,
+  enum:    Object.values(ROLES),
+  default: 'technician' 
   },
-  {
-    timestamps: true, // corrige le typo
-  }
-);
+  resetPasswordToken: String,
+  resetPasswordExpires: Date
+});
 
-// Middleware avant sauvegarde pour hasher le mot de passe
-userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return; // pas besoin de next
+// Middleware pour hasher password
+userSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
   this.password = await bcrypt.hash(this.password, 10);
 });
 
-const User = mongoose.model("User", userSchema);
-
-export default User;
+export default mongoose.model('User', userSchema);

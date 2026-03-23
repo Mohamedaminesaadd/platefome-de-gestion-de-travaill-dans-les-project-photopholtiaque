@@ -12,8 +12,20 @@ export const verifyToken = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
-  } catch (error) {
-    console.error("JWT verification error:", error);
-    return res.status(401).json({ message: "Invalid token" });
+  }catch (error) {
+    // Distinguer les types d'erreurs pour les logs internes
+    if (error.name === "TokenExpiredError") {
+      console.warn("⚠️  Expired token attempt");
+      return res.status(401).json({ message: "Token expired" });
+    }
+
+    if (error.name === "JsonWebTokenError") {
+      console.warn("⚠️  Invalid token attempt");
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    // Erreur inattendue → 500, pas 401
+    console.error("❌ Unexpected auth error:", error.message);
+    return res.status(500).json({ message: "Authentication error" });
   }
 };
