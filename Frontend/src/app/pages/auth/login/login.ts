@@ -144,9 +144,8 @@ onSubmit(loginForm: NgForm) {
         case 'technician':
           this.router.navigate(['/technician-profil']); // Attention à l'orthographe ici
           break;
-        case 'chefsproject':
         case 'project_manager':
-          this.router.navigate(['/manager-profil']);
+          this.router.navigate(['/projectManager-profil']); 
           break;
         default:
           this.router.navigate(['/']);

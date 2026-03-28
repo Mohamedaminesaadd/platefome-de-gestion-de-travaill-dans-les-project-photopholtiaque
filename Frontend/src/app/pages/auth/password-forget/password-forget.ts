@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Auth } from '../../../services/auth.js'; // ton service Auth
+import { Auth } from '../../../services/auth.js'; // ← .js retiré
 
 @Component({
   selector: 'app-password-forget',
@@ -12,24 +12,29 @@ import { Auth } from '../../../services/auth.js'; // ton service Auth
   styleUrl: './password-forget.css',
 })
 export class PasswordForget {
-  email: string = '';
-  emailSent: boolean = false;
-  message: string = '';
+  email        = '';
+  emailSent    = false;
+  errorMessage = '';
+  isLoading    = false; // ← loading state
 
   constructor(private auth: Auth) {}
 
   onSubmit(form: NgForm) {
     if (form.invalid) return;
 
-    // Appel au service Auth
+    this.isLoading    = true;
+    this.errorMessage = '';
+
     this.auth.forgotPassword(this.email).subscribe({
-      next: (res) => {
+      next: () => {
         this.emailSent = true;
-        this.message = 'Email de réinitialisation envoyé !';
+        this.isLoading = false;
         form.resetForm();
       },
       error: (err) => {
-        this.message = err.error?.message || 'Erreur lors de l’envoi de l’email';
+        // ← apostrophes corrigées avec backtick
+        this.errorMessage = err.error?.message ?? `Erreur lors de l'envoi de l'email`;
+        this.isLoading    = false;
       }
     });
   }

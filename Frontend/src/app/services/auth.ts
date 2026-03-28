@@ -48,6 +48,10 @@ export class Auth {
   return this.http.post(`${this.apiUrl}/forget-password`, { email });
   }
 
+  resetPassword(token: string, newPassword: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
+}
+
   // 🔥 Méthode pour récupérer le rôle depuis le JWT
   getUserRole(): string | null {
     const token = this.getToken();

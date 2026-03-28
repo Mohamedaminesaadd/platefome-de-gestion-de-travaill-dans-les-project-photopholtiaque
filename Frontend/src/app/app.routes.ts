@@ -7,6 +7,7 @@ import { roleGuard } from './guards/role-guard';
 import { Profileadmin } from './pages/admin/profileadmin/profileadmin';
 import { Profildirector } from './pages/director/profildirector/profildirector';
 import { Profiltechnician } from './pages/technincian/profiltechnician/profiltechnician';
+import { ProjectManager } from './pages/project-manager/project-manager';
 
 export const routes: Routes = [
   // Routes publiques
@@ -33,6 +34,12 @@ export const routes: Routes = [
     component: Profiltechnician,
     canActivate: [authGuard, roleGuard],
     data: { role: 'technician' }
+  },
+  {
+    path: 'projectManager-profil', // <--- ORTHOGRAPHE FIXÉE
+    component: ProjectManager,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'project_manager' }
   },
 
   // 404
