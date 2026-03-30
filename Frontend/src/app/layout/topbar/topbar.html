@@ -1,0 +1,34 @@
+<header class="topbar">
+
+
+
+  <div class="topbar-greeting">
+    <div class="greeting-name">Hello, Alex Rivera 👋</div>
+    <div class="greeting-date">{{ today }}</div>
+  </div>
+
+  <div class="search-bar">
+    <mat-icon>search</mat-icon>
+    <input type="text" placeholder="Search projects…" />
+  </div>
+
+  <button
+    class="notif-btn"
+    matRipple
+    matTooltip="Notifications"
+    [matBadge]="notifCount"
+    matBadgeColor="warn"
+    [matBadgeHidden]="notifCount === 0">
+
+    <mat-icon>notifications</mat-icon>
+  </button>
+
+  <div class="user-chip" matRipple>
+    <div class="user-avatar">AR</div>
+    <div>
+      <div class="user-info-name">Alex Rivera</div>
+      <div class="user-info-role">Project Manager</div>
+    </div>
+  </div>
+
+</header>

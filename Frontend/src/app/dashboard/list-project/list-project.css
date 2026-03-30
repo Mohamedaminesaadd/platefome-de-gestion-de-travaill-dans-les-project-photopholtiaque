@@ -1,0 +1,267 @@
+/* Section Header */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0F172A;
+  letter-spacing: -0.2px;
+}
+
+/* Primary Button */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 18px;
+  height: 38px;
+  border-radius: 8px;
+  background: #2563EB;
+  color: #fff;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.btn-primary:hover {
+  background: #1D4ED8;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-primary mat-icon {
+  font-size: 17px;
+  width: 17px;
+  height: 17px;
+}
+
+/* Projects Grid */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+/* Project Card */
+.proj-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+  animation: fadeUp 0.4s ease both;
+}
+
+.proj-card:nth-child(1) { animation-delay: 0.20s; }
+.proj-card:nth-child(2) { animation-delay: 0.25s; }
+.proj-card:nth-child(3) { animation-delay: 0.30s; }
+.proj-card:nth-child(4) { animation-delay: 0.35s; }
+
+.proj-card:hover {
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+  border-color: #DBEAFE;
+  transform: translateY(-2px);
+}
+
+/* Card Header */
+.proj-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.proj-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0F172A;
+  letter-spacing: -0.2px;
+}
+
+.proj-client {
+  font-size: 12px;
+  color: #64748B;
+  margin-top: 3px;
+}
+
+/* Status Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.badge-inprogress {
+  background: #DBEAFE;
+  color: #1D4ED8;
+}
+
+.badge-delayed {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.badge-completed {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+/* Progress Block */
+.progress-block {
+  margin-bottom: 14px;
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.progress-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748B;
+}
+
+.progress-pct {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.progress-track {
+  height: 7px;
+  background: #F1F5F9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fill-blue {
+  background: linear-gradient(90deg, #2563EB, #60A5FA);
+}
+
+.fill-sky {
+  background: linear-gradient(90deg, #0EA5E9, #38BDF8);
+}
+
+.fill-orange {
+  background: linear-gradient(90deg, #F59E0B, #FCD34D);
+}
+
+.fill-green {
+  background: linear-gradient(90deg, #10B981, #34D399);
+}
+
+/* Project Footer */
+.proj-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid #F1F5F9;
+}
+
+.proj-time {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #64748B;
+}
+
+.proj-time mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+.proj-time.overdue {
+  color: #EF4444;
+}
+
+.proj-time.overdue mat-icon {
+  color: #EF4444;
+}
+
+.proj-chevron {
+  font-size: 18px;
+  color: #94A3B8;
+}
+
+/* Animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .proj-card {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .proj-name {
+    font-size: 14px;
+  }
+
+  .proj-client {
+    font-size: 11px;
+  }
+
+  .badge {
+    font-size: 9px;
+    padding: 2px 8px;
+  }
+
+  .proj-time {
+    font-size: 11px;
+  }
+}

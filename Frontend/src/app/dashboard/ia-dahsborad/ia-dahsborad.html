@@ -1,0 +1,46 @@
+<div class="card chart-card">
+  <div class="card-top-bar bar-purple"></div>
+  <div class="card-inner">
+
+    <div class="chart-card-header">
+      <div>
+        <div class="card-eyebrow">Historical Analysis</div>
+        <h2 class="card-title">Duration Comparison</h2>
+        <p class="chart-sub">Predicted vs. Actual vs. AI-optimized</p>
+      </div>
+      <!-- Legend -->
+      <div class="chart-legend">
+        <div class="legend-item">
+          <span class="legend-dot" style="background:#7C3AED"></span> Predicted
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot" style="background:#F59E0B"></span> Actual
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot" style="background:#10B981"></span> Optimized
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <canvas #durationChart></canvas>
+    </div>
+
+    <!-- KPI row -->
+    <div class="kpi-row">
+      <div class="kpi-item">
+        <div class="kpi-value purple">±3.2d</div>
+        <div class="kpi-label">Avg. Prediction Error</div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-value amber">+7%</div>
+        <div class="kpi-label">Actual vs Predicted</div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-value green">−16%</div>
+        <div class="kpi-label">AI Savings Potential</div>
+      </div>
+    </div>
+
+  </div>
+</div>

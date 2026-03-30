@@ -6,7 +6,7 @@ import usersRouter from './router/user.router.js';
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:44645', // autorise ton frontend
+  origin: 'http://localhost:4200', // autorise ton frontend
   credentials: true,               // si tu veux envoyer cookies ou auth
 }));
 

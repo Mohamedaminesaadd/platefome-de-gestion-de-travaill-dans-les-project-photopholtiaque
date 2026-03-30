@@ -1,0 +1,62 @@
+
+      <!-- ── MY PROJECTS ──────────────────────────────────────── -->
+      <section>
+        <div class="section-header">
+          <h2 class="section-title">My Projects</h2>
+          <button class="btn-primary" matRipple (click)="onNewProject()">
+            <mat-icon>add</mat-icon>
+            New Project
+          </button>
+        </div>
+
+        <div class="projects-grid">
+          <div
+            class="proj-card"
+            matRipple
+            *ngFor="let p of project; trackBy: trackById"
+            (click)="onOpenProject(p)"
+          >
+            <div class="proj-card-header">
+              <div>
+                <div class="proj-name">{{ p.name }}</div>
+                <div class="proj-client">{{ p.client }}</div>
+              </div>
+              <span
+                class="badge"
+                [class.badge-inprogress]="p.status === 'IN_PROGRESS'"
+                [class.badge-delayed]="p.status === 'DELAYED'"
+                [class.badge-completed]="p.status === 'COMPLETED'"
+              >
+                {{ statusLabel(p.status) }}
+              </span>
+            </div>
+
+            <div class="progress-block">
+              <div class="progress-meta">
+                <span class="progress-label">Progress</span>
+                <span class="progress-pct">{{ p.progress }}%</span>
+              </div>
+              <div class="progress-track">
+                <div
+                  class="progress-fill"
+                  [class.fill-blue]="p.status === 'IN_PROGRESS' && p.progress > 50"
+                  [class.fill-sky]="p.status === 'IN_PROGRESS' && p.progress <= 50"
+                  [class.fill-orange]="p.status === 'DELAYED'"
+                  [class.fill-green]="p.status === 'COMPLETED'"
+                  [style.width.%]="p.progress"
+                ></div>
+              </div>
+            </div>
+
+            <div class="proj-footer">
+              <div class="proj-time" [class.overdue]="p.daysOverdue">
+                <mat-icon>{{ p.daysOverdue ? 'error_outline' : 'schedule' }}</mat-icon>
+                <span *ngIf="p.daysRemaining">{{ p.daysRemaining }} days remaining</span>
+                <span *ngIf="p.daysOverdue">{{ p.daysOverdue }} days overdue</span>
+                <span *ngIf="p.dueToday">Due Today</span>
+              </div>
+              <mat-icon class="proj-chevron">chevron_right</mat-icon>
+            </div>
+          </div>
+        </div>
+      </section>

@@ -1,0 +1,263 @@
+:host {
+  display: block;
+  height: 100%; /* Ou 100vh selon ton layout */
+}
+
+/* ══════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════ */
+
+.sidebar {
+  height: 100%;
+  width: 240px;
+  background: var(--surface, #fff);
+  border-right: 1px solid var(--border, #E2E8F0);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+/*tu ne pas besion de ecrire le code totale car il herite de sidbar*/
+.sidebar.collapsed {
+  width: 68px;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px;
+  height: var(--header-h, 64px);
+  border-bottom: 1px solid var(--border-light, #F1F5F9);
+}
+
+.logo-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--primary, #2563EB);
+  display: grid;
+  place-items: center;
+}
+.sidebar-logo button{
+  display: block;
+  background: transparent;
+  background: #2563EB;
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+
+  
+}
+
+.logo-icon mat-icon :hover{
+  font-size: 18px;
+  color: #f1f4ff;
+  
+}
+
+/* Une seule fois, tous les textes ensemble */
+.logo-text,
+.nav-label,
+.nav-item span,
+.logout-btn span {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* état collapsed */
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .nav-item span {
+  opacity: 0;
+  transform: translateX(-10px);
+  pointer-events: none;
+}
+/*centre les icone */
+.sidebar.collapsed .nav-item {
+  justify-content: center;
+}
+
+
+.logo-text,
+.nav-item span,
+.alert-header span,
+.alert-body,
+.logout-btn span {
+  transition: 
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .nav-item span,
+.sidebar.collapsed .alert-header span,
+.sidebar.collapsed .alert-body,
+.sidebar.collapsed .logout-btn span {
+  opacity: 0;
+  transform: translateX(-10px);
+  pointer-events: none;
+
+  transition-delay: 0s;
+}
+
+.sidebar:not(.collapsed) .logo-text,
+.sidebar:not(.collapsed) .nav-item span,
+.sidebar:not(.collapsed) .alert-header span,
+.sidebar:not(.collapsed) .alert-body,
+.sidebar:not(.collapsed) .logout-btn span {
+  opacity: 1;
+  transform: translateX(0);
+
+  transition-delay: 0.15s; /* 🔥 clé magique */
+}
+/* NAV */
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  color: var(--text-m, #94A3B8);
+  text-transform: uppercase;
+  padding: 0 8px 8px;
+  margin-top: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--r-sm, 8px);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-s, #64748B);
+  transition: var(--transition, all .2s ease);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.nav-item mat-icon {
+  font-size: 19px;
+  min-width: 19px;/*---corrige le probleme de icone comprimaient*/
+}
+/*Quand le conteneur rétrécit, flexbox essaie de compresser tous les enfants. min-width dit à l'icône "tu ne rétrécis pas en dessous de cette valeur".*/
+
+.nav-item:hover {
+  background: var(--bg, #F1F5F9);
+  color: var(--text-h, #0F172A);
+}
+
+.nav-item.active {
+  background: var(--primary-light, #EFF6FF);
+  color: var(--primary, #2563EB);
+  font-weight: 600;
+}
+
+.nav-item.active mat-icon {
+  color: var(--primary, #2563EB);
+}
+
+/* ALERT */
+.sidebar-alert {
+  max-height: 120px;
+  opacity: 1;
+  margin: 12px;
+  padding: 12px;
+  border-radius: var(--r-sm, 8px);
+  background: var(--warning-bg, #FFFBEB);
+  border: 1px solid #FDE68A;
+  transition: 
+    max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity    0.25s ease,
+    padding    0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    margin     0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Pourquoi max-height et pas height ? En CSS, on ne peut pas animer height: auto. La solution universelle est d'animer max-height entre une valeur connue et 0.*/
+.sidebar.collapsed .sidebar-alert {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 12px;
+  margin-bottom: 0;
+}
+
+.alert-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.alert-header mat-icon {
+  font-size: 16px;
+  color: var(--warning, #F59E0B);
+}
+
+.alert-header span {
+  font-size: 12px;
+  font-weight: 700;
+  color: #92400E;
+}
+
+.alert-body {
+  font-size: 11.5px;
+  color: #78350F;
+  line-height: 1.5;
+}
+
+/* LOGOUT */
+.sidebar-logout {
+  padding: 12px;
+  border-top: 1px solid var(--border-light, #F1F5F9);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--r-sm, 8px);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-s, #64748B);
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  transition: var(--transition, all .2s ease);
+}
+
+.logout-btn:hover {
+  background: var(--danger-bg, #FEF2F2);
+  color: var(--danger, #EF4444);
+}
+
+.logout-btn mat-icon {
+  font-size: 19px;
+}
+
+/* À l'ouverture : les textes attendent que la sidebar s'élargisse */
+.sidebar:not(.collapsed) .logo-text,
+.sidebar:not(.collapsed) .nav-item span {
+  transition-delay: 0.18s;
+}
+
+/* À la fermeture : les textes disparaissent immédiatement 
+Ajout — transition-delay pour l'ordre d'apparition*/
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .nav-item span {
+  transition-delay: 0s;
+}
+/*L'effet obtenu : La sidebar s'élargit d'abord → puis les textes apparaissent en glissant. Sans ça, les textes apparaissent trop tôt et débordent pendant l'animation.*/

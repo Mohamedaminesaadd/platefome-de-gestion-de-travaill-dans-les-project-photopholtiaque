@@ -1,3 +1,70 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+/* src/styles.css */
+*{
+  margin: 0;
+  padding: 0;
+}
+:root {
+  /* ===== DIMENSIONS ===== */
+  --sidebar-w: 240px;
+  --header-h: 64px;
+  
+  /* ===== COULEURS DE BASE ===== */
+  --surface: #fff;
+  --bg: #F1F5F9;
+  --bg-light: #f8f9fc;
+  
+  /* ===== COULEURS DES BORDURES ===== */
+  --border: #E2E8F0;
+  --border-light: #F1F5F9;
+  
+  /* ===== COULEURS DE TEXTE ===== */
+  --text-h: #0F172A;
+  --text-dark: #2d3748;
+  --text-b: #334155;
+  --text-s: #64748B;
+  --text-m: #94A3B8;
+  --text-muted: #718096;
+  
+  /* ===== COULEURS PRIMAIRES ===== */
+  --primary: #2563EB;
+  --primary-blue: #0061f2;
+  --primary-light: #EFF6FF;
+  
+  /* ===== COULEURS DE STATUT ===== */
+  --status-progress: #0061f2;
+  --status-delayed: #ed8936;
+  --status-completed: #48bb78;
+  
+  /* ===== COULEURS D'ALERTE ===== */
+  --warning: #F59E0B;
+  --warning-bg: #FFFBEB;
+  --danger: #EF4444;
+  --danger-bg: #FEF2F2;
+  
+  /* ===== COULEURS SPÉCIFIQUES ===== */
+  --success: #10B981;
+  --success-bg: #ECFDF5;
+  --info: #3B82F6;
+  --info-bg: #DBEAFE;
+  
+  /* ===== BORDURES ET TRANSITIONS ===== */
+  --r-sm: 8px;
+  --r: 12px;
+  --r-xs: 6px;
+  --transition: all .2s ease;
+  --sh-sm: 0 1px 3px rgba(15,23,42,.06);
+  
+  /* ===== POLICES ===== */
+  --font-family: 'DM Sans', sans-serif;
+}
+
+body {
+  margin-top: 0 px;
+  
+  font-family: 'Inter', sans-serif; /* Assure-toi d'importer Inter dans ton index.html */
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+}

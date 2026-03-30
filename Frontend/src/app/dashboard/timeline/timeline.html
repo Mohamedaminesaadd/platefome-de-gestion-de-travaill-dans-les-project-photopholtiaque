@@ -1,0 +1,43 @@
+<div class="timeline-card">
+  <div class="card-header">
+    <span class="card-title">Timeline Preview</span>
+    <div class="tab-group">
+      <button
+        class="tab"
+        [class.active]="activePeriod === 'week'"
+        (click)="switchPeriod('week')"
+      >
+        Week
+      </button>
+      <button
+        class="tab"
+        [class.active]="activePeriod === 'month'"
+        (click)="switchPeriod('month')"
+      >
+        Month
+      </button>
+      <button
+        class="tab"
+        [class.active]="activePeriod === 'quarter'"
+        (click)="switchPeriod('quarter')"
+      >
+        Quarter
+      </button>
+    </div>
+  </div>
+
+  <div class="chart-wrap">
+    <canvas #timelineCanvas></canvas>
+  </div>
+
+  <div class="chart-legend">
+    <div class="legend-item">
+      <span class="legend-dot" style="background: #2563EB"></span>
+      Target Completed
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background: #CBD5E1"></span>
+      Estimated Completion
+    </div>
+  </div>
+</div>

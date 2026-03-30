@@ -1,0 +1,29 @@
+/* ── LAYOUT SHELL ─────────────────────────── */
+.shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+}
+.main {
+  flex: 1;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+/*je le creer pour ajute les deux dash */
+.dashia {
+  display: flex;
+  gap: 20px;          /* Espace entre les deux cartes */
+  align-items:normal /* Force les enfants à avoir la même hauteur */
+
+}
+app-timeline {
+  flex: 3; /* Plus large */
+}
+app-ia-dahsborad {
+  margin-right: 5px;
+}

@@ -1,0 +1,121 @@
+/* ── BASE CARD STYLES ─────────────────────────────── */
+.card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 4px rgba(15,23,42,.05);
+  overflow: hidden;
+}
+
+.card-top-bar {
+  height: 3px;
+  background: linear-gradient(90deg, #10B981, #34D399);
+}
+.bar-purple {
+  background: linear-gradient(90deg, #7C3AED, #A78BFA);
+}
+
+.card-inner {
+  padding: 22px 24px;
+}
+
+.card-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #94A3B8;
+  margin-bottom: 4px;
+}
+
+.card-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0F172A;
+  letter-spacing: -.3px;
+  margin: 0 0 4px;
+}
+
+/* ── DURATION COMPARISON SPECIFIC ─────────────────── */
+.chart-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.chart-sub {
+  font-size: 12px;
+  color: #94A3B8;
+  margin: 2px 0 0;
+}
+
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #64748B;
+}
+
+.legend-dot {
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.chart-wrap {
+  position: relative;
+  height: 180px;
+  margin-bottom: 20px;
+}
+
+.chart-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* KPI row */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #F1F5F9;
+}
+
+.kpi-item {
+  text-align: center;
+}
+
+.kpi-value {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.kpi-value.purple {
+  color: #7C3AED;
+}
+.kpi-value.amber {
+  color: #D97706;
+}
+.kpi-value.green {
+  color: #10B981;
+}
+
+.kpi-label {
+  font-size: 11px;
+  color: #94A3B8;
+  font-weight: 500;
+}

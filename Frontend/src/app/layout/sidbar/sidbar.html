@@ -1,0 +1,62 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed">
+
+  <div class="sidebar-logo">
+    <button (click)="toggleSidebar()">
+      <mat-icon>solar_power</mat-icon>
+    </button>
+    @if(!isCollapsed){<span class="logo-text">PV Manager</span>}
+  </div>
+
+  <nav class="sidebar-nav">
+
+
+
+    <a class="nav-item active" matRipple>
+      <mat-icon>dashboard</mat-icon>
+      @if (!isCollapsed) { <span>Dashboard</span> }
+    </a>
+
+    <a class="nav-item" matRipple>
+      <mat-icon>bar_chart</mat-icon>
+      @if (!isCollapsed) { <span>Projects</span> }
+    </a>
+
+    <a class="nav-item" matRipple>
+      <mat-icon>calendar_month</mat-icon>
+      @if (!isCollapsed) { <span>Schedule</span> }
+    </a>
+
+    <a class="nav-item" matRipple>
+      <mat-icon>group</mat-icon>
+      @if (!isCollapsed) { <span>Team</span> }
+    </a>
+
+    <a class="nav-item" matRipple>
+      <mat-icon>settings</mat-icon>
+      @if (!isCollapsed) { <span>Settings</span> }
+    </a>
+
+  </nav>
+
+   <div class="sidebar-alert">
+    <div class="alert-header">
+      <mat-icon>warning_amber</mat-icon>
+      @if (!isCollapsed) { <span>Alerts</span> }
+      
+      
+    </div>
+    @if (!isCollapsed) { <p class="alert-body">
+      2 installations require urgent site review due to weather.
+    </p> }
+    
+  </div>
+
+  <div class="sidebar-logout">
+    <button class="logout-btn" matRipple>
+      <mat-icon>logout</mat-icon>
+      @if (!isCollapsed) { <span>Logout</span> }
+      
+    </button>
+  </div>
+
+</aside>
