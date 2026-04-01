@@ -1,0 +1,57 @@
+<div class="detail-dialog">
+
+  <!-- Header -->
+  <div mat-dialog-title class="detail-header">
+    <div class="detail-title-block">
+      <h2>{{ data.name }}</h2>
+      <span class="client-name">{{ data.client }}</span>
+    </div>
+    <button mat-icon-button (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <mat-dialog-content class="detail-content">
+
+    <!-- Badge statut -->
+    <div class="detail-row">
+      <mat-icon>flag</mat-icon>
+      <span>Status :</span>
+      <span class="badge"
+        [class.badge-inprogress]="data.status === 'IN_PROGRESS'"
+        [class.badge-delayed]="data.status === 'DELAYED'"
+        [class.badge-completed]="data.status === 'COMPLETED'">
+        {{ statusLabel(data.status) }}
+      </span>
+    </div>
+
+    <!-- Progress -->
+    <div class="detail-progress-block">
+      <div class="progress-meta">
+        <span>Progress</span>
+        <strong>{{ data.progress }}%</strong>
+      </div>
+      <mat-progress-bar
+        [value]="data.progress"
+        [color]="data.status === 'DELAYED' ? 'warn' : 'primary'">
+      </mat-progress-bar>
+    </div>
+
+    <!-- Délai -->
+    <div class="detail-row" [class.overdue]="data.daysOverdue">
+      <mat-icon>{{ data.daysOverdue ? 'error_outline' : 'schedule' }}</mat-icon>
+      <span *ngIf="data.daysRemaining">{{ data.daysRemaining }} days remaining</span>
+      <span *ngIf="data.daysOverdue">{{ data.daysOverdue }} days overdue</span>
+      <span *ngIf="data.dueToday">Due Today</span>
+    </div>
+
+  </mat-dialog-content>
+
+  <!-- Actions -->
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button (click)="close()">Close</button>
+    <button mat-flat-button color="primary">Edit Project</button>
+  </mat-dialog-actions>
+
+</div>

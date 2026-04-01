@@ -1,0 +1,288 @@
+/* ============================================ */
+/* DETAIL DIALOG - Styles unifiés avec project-list */
+/* ============================================ */
+
+.detail-dialog {
+  min-width: 420px;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  animation: fadeUp 0.3s ease;
+}
+
+/* Header - aligné avec les cartes projets */
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 24px 16px 24px;
+  border-bottom: 1px solid #F1F5F9;
+  background: #ffffff;
+}
+
+.detail-title-block {
+  flex: 1;
+}
+
+.detail-title-block h2 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F172A;
+  letter-spacing: -0.2px;
+}
+
+.client-name {
+  font-size: 13px;
+  color: #64748B;
+  font-weight: 500;
+  margin-top: 2px;
+  display: inline-block;
+}
+
+/* Bouton close - style épuré */
+.detail-header button {
+  color: #94A3B8;
+  transition: all 0.2s ease;
+}
+
+.detail-header button:hover {
+  color: #475569;
+  background: #F8FAFC;
+}
+
+/* Content */
+.detail-content {
+  padding: 24px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: #ffffff;
+}
+
+/* Lignes d'information - style uniforme */
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #334155;
+  padding: 8px 12px;
+  background: #F8FAFC;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.detail-row mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #64748B;
+}
+
+.detail-row span:first-of-type {
+  font-weight: 500;
+  color: #475569;
+  min-width: 48px;
+}
+
+.detail-row.overdue {
+  background: #FEF2F2;
+  color: #DC2626;
+}
+
+.detail-row.overdue mat-icon {
+  color: #DC2626;
+}
+
+/* Badges - réutilisation exacte des styles project-list */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  margin-left: auto;
+}
+
+.badge-inprogress {
+  background: #DBEAFE;
+  color: #1D4ED8;
+}
+
+.badge-delayed {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.badge-completed {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+/* Progress Block - aligné avec project-list */
+.detail-progress-block {
+  background: #F8FAFC;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.progress-meta span {
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748B;
+}
+
+.progress-meta strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+/* Personnalisation de la barre de progression Angular Material */
+::ng-deep .detail-progress-block .mat-progress-bar {
+  height: 8px !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+::ng-deep .detail-progress-block .mat-progress-bar-fill::after {
+  background: linear-gradient(90deg, #2563EB, #60A5FA) !important;
+  border-radius: 8px;
+}
+
+::ng-deep .detail-progress-block .mat-progress-bar.mat-warn .mat-progress-bar-fill::after {
+  background: linear-gradient(90deg, #F59E0B, #FCD34D) !important;
+}
+
+/* Actions du dialogue */
+mat-dialog-actions {
+  padding: 16px 24px 24px 24px !important;
+  gap: 12px;
+  border-top: 1px solid #F1F5F9;
+  background: #ffffff;
+}
+
+/* Boutons - réutilisation des styles btn-primary */
+mat-dialog-actions button[mat-stroked-button] {
+  padding: 0 20px;
+  height: 38px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  border-color: #E2E8F0;
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+mat-dialog-actions button[mat-stroked-button]:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+}
+
+mat-dialog-actions button[mat-flat-button][color="primary"] {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 24px;
+  height: 38px;
+  border-radius: 8px;
+  background: #2563EB;
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+mat-dialog-actions button[mat-flat-button][color="primary"]:hover {
+  background: #1D4ED8;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+
+/* Animation - identique à project-list */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .detail-dialog {
+    min-width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+    margin: 16px;
+  }
+
+  .detail-header {
+    padding: 16px 20px 12px 20px;
+  }
+
+  .detail-title-block h2 {
+    font-size: 16px;
+  }
+
+  .client-name {
+    font-size: 12px;
+  }
+
+  .detail-content {
+    padding: 20px !important;
+    gap: 16px;
+  }
+
+  .detail-row {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .detail-progress-block {
+    padding: 12px 14px;
+  }
+
+  mat-dialog-actions {
+    padding: 12px 20px 20px 20px !important;
+  }
+
+  mat-dialog-actions button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .badge {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
+
+  .detail-row {
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    margin-left: 0;
+    margin-top: 4px;
+    width: fit-content;
+  }
+}

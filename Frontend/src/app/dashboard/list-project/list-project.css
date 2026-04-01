@@ -1,14 +1,9 @@
 /* Section Header */
-
-
-
-
 .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 14px;
-  margin-top: 14px;
 }
 
 .section-title {
@@ -269,4 +264,101 @@
   .proj-time {
     font-size: 11px;
   }
+}
+
+
+/* ── SEARCH BAR ─────────────────────────────────────────── */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 8px 14px;
+  margin-bottom: 18px;
+  transition: border-color 0.2s ease;
+}
+
+.search-bar:focus-within {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+.search-icon {
+  color: #94A3B8;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #334155;
+  background: transparent;
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.search-input::placeholder {
+  color: #94A3B8;
+}
+
+/* ── ACTIONS ────────────────────────────────────────────── */
+.proj-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.action-btn mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+/* View */
+.view-btn  { color: #2563EB; }
+.view-btn:hover  { background: #DBEAFE; }
+
+/* Edit */
+.edit-btn  { color: #0EA5E9; }
+.edit-btn:hover  { background: #E0F2FE; }
+
+/* Delete */
+.delete-btn { color: #EF4444; }
+.delete-btn:hover { background: #FEE2E2; }
+
+/* ── NO DATA ────────────────────────────────────────────── */
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 0;
+  gap: 10px;
+  color: #94A3B8;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.no-data mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
 }

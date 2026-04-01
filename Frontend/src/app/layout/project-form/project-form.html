@@ -1,0 +1,182 @@
+<div class="form-dialog">
+
+  <!-- ── HEADER ──────────────────────────────────────────── -->
+  <div class="form-header" mat-dialog-title>
+    <div class="form-title-block">
+      <div class="form-title-icon">
+        <mat-icon>{{ isEditMode ? 'edit' : 'add_circle' }}</mat-icon>
+      </div>
+      <div>
+        <h2>{{ isEditMode ? 'Modifier le projet' : 'Nouveau projet' }}</h2>
+        <p class="form-subtitle">
+          {{ isEditMode ? 'Modifiez les informations du projet' : 'Remplissez les informations du nouveau projet' }}
+        </p>
+      </div>
+    </div>
+    <button class="close-btn" (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- ── CONTENT ─────────────────────────────────────────── -->
+  <mat-dialog-content class="form-content">
+    <form [formGroup]="form" autocomplete="off">
+
+      <!-- Nom du projet -->
+      <div class="field-group">
+        <label class="field-label">
+          <mat-icon>business_center</mat-icon>
+          Nom du projet <span class="required">*</span>
+        </label>
+        <div class="input-wrapper" [class.has-error]="isInvalid('name')">
+          <input
+            class="field-input"
+            formControlName="name"
+            placeholder="Ex: Solar Farm West Side"
+          />
+        </div>
+        <span class="error-msg" *ngIf="isInvalid('name')">
+          <mat-icon>error</mat-icon>{{ getError('name') }}
+        </span>
+      </div>
+
+      <!-- Client -->
+      <div class="field-group">
+        <label class="field-label">
+          <mat-icon>person</mat-icon>
+          Client <span class="required">*</span>
+        </label>
+        <div class="input-wrapper" [class.has-error]="isInvalid('client')">
+          <input
+            class="field-input"
+            formControlName="client"
+            placeholder="Ex: Green Energy Co"
+          />
+        </div>
+        <span class="error-msg" *ngIf="isInvalid('client')">
+          <mat-icon>error</mat-icon>{{ getError('client') }}
+        </span>
+      </div>
+
+      <!-- Statut + Progression -->
+      <div class="row-2col">
+
+        <!-- Statut -->
+        <div class="field-group">
+          <label class="field-label">
+            <mat-icon>flag</mat-icon>
+            Statut <span class="required">*</span>
+          </label>
+          <div class="select-wrapper" [class.has-error]="isInvalid('status')">
+            <select class="field-select" formControlName="status">
+              <option *ngFor="let s of statusOptions" [value]="s.value">
+                {{ s.label }}
+              </option>
+            </select>
+            <mat-icon class="select-chevron">expand_more</mat-icon>
+          </div>
+          <span class="error-msg" *ngIf="isInvalid('status')">
+            <mat-icon>error</mat-icon>{{ getError('status') }}
+          </span>
+        </div>
+
+        <!-- Progression -->
+        <div class="field-group">
+          <label class="field-label">
+            <mat-icon>trending_up</mat-icon>
+            Progression (%) <span class="required">*</span>
+          </label>
+          <div class="input-wrapper" [class.has-error]="isInvalid('progress')">
+            <input
+              class="field-input"
+              type="number" min="0" max="100"
+              formControlName="progress"
+              placeholder="0 – 100"
+            />
+          </div>
+          <span class="error-msg" *ngIf="isInvalid('progress')">
+            <mat-icon>error</mat-icon>{{ getError('progress') }}
+          </span>
+          <!-- Mini progress bar live -->
+          <div class="mini-progress-track" *ngIf="!isInvalid('progress')">
+            <div
+              class="mini-progress-fill"
+              [style.width.%]="form.get('progress')?.value"
+            ></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Jours restants + Jours de retard -->
+      <div class="row-2col">
+
+        <div class="field-group">
+          <label class="field-label">
+            <mat-icon>schedule</mat-icon>
+            Jours restants
+          </label>
+          <div class="input-wrapper" [class.has-error]="isInvalid('daysRemaining')">
+            <input
+              class="field-input"
+              type="number" min="0"
+              formControlName="daysRemaining"
+              placeholder="Ex: 14"
+            />
+          </div>
+          <span class="error-msg" *ngIf="isInvalid('daysRemaining')">
+            <mat-icon>error</mat-icon>{{ getError('daysRemaining') }}
+          </span>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">
+            <mat-icon>error_outline</mat-icon>
+            Jours de retard
+          </label>
+          <div class="input-wrapper" [class.has-error]="isInvalid('daysOverdue')">
+            <input
+              class="field-input"
+              type="number" min="0"
+              formControlName="daysOverdue"
+              placeholder="Ex: 3"
+            />
+          </div>
+          <span class="error-msg" *ngIf="isInvalid('daysOverdue')">
+            <mat-icon>error</mat-icon>{{ getError('daysOverdue') }}
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Due Today toggle -->
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <mat-icon>today</mat-icon>
+          <div>
+            <span class="toggle-title">À rendre aujourd'hui</span>
+            <span class="toggle-desc">Marquer ce projet comme dû aujourd'hui</span>
+          </div>
+        </div>
+        <div
+          class="toggle-switch"
+          [class.active]="form.get('dueToday')?.value"
+          (click)="form.get('dueToday')?.setValue(!form.get('dueToday')?.value)"
+        >
+          <div class="toggle-thumb"></div>
+        </div>
+      </div>
+
+    </form>
+  </mat-dialog-content>
+
+  <!-- ── ACTIONS ─────────────────────────────────────────── -->
+  <mat-dialog-actions align="end">
+    <button class="btn-cancel" (click)="onCancel()">Annuler</button>
+    <button class="btn-submit" (click)="onSubmit()">
+      <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+      {{ isEditMode ? 'Enregistrer' : 'Créer le projet' }}
+    </button>
+  </mat-dialog-actions>
+
+</div>
