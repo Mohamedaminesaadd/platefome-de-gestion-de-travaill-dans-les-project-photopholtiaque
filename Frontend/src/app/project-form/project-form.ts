@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule }    from '@angular/material/button';
 import { MatIconModule }      from '@angular/material/icon';
-import {  Project, ProjectStatus } from '../../dashboard/list-project/list-project'; // ←
+import {  Project, ProjectStatus } from '../dashboard/list-project/list-project'; // ←
 
 @Component({
   selector: 'app-project-form',

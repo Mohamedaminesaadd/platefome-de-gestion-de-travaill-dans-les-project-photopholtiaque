@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import {  Project } from '../../dashboard/list-project/list-project'; // ← adapte le chemin
+import {  Project } from '../dashboard/list-project/list-project'; // ← adapte le chemin
 
 @Component({
   selector: 'app-project-detail',

@@ -5,8 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ProjectDetail } from '../../layout/project-details/project-details';
-import { ProjectForm } from '../../layout/project-form/project-form';
+import { ProjectDetail } from '../../project-details/project-details';
+import { ProjectForm } from '../../project-form/project-form';
 
 
 export type ProjectStatus = 'IN_PROGRESS' | 'DELAYED' | 'COMPLETED';
