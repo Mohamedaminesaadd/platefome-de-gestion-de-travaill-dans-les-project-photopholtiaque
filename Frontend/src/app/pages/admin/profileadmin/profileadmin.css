@@ -16,14 +16,17 @@
 
 /*je le creer pour ajute les deux dash */
 .dashia {
+  margin: 20px; /* Ajout d'une marge autour de la section */
   display: flex;
   gap: 20px;          /* Espace entre les deux cartes */
   align-items:normal /* Force les enfants à avoir la même hauteur */
 
 }
 app-timeline {
-  flex: 3; /* Plus large */
+  flex: 2; /* Plus large */
+  height: 100%;
 }
 app-ia-dahsborad {
   margin-right: 5px;
+  flex: 1; /* Plus étroit */
 }

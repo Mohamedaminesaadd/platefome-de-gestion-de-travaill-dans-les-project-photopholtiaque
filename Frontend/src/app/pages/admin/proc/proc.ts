@@ -1,5 +1,6 @@
 import { Sidebar } from "../../../layout/sidbar/sidbar";
 import { Topbar } from "../../../layout/topbar/topbar";
+import { ListProject } from "../../../dashboard/list-project/list-project";
 import { Timeline } from "../../../dashboard/timeline/timeline";
 
 import {
@@ -72,13 +73,15 @@ export interface TeamMember {
   avatarBg: string;
   avatarColor: string;
 }
+
 @Component({
-  selector: 'app-profileadmin',
-  imports: [Sidebar, Topbar, Timeline, IaDahsborad],
-  templateUrl: './profileadmin.html',
-  styleUrl: './profileadmin.css',
+  selector: 'app-proc',
+  standalone: true,
+  imports: [Sidebar, Topbar, ListProject, Timeline, IaDahsborad],
+  templateUrl: './proc.html',
+  styleUrl: './proc.css',
 })
-export class  Profiladmin implements OnInit, AfterViewInit, OnDestroy {
+export class Proc implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() opened = true;
   @ViewChild('timelineCanvas') timelineCanvas!: ElementRef<HTMLCanvasElement>;

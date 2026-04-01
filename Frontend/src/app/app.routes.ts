@@ -4,33 +4,38 @@ import { PasswordForget } from './pages/auth/password-forget/password-forget';
 import { ResetPassword } from './pages/auth/reset-password/reset-password';
 import { authGuard } from './guards/auth-guard';
 import { roleGuard } from './guards/role-guard';
-import {Profiladmin } from './pages/admin/profileadmin/profileadmin';
+import { Profiladmin } from './pages/admin/profileadmin/profileadmin';
 import { Profildirector } from './pages/director/profildirector/profildirector';
 import { Profiltechnician } from './pages/technincian/profiltechnician/profiltechnician';
 import { ProjectManager } from './pages/project-manager/project-manager';
-import {  Sidebar } from './layout/sidbar/sidbar';
-import { Topbar } from './layout/topbar/topbar';
-import { StatsRow } from './dashboard/stats-row/stats-row';
 import { ListProject } from './dashboard/list-project/list-project';
 import { IaDahsborad } from './dashboard/ia-dahsborad/ia-dahsborad';
+import { Proc } from './pages/admin/proc/proc';
 
 export const routes: Routes = [
   // Routes publiques
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'forget-password', component: PasswordForget },
-  { path: 'reset/:token', component: ResetPassword }, 
-  {path:'side-bar',component:Sidebar},
-  {path:'top-bar',component:Topbar},
-  {path:'stats-row',component:StatsRow},
-  {path: 'list-project', component: ListProject},
-  {path:'ia-dahsborad',component:IaDahsborad},
+  { path: 'reset/:token', component: ResetPassword },
+  
+  // Remove these standalone routes - they should be part of your main layout
+  // { path: 'side-bar', component: Sidebar }, // REMOVE
+  // { path: 'top-bar', component: Topbar },   // REMOVE
+  // { path: 'stats-row', component: StatsRow }, // REMOVE
+  // { path: 'list-project', component: ListProject }, // This will be a child route
+  // { path: 'ia-dahsborad', component: IaDahsborad }, // This will be a child route
 
-
-  // Routes protégées (Note: 'technician' est maintenant écrit correctement)
+  // Routes protégées
   {
     path: 'admin-profil',
-    component: Profiladmin, // Corrigé : c'était Profildirector avant
+    component: Profiladmin,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'admin' }
+  },
+  {
+    path: 'admin-proc',
+    component: Proc,
     canActivate: [authGuard, roleGuard],
     data: { role: 'admin' }
   },
@@ -41,16 +46,21 @@ export const routes: Routes = [
     data: { role: 'director' }
   },
   {
-    path: 'technician-profil', // <--- ORTHOGRAPHE FIXÉE
+    path: 'technician-profil',
     component: Profiltechnician,
     canActivate: [authGuard, roleGuard],
     data: { role: 'technician' }
   },
   {
-    path: 'projectManager-profil', // <--- ORTHOGRAPHE FIXÉE
+    path: 'projectManager-profil',
     component: ProjectManager,
     canActivate: [authGuard, roleGuard],
     data: { role: 'project_manager' }
+  },
+  {
+    path: 'dashboard',
+    component: ListProject, // or a dashboard component
+    canActivate: [authGuard]
   },
 
   // 404

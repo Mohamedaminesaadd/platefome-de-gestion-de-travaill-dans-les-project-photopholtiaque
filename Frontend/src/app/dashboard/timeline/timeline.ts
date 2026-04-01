@@ -20,7 +20,7 @@ export class Timeline implements AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.buildTimelineChart();
       this.cdr.markForCheck();
-    }, 1000);
+    }, 0);
   }
 
   ngOnDestroy(): void {
@@ -45,7 +45,7 @@ export class Timeline implements AfterViewInit, OnDestroy {
     const dataMap = {
       week: {
         labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        target: [65, 25, 75, 80, 85, 90, 95],
+        target: [65, 25, 75, 80, 85, , 95],
         estimated: [60, 65, 70, 30, 80, 85, 90]
       },
       month: {

@@ -1,0 +1,15 @@
+/* ── LAYOUT SHELL ─────────────────────────── */
+.shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+}
+.main {
+  flex: 1;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow-y: auto;
+  min-width: 0;
+}

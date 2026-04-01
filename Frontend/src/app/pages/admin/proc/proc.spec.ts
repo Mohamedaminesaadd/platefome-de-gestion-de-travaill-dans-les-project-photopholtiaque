@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {Profiladmin } from './profileadmin';
+import { Proc } from './proc';
 
-describe('ProfileAdmin', () => {
-  let component: Profiladmin;
-  let fixture: ComponentFixture<Profiladmin>;
+describe('Proc', () => {
+  let component: Proc;
+  let fixture: ComponentFixture<Proc>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Profiladmin]
+      imports: [Proc]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Profiladmin);
+    fixture = TestBed.createComponent(Proc);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -9,7 +9,6 @@ const router = Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 
-
 router.post('/forget-password', forgotPassword );
 router.post('/reset-password', resetPassword );
 

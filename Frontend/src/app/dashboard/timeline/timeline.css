@@ -6,6 +6,7 @@
   padding: 22px;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
   animation: fadeUp 0.4s 0.3s ease both;
+  height: 100%;
 }
 
 .card-header {
