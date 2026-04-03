@@ -13,7 +13,6 @@ export interface Utilisateur {
   motDepasse: string; // À ne pas afficher côté front en temps normal
   telephone: number;
   dateEmbauche: Date;
-  photo: string; // URL de l'image (Image 2 - Avatar)
   actif: boolean;
   derniereConnexion: Date;
   role: UserRole;

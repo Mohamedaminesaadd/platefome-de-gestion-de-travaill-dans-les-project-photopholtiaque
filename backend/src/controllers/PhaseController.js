@@ -66,6 +66,8 @@ export const createPhase = async (req, res) => {
 };
 
 
+// GET ALL BY PROJECT
+
 export const getPhasesByProject = async (req, res) => {
   try {
     const phases = await Phase.find({
@@ -77,6 +79,8 @@ export const getPhasesByProject = async (req, res) => {
     res.status(500).json({ message: error.message , error: error.toString(),"projectId": req.params.projectId});
   }
 };
+
+// GET ONE
 
 export const getPhaseById = async (req, res) => {
   try {
@@ -92,6 +96,7 @@ export const getPhaseById = async (req, res) => {
   }
 };
 
+// UPDATE
 
 export const updatePhase = async (req, res) => {
   try {
@@ -111,6 +116,7 @@ export const updatePhase = async (req, res) => {
   }
 };
 
+// DELETE
 
 export const deletePhase = async (req, res) => {
   try {

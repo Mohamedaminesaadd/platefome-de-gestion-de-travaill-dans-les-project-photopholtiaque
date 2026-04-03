@@ -4,6 +4,7 @@ import cors from 'cors';
 import usersRouter from './router/user.router.js';
 import projectRouter from './router/project.router.js';
 import phaseRouter from './router/phase.router.js';
+import tacheRouter from './router/tache.router.js';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use('/api/users', usersRouter);
 app.use('/api/projects', projectRouter);
 app.use('/api/phases', phaseRouter);
+app.use('/api/taches', tacheRouter);
 
 // test route
 app.get('/', (req, res) => {
