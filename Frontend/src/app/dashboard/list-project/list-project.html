@@ -1,73 +1,115 @@
 <section>
 
-  <!-- Header -->
+  <!-- ── HEADER ──────────────────────────────────────────────── -->
   <div class="section-header">
-    <h2 class="section-title">My Projects</h2>
+    <h2 class="section-title">Mes Projets</h2>
     <button class="btn-primary" matRipple (click)="onNewProject()">
       <mat-icon>add</mat-icon>
-      New Project
+      Nouveau Projet
     </button>
   </div>
 
-  <!-- Recherche -->
+  <!-- ── RECHERCHE ───────────────────────────────────────────── -->
   <div class="search-bar">
     <mat-icon class="search-icon">search</mat-icon>
     <input
       class="search-input"
-      placeholder="Rechercher un projet..."
+      placeholder="Rechercher par nom, code ou ville..."
       [(ngModel)]="searchTerm"
       (input)="applyFilter()"
     />
   </div>
 
-  <!-- Grid -->
-  <div class="projects-grid" *ngIf="filteredProjects.length > 0; else noData">
+  <!-- ── LOADING ─────────────────────────────────────────────── -->
+  <div class="loading-state" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span>Chargement des projets...</span>
+  </div>
+
+  <!-- ── ERREUR ──────────────────────────────────────────────── -->
+  <div class="error-state" *ngIf="errorMsg && !isLoading">
+    <mat-icon>cloud_off</mat-icon>
+    <span>{{ errorMsg }}</span>
+    <button class="btn-primary" (click)="loadProjects()">
+      <mat-icon>refresh</mat-icon>
+      Réessayer
+    </button>
+  </div>
+
+  <!-- ── GRID ────────────────────────────────────────────────── -->
+  <div
+    class="projects-grid"
+    *ngIf="!isLoading && !errorMsg && filteredProjects.length > 0"
+  >
     <div
       class="proj-card"
       matRipple
       *ngFor="let p of filteredProjects; trackBy: trackById"
     >
+
       <!-- Card Header -->
       <div class="proj-card-header">
-        <div>
-          <div class="proj-name">{{ p.name }}</div>
-          <div class="proj-client">{{ p.client }}</div>
+        <div class="proj-info">
+          <div class="proj-name">{{ p.nom }}</div>
+          <div class="proj-client">
+            <mat-icon class="meta-icon">tag</mat-icon>
+            {{ p.codeProject }}
+          </div>
         </div>
-        <span
-          class="badge"
-          [class.badge-inprogress]="p.status === 'IN_PROGRESS'"
-          [class.badge-delayed]="p.status === 'DELAYED'"
-          [class.badge-completed]="p.status === 'COMPLETED'"
-        >
-          {{ statusLabel(p.status) }}
+        <span class="badge" [ngClass]="statusClass(p.statut!)">
+          {{ statusLabel(p.statut!) }}
         </span>
       </div>
 
-      <!-- Progress -->
+      <!-- Meta infos -->
+      <div class="proj-meta">
+
+        <!-- Ville -->
+        <div class="meta-item" *ngIf="p.ville">
+          <mat-icon>location_on</mat-icon>
+          <span>{{ p.ville }}</span>
+        </div>
+
+        <!-- Priorité -->
+        <div class="meta-item">
+          <mat-icon>flag</mat-icon>
+          <span class="priority-tag" [ngClass]="priorityClass(p.priorite)">
+            {{ p.priorite }}
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Budget Progress -->
       <div class="progress-block">
         <div class="progress-meta">
-          <span class="progress-label">Progress</span>
-          <span class="progress-pct">{{ p.progress }}%</span>
+          <span class="progress-label">Budget consommé</span>
+          <span class="progress-pct">
+            {{ p.budgetConsomme | number }} / {{ p.budgetTotale | number }} DZD
+          </span>
         </div>
         <div class="progress-track">
           <div
             class="progress-fill"
-            [class.fill-blue]="p.status === 'IN_PROGRESS' && p.progress > 50"
-            [class.fill-sky]="p.status === 'IN_PROGRESS' && p.progress <= 50"
-            [class.fill-orange]="p.status === 'DELAYED'"
-            [class.fill-green]="p.status === 'COMPLETED'"
-            [style.width.%]="p.progress"
+            [class.fill-green]="p.statut === 'TERMINE'"
+            [class.fill-orange]="p.statut === 'EN RETARD' || p.statut === 'SUSPENDU'"
+            [class.fill-blue]="p.statut === 'EN COURS' && budgetPct(p) > 50"
+            [class.fill-sky]="p.statut === 'EN COURS' && budgetPct(p) <= 50"
+            [class.fill-grey]="p.statut === 'PLANIFIE' || p.statut === 'ANNULE'"
+            [style.width.%]="budgetPct(p)"
           ></div>
         </div>
       </div>
 
       <!-- Footer -->
       <div class="proj-footer">
-        <div class="proj-time" [class.overdue]="p.daysOverdue">
-          <mat-icon>{{ p.daysOverdue ? 'error_outline' : 'schedule' }}</mat-icon>
-          <span *ngIf="p.daysRemaining">{{ p.daysRemaining }} days remaining</span>
-          <span *ngIf="p.daysOverdue">{{ p.daysOverdue }} days overdue</span>
-          <span *ngIf="p.dueToday">Due Today</span>
+
+        <!-- Dates -->
+        <div class="proj-time" [class.overdue]="p.statut === 'EN RETARD'">
+          <mat-icon>{{ p.statut === 'EN RETARD' ? 'error_outline' : 'schedule' }}</mat-icon>
+          <span>{{ p.dateDebut | date:'dd/MM/yy' }}</span>
+          <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+          <span>{{ p.dateFinPrevue | date:'dd/MM/yy' }}</span>
         </div>
 
         <!-- Actions -->
@@ -76,7 +118,7 @@
             class="action-btn view-btn"
             matRipple
             matTooltip="Voir détails"
-            (click)="onOpenProject(p)"
+            (click)="onOpenProject(p); $event.stopPropagation()"
           >
             <mat-icon>visibility</mat-icon>
           </button>
@@ -97,13 +139,14 @@
             <mat-icon>delete</mat-icon>
           </button>
         </div>
+
       </div>
     </div>
   </div>
 
-  <!-- Aucun résultat -->
+  <!-- ── AUCUN RÉSULTAT ───────────────────────────────────────── -->
   <ng-template #noData>
-    <div class="no-data">
+    <div class="no-data" *ngIf="!isLoading && !errorMsg">
       <mat-icon>search_off</mat-icon>
       <span>Aucun projet trouvé</span>
     </div>

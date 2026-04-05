@@ -1,57 +1,103 @@
 <div class="detail-dialog">
 
-  <!-- Header -->
+  <!-- ── HEADER ──────────────────────────────────────────────── -->
   <div mat-dialog-title class="detail-header">
     <div class="detail-title-block">
-      <h2>{{ data.name }}</h2>
-      <span class="client-name">{{ data.client }}</span>
+      <h2>{{ data.nom }}</h2>
+      <span class="client-name">
+        <mat-icon class="meta-icon">tag</mat-icon>
+        {{ data.codeProject }}
+      </span>
     </div>
     <button mat-icon-button (click)="close()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
 
-  <!-- Content -->
+  <!-- ── CONTENT ─────────────────────────────────────────────── -->
   <mat-dialog-content class="detail-content">
 
-    <!-- Badge statut -->
+    <!-- Statut + Priorité -->
     <div class="detail-row">
       <mat-icon>flag</mat-icon>
-      <span>Status :</span>
-      <span class="badge"
-        [class.badge-inprogress]="data.status === 'IN_PROGRESS'"
-        [class.badge-delayed]="data.status === 'DELAYED'"
-        [class.badge-completed]="data.status === 'COMPLETED'">
-        {{ statusLabel(data.status) }}
+      <span>Statut :</span>
+      <span class="badge" [ngClass]="statusClass(data.statut!)">
+        {{ statusLabel(data.statut!) }}
+      </span>
+      <span class="separator">·</span>
+      <mat-icon>priority_high</mat-icon>
+      <span>Priorité :</span>
+      <span class="priority-tag" [ngClass]="prioriteClass(data.priorite)">
+        {{ prioriteLabel(data.priorite) }}
       </span>
     </div>
 
-    <!-- Progress -->
+    <!-- Description -->
+    <div class="detail-row" *ngIf="data.description">
+      <mat-icon>notes</mat-icon>
+      <span>{{ data.description }}</span>
+    </div>
+
+    <!-- Localisation -->
+    <div class="detail-row" *ngIf="data.ville || data.adresse">
+      <mat-icon>location_on</mat-icon>
+      <span>
+        {{ data.adresse }}
+        <ng-container *ngIf="data.adresse && data.ville"> · </ng-container>
+        {{ data.ville }}
+        <ng-container *ngIf="data.codePostal"> {{ data.codePostal }}</ng-container>
+      </span>
+    </div>
+
+    <!-- Dates -->
+    <div class="detail-row">
+      <mat-icon>calendar_today</mat-icon>
+      <span>Début :</span>
+      <strong>{{ data.dateDebut | date:'dd/MM/yyyy' }}</strong>
+      <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+      <span>Fin prévue :</span>
+      <strong>{{ data.dateFinPrevue | date:'dd/MM/yyyy' }}</strong>
+    </div>
+
+    <!-- Date fin réelle -->
+    <div class="detail-row" *ngIf="data.dateFinReelle">
+      <mat-icon>event_available</mat-icon>
+      <span>Fin réelle :</span>
+      <strong>{{ data.dateFinReelle | date:'dd/MM/yyyy' }}</strong>
+    </div>
+
+    <!-- Budget Progress -->
     <div class="detail-progress-block">
       <div class="progress-meta">
-        <span>Progress</span>
-        <strong>{{ data.progress }}%</strong>
+        <span>Budget consommé</span>
+        <strong>
+          {{ data.budgetConsomme ?? 0 | number }} /
+          {{ data.budgetTotale | number }} DZD
+          ({{ budgetPct() }}%)
+        </strong>
       </div>
       <mat-progress-bar
-        [value]="data.progress"
-        [color]="data.status === 'DELAYED' ? 'warn' : 'primary'">
+        [value]="budgetPct()"
+        [color]="budgetProgressColor()">
       </mat-progress-bar>
     </div>
 
-    <!-- Délai -->
-    <div class="detail-row" [class.overdue]="data.daysOverdue">
-      <mat-icon>{{ data.daysOverdue ? 'error_outline' : 'schedule' }}</mat-icon>
-      <span *ngIf="data.daysRemaining">{{ data.daysRemaining }} days remaining</span>
-      <span *ngIf="data.daysOverdue">{{ data.daysOverdue }} days overdue</span>
-      <span *ngIf="data.dueToday">Due Today</span>
+    <!-- GPS -->
+    <div class="detail-row" *ngIf="data.coordonnesGPS">
+      <mat-icon>my_location</mat-icon>
+      <span>GPS :</span>
+      <span class="gps-value">{{ data.coordonnesGPS }}</span>
     </div>
 
   </mat-dialog-content>
 
-  <!-- Actions -->
+  <!-- ── ACTIONS ─────────────────────────────────────────────── -->
   <mat-dialog-actions align="end">
-    <button mat-stroked-button (click)="close()">Close</button>
-    <button mat-flat-button color="primary">Edit Project</button>
+    <button mat-stroked-button (click)="close()">Fermer</button>
+    <button mat-flat-button color="primary">
+      <mat-icon>edit</mat-icon>
+      Modifier
+    </button>
   </mat-dialog-actions>
 
 </div>

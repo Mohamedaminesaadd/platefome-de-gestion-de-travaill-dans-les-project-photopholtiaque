@@ -1,38 +1,23 @@
-import { EnumPriorite } from "./project.model";
-
-export enum EnumStatutTache {
-  A_FAIRE = 'A FAIRE',
-  EN_COURS = 'EN COURS',
-  EN_REVUE = 'EN REVUE',
-  ANNULEE = 'ANNULEE',
-  BLOQUEE = 'BLOQUEE',
-  TERMINEE = 'TERMINEE'
-}
+export type StatutTache    = 'A FAIRE' | 'EN COURS' | 'EN REVUE' | 'ANNULEE' | 'BLOQUEE' | 'TERMINEE';
+export type PrioriteTache  = 'BASSE' | 'MOYENNE' | 'HAUTE' | 'CRITIQUE';
+export type Complexite     = 'BASSE' | 'MOYENNE' | 'ELEVEE';
 
 export interface Tache {
-  id: string;
-  titre: string;
-  description: string;
-  
-  // Dates et Temps (Image 4 & 10)
-  dateCreation: Date;
-  dateEcheance: Date; // La "Due Date" sur le Kanban
-  dateDebut?: Date;
-  dateFin?: Date;
-  
-  // Suivi du temps (Vu sur le Dashboard Technicien)
-  heureEstimees: number; // ex: 2h
-  heureRelles: number;    // Le temps vraiment passé
-  
-  // État et Importance
-  statut: EnumStatutTache;
-  priorite: EnumPriorite; // Réutilise l'EnumPriorite du modèle Project
-  complexite: 'BASSE' | 'MOYENNE' | 'ELEVEE';
-  
-  // Financier
-  cout: number;
-
-  // Relations
-  idPhase: string;       // La phase parente
-  idUtilisateur?: string; // Le technicien assigné (Image 10 - petit avatar)
+  _id?:           string;
+  titre:          string;
+  description?:   string;
+  dateCreation?:  string;
+  dateEcheance:   string;
+  dateDebut?:     string;
+  dateFin?:       string;
+  heureEstimees:  number;
+  heureRelles?:   number;
+  statut?:        StatutTache;
+  priorite?:      PrioriteTache;
+  complexite?:    Complexite;
+  cout?:          number;
+  idPhase:        string;
+  idUtilisateur?: string;
+  createdAt?:     string;
+  updatedAt?:     string;
 }

@@ -11,6 +11,8 @@ import { ProjectManager } from './pages/project-manager/project-manager';
 import { ListProject } from './dashboard/list-project/list-project';
 import { IaDahsborad } from './dashboard/ia-dahsborad/ia-dahsborad';
 import { Proc } from './pages/admin/proc/proc';
+import { TechnicianList } from './pages/admin/technician-list/technician-list';
+
 
 export const routes: Routes = [
   // Routes publiques
@@ -18,6 +20,7 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'forget-password', component: PasswordForget },
   { path: 'reset/:token', component: ResetPassword },
+  { path: 'page-technician', component: TechnicianList },
   
   // Remove these standalone routes - they should be part of your main layout
   // { path: 'side-bar', component: Sidebar }, // REMOVE

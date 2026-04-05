@@ -1,6 +1,10 @@
 import { Sidebar } from "../../../layout/sidbar/sidbar";
 import { Topbar } from "../../../layout/topbar/topbar";
 import { Timeline } from "../../../dashboard/timeline/timeline";
+import { IaDahsborad } from "../../../dashboard/ia-dahsborad/ia-dahsborad";
+import { StatsRow } from "../../../dashboard/stats-row/stats-row";
+import { PieDashboard } from "../../../dashboard/pie-dashboard/pie-dashboard";
+import { RadarDashboard } from "../../../dashboard/radar-dashboard/radar-dashboard";
 
 import {
   Component,
@@ -9,15 +13,11 @@ import {
   OnDestroy,
   ViewChild,
   ElementRef,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
-  signal,
   Input,
-  Inject, 
-  
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Chart, registerables  } from 'chart.js';
+import { Chart, registerables } from 'chart.js';
 
 // Angular Material
 import { MatCardModule }        from '@angular/material/card';
@@ -26,8 +26,14 @@ import { MatIconModule }        from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRippleModule }      from '@angular/material/core';
 import { MatTooltipModule }     from '@angular/material/tooltip';
-import { MatBadgeModule } from '@angular/material/badge';
-import { IaDahsborad } from "../../../dashboard/ia-dahsborad/ia-dahsborad";
+import { MatBadgeModule }       from '@angular/material/badge';
+
+// ✅ Drag & Drop
+import {
+  DragDropModule,
+  CdkDragDrop,
+  moveItemInArray
+} from '@angular/cdk/drag-drop';
 
 Chart.register(...registerables);
 
@@ -72,13 +78,32 @@ export interface TeamMember {
   avatarBg: string;
   avatarColor: string;
 }
+
 @Component({
   selector: 'app-profileadmin',
-  imports: [Sidebar, Topbar, Timeline, IaDahsborad],
+  standalone: true,
+  imports: [
+    CommonModule,
+    Sidebar,
+    Topbar,
+    Timeline,
+    IaDahsborad,
+    StatsRow,
+    PieDashboard,
+    RadarDashboard,
+    DragDropModule,           // ✅ ajouté
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressBarModule,
+    MatRippleModule,
+    MatTooltipModule,
+    MatBadgeModule
+  ],
   templateUrl: './profileadmin.html',
-  styleUrl: './profileadmin.css',
+  styleUrls: ['./profileadmin.css'],
 })
-export class  Profiladmin implements OnInit, AfterViewInit, OnDestroy {
+export class Profiladmin implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() opened = true;
   @ViewChild('timelineCanvas') timelineCanvas!: ElementRef<HTMLCanvasElement>;
@@ -93,13 +118,12 @@ export class  Profiladmin implements OnInit, AfterViewInit, OnDestroy {
   };
 
   // ── DATA ─────────────────────────────────────────────────────
-  
   projects: Project[] = [
     { id:'p1', name:'West Side Solar Farm',  client:'Green Energy Co',  status:'IN_PROGRESS', progress:75, daysRemaining:12 },
     { id:'p2', name:'Residential Cluster A', client:'Horizon Homes',    status:'DELAYED',     progress:40, daysOverdue:3   },
     { id:'p3', name:'Downtown Tech Park',    client:'Urban Solutions',  status:'COMPLETED',   progress:100, dueToday:true  },
     { id:'p4', name:'Mountain Ridge Array',  client:'Peak Power',       status:'IN_PROGRESS', progress:15, daysRemaining:45 },
-  ]
+  ];
 
   tasks: Task[] = [
     { id:'t1', name:'Site survey: Sector 4',  time:'09:00 AM', duration:'2h',   priority:'HIGH',   done:false },
@@ -121,9 +145,11 @@ export class  Profiladmin implements OnInit, AfterViewInit, OnDestroy {
     { id:'m4', initials:'LP', name:'L. Park',   availability:90, avatarBg:'#EDE9FE', avatarColor:'#5B21B6' },
   ];
 
-  
-    notifCount: any=1;
+  notifCount = 1;
 
+  // ✅ DRAG & DROP : ordre des widgets
+  dashboardItems: string[] = [];
+  private defaultLayout = ['stats', 'timeline', 'ia', 'pie', 'radar'];
 
   // ── GETTERS ───────────────────────────────────────────────────
   get pendingCount(): number {
@@ -139,18 +165,25 @@ export class  Profiladmin implements OnInit, AfterViewInit, OnDestroy {
   // ── LIFECYCLE ─────────────────────────────────────────────────
   constructor(private cdr: ChangeDetectorRef) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Charger l'ordre sauvegardé
+    const saved = localStorage.getItem('dashboardLayout');
+    if (saved) {
+      this.dashboardItems = JSON.parse(saved);
+    } else {
+      this.dashboardItems = [...this.defaultLayout];
+    }
+  }
 
   ngAfterViewInit(): void {
     if (typeof window !== 'undefined') {
-    this.buildChart();
-  }
+      this.buildChart();
+    }
   }
 
   ngOnDestroy(): void {
     if (this.chart) this.chart.destroy();
   }
-  
 
   // ── CHART ─────────────────────────────────────────────────────
   private buildChart(): void {
@@ -251,6 +284,18 @@ export class  Profiladmin implements OnInit, AfterViewInit, OnDestroy {
     console.log('New project');
   }
 
+  // ✅ DRAG & DROP : déplacement
+  drop(event: CdkDragDrop<string[]>): void {
+    moveItemInArray(this.dashboardItems, event.previousIndex, event.currentIndex);
+    localStorage.setItem('dashboardLayout', JSON.stringify(this.dashboardItems));
+  }
+
+  // ✅ Réinitialiser la disposition
+  resetLayout(): void {
+    this.dashboardItems = [...this.defaultLayout];
+    localStorage.removeItem('dashboardLayout');
+  }
+
   // ── HELPERS ───────────────────────────────────────────────────
   availabilityColor(pct: number): string {
     if (pct >= 75) return '#10B981';
@@ -267,7 +312,12 @@ export class  Profiladmin implements OnInit, AfterViewInit, OnDestroy {
     return map[status];
   }
 
-  trackById(_: number, item: { id: string }): string {
-    return item.id;
-  }
-} 
+
+ trackByString(index: number, item: string): string {
+  return item; // la chaîne elle-même est unique
+}
+
+  
+}
+
+

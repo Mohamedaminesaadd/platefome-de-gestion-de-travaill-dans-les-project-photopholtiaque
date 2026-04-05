@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@700&display=swap');
+
+:host {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ───────── Wrapper ───────── */
+.dashboard-wrapper {
+  background: #0f1428;
+  border-radius: 20px;
+  overflow: hidden;
+  width: 540px;
+  color: #e2e8f0;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* ───────── Header ───────── */
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+}
+
+.dash-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dash-title h2 {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f0f4ff;
+  line-height: 1.2;
+}
+
+.title-icon {
+  color: #F4738A;
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.dash-subtitle {
+  font-size: 0.72rem;
+  color: #64748b;
+  letter-spacing: 0.03em;
+}
+
+.refresh-btn {
+  color: #64748b !important;
+  transition: color 0.2s;
+}
+
+.refresh-btn:hover {
+  color: #F4738A !important;
+}
+
+mat-divider {
+  border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* ───────── Legend ───────── */
+.legend-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 14px 24px 4px;
+}
+
+.legend-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+  color: #cbd5e1;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.legend-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.legend-btn.hidden {
+  opacity: 0.35;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-label {
+  color: #cbd5e1;
+}
+
+/* ───────── Chart ───────── */
+.chart-container {
+  position: relative;
+  height: 320px;
+  padding: 16px 24px;
+}
+
+/* ───────── KPI Strip ───────── */
+.kpi-strip {
+  display: flex;
+  justify-content: space-around;
+  padding: 14px 16px;
+}
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.kpi-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-bottom: 2px;
+}
+
+.kpi-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.kpi-label {
+  font-size: 0.62rem;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

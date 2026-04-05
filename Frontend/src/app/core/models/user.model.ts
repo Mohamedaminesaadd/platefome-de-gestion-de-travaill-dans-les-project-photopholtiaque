@@ -1,23 +1,27 @@
-export enum UserRole {
-  ADMIN = 'Administrateur',
-  DIRECTOR = 'Directeru', // Gardé tel quel selon ton diagramme
-  TECHNICIAN = 'Technicien',
-  PROJECT_MANAGER = 'ChefsProject'
+export type Role = 'admin' | 'director' | 'technician' | 'project_manager';
+
+export interface User {
+  _id?:      string;
+  username:  string;
+  email:     string;
+  password?: string;
+  role?:     Role;
 }
 
-export interface Utilisateur {
-  id: string;
-  nom: string;
-  prenom: string;
-  email: string;
-  motDepasse: string; // À ne pas afficher côté front en temps normal
-  telephone: number;
-  dateEmbauche: Date;
-  actif: boolean;
-  derniereConnexion: Date;
-  role: UserRole;
-  
-  // Champs spécifiques du diagramme
-  specialite?: string;      // Pour le Technicien
-  certifications?: string;  // Pour le Technicien
+export interface AuthResponse {
+  token:   string;
+  user:    User;
+  message?: string;
+}
+
+export interface LoginPayload {
+  email:    string;
+  password: string;
+}
+
+export interface RegisterPayload {
+  username: string;
+  email:    string;
+  password: string;
+  role?:    Role;
 }

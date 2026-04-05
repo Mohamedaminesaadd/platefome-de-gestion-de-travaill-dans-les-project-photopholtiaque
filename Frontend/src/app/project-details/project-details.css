@@ -286,3 +286,60 @@ mat-dialog-actions button[mat-flat-button][color="primary"]:hover {
     width: fit-content;
   }
 }
+
+/* ── SEPARATOR ───────────────────────────────────────────── */
+.separator {
+  color: #CBD5E1;
+  font-size: 16px;
+  margin: 0 4px;
+}
+
+/* ── PRIORITY TAG ─────────────────────────────────────────── */
+.priority-tag {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.priority-low      { color: #22C55E; }
+.priority-medium   { color: #F59E0B; }
+.priority-high     { color: #EF4444; }
+.priority-critical { color: #7C3AED; }
+
+/* ── STATUS BADGES ────────────────────────────────────────── */
+.badge-planned    { background: #F1F5F9; color: #475569; }
+.badge-inprogress { background: #DBEAFE; color: #1D4ED8; }
+.badge-delayed    { background: #FEF3C7; color: #92400E; }
+.badge-suspended  { background: #FEE2E2; color: #DC2626; }
+.badge-completed  { background: #D1FAE5; color: #065F46; }
+.badge-cancelled  { background: #F1F5F9; color: #94A3B8; }
+
+/* ── META ICON ────────────────────────────────────────────── */
+.meta-icon {
+  font-size: 13px !important;
+  width: 13px !important;
+  height: 13px !important;
+  color: #94A3B8;
+  vertical-align: middle;
+  margin-right: 3px;
+}
+
+/* ── ARROW ICON ───────────────────────────────────────────── */
+.arrow-icon {
+  font-size: 12px !important;
+  width: 12px !important;
+  height: 12px !important;
+  color: #CBD5E1;
+}
+
+/* ── GPS VALUE ────────────────────────────────────────────── */
+.gps-value {
+  font-size: 12px;
+  color: #475569;
+  font-family: monospace;
+  background: #F8FAFC;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #E2E8F0;
+}

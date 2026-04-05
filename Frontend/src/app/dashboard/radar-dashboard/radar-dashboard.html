@@ -1,0 +1,50 @@
+<div class="dashboard-wrapper">
+
+  <!-- Header -->
+  <div class="dash-header">
+    <div class="dash-title">
+      <mat-icon class="title-icon">radar</mat-icon>
+      <div>
+        <h2>Activity Radar</h2>
+        <span class="dash-subtitle">Performance by Category · 2024</span>
+      </div>
+    </div>
+    <button mat-icon-button matTooltip="Refresh data" class="refresh-btn">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- Legend -->
+  <div class="legend-row">
+    <button
+      *ngFor="let s of series; let i = index"
+      class="legend-btn"
+      [class.hidden]="!isSeriesVisible(i)"
+      (click)="toggleSeries(i)"
+    >
+      <span class="legend-dot" [style.background]="s.color"></span>
+      <span class="legend-label">{{ s.label }}</span>
+    </button>
+  </div>
+
+  <!-- Chart -->
+  <div class="chart-container">
+    <canvas #radarCanvas></canvas>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- KPI Strip -->
+  <div class="kpi-strip">
+    <div class="kpi" *ngFor="let s of series; let i = index">
+      <span class="kpi-dot" [style.background]="s.color"></span>
+      <span class="kpi-val" [style.color]="s.color">
+        {{ avg(s.data) }}
+      </span>
+      <span class="kpi-label">{{ s.label }} avg</span>
+    </div>
+  </div>
+
+</div>

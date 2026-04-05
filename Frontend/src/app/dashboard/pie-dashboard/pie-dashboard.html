@@ -1,0 +1,79 @@
+
+
+<div class="dashboard-wrapper">
+ 
+  <!-- Header -->
+  <div class="dash-header">
+    <div class="dash-title">
+      <mat-icon class="title-icon">pie_chart</mat-icon>
+      <div>
+        <h2>Market Distribution</h2>
+        <span class="dash-subtitle">Revenue by Country · 2024</span>
+      </div>
+    </div>
+    <button mat-icon-button matTooltip="Refresh data" class="refresh-btn">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+ 
+  <mat-divider></mat-divider>
+ 
+  <!-- Main Content -->
+  <div class="dash-body">
+ 
+    <!-- Chart -->
+    <div class="chart-container">
+      <canvas #pieCanvas></canvas>
+      <!-- Center label -->
+      <div class="chart-center">
+        <span class="center-value">{{ totalValue }}</span>
+        <span class="center-label">Total Units</span>
+      </div>
+    </div>
+ 
+    <!-- Legend + Stats -->
+    <div class="stats-panel">
+      <p class="panel-heading">Breakdown</p>
+ 
+      <div
+        class="stat-row"
+        *ngFor="let item of countryData; let i = index"
+        [class.active]="activeIndex === i"
+        (mouseenter)="highlightSlice(i)"
+        (mouseleave)="resetHighlight()"
+      >
+        <!-- Color dot + flag -->
+        <span class="dot" [style.background]="item.color"></span>
+        <span class="flag">{{ item.flag }}</span>
+        <span class="country-name">{{ item.country }}</span>
+ 
+        <!-- Bar -->
+        <div class="bar-track">
+          <div
+            class="bar-fill"
+            [style.width.%]="getPercentage(item.value)"
+            [style.background]="item.color"
+          ></div>
+        </div>
+ 
+        <!-- Percentage -->
+        <span class="pct-badge" [style.color]="item.color">
+          {{ getPercentage(item.value) }}%
+        </span>
+      </div>
+ 
+    </div>
+  </div>
+ 
+  <!-- Footer KPIs -->
+  <mat-divider></mat-divider>
+  <div class="kpi-strip">
+    <div class="kpi" *ngFor="let item of countryData">
+      <span class="kpi-flag">{{ item.flag }}</span>
+      <span class="kpi-val" [style.color]="item.color">{{ item.value }}</span>
+      <span class="kpi-label">{{ item.country }}</span>
+    </div>
+  </div>
+ 
+</div>
+ 

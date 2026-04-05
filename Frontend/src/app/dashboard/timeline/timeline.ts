@@ -45,13 +45,13 @@ export class Timeline implements AfterViewInit, OnDestroy {
     const dataMap = {
       week: {
         labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        target: [65, 25, 75, 80, 85, , 95],
-        estimated: [60, 65, 70, 30, 80, 85, 90]
+        target: [65, 25, 35, 42, 85, 72, 95],
+        estimated: [60, 65, 70, 30, 80, 85, 20]
       },
       month: {
         labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-        target: [40, 55, 70, 85],
-        estimated: [35, 50, 65, 80]
+        target: [40, 5, 70, 8],
+        estimated: [15, 50, 5, 80]
       },
       quarter: {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],

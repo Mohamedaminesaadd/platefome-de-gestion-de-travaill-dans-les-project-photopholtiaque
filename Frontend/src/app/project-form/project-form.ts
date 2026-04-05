@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule }    from '@angular/material/button';
-import { MatIconModule }      from '@angular/material/icon';
-import {  Project, ProjectStatus } from '../dashboard/list-project/list-project'; // ←
+import { MatButtonModule }  from '@angular/material/button';
+import { MatIconModule }    from '@angular/material/icon';
+import { Project, StatutProject, Priorite } from '../core/models/project.model';
 
 @Component({
   selector: 'app-project-form',
@@ -24,10 +24,20 @@ export class ProjectForm {
   form: FormGroup;
   isEditMode: boolean;
 
-  statusOptions: { value: ProjectStatus; label: string }[] = [
-    { value: 'IN_PROGRESS', label: 'In Progress' },
-    { value: 'DELAYED',     label: 'Delayed'     },
-    { value: 'COMPLETED',   label: 'Completed'   },
+  statutOptions: { value: StatutProject; label: string }[] = [
+    { value: 'PLANIFIE',  label: 'Planifié'  },
+    { value: 'EN COURS',  label: 'En cours'  },
+    { value: 'EN RETARD', label: 'En retard' },
+    { value: 'SUSPENDU',  label: 'Suspendu'  },
+    { value: 'TERMINE',   label: 'Terminé'   },
+    { value: 'ANNULE',    label: 'Annulé'    },
+  ];
+
+  prioriteOptions: { value: Priorite; label: string }[] = [
+    { value: 'BASSE',    label: 'Basse'    },
+    { value: 'MOYENNE',  label: 'Moyenne'  },
+    { value: 'HAUTE',    label: 'Haute'    },
+    { value: 'CRITIQUE', label: 'Critique' },
   ];
 
   constructor(
@@ -38,13 +48,20 @@ export class ProjectForm {
     this.isEditMode = !!data;
 
     this.form = this.fb.group({
-      name:          [data?.name          ?? '', [Validators.required, Validators.minLength(3)]],
-      client:        [data?.client        ?? '', [Validators.required]],
-      status:        [data?.status        ?? 'IN_PROGRESS', [Validators.required]],
-      progress:      [data?.progress      ?? 0,  [Validators.required, Validators.min(0), Validators.max(100)]],
-      daysRemaining: [data?.daysRemaining ?? null, [Validators.min(0)]],
-      daysOverdue:   [data?.daysOverdue   ?? null, [Validators.min(0)]],
-      dueToday:      [data?.dueToday      ?? false],
+      codeProject:   [data?.codeProject   ?? '', [Validators.required]],
+      nom:           [data?.nom           ?? '', [Validators.required, Validators.minLength(3)]],
+      description:   [data?.description   ?? ''],
+      dateDebut:     [data?.dateDebut     ?? '', [Validators.required]],
+      dateFinPrevue: [data?.dateFinPrevue ?? '', [Validators.required]],
+      dateFinReelle: [data?.dateFinReelle ?? ''],
+      budgetTotale:  [data?.budgetTotale  ?? 0,  [Validators.required, Validators.min(0)]],
+      budgetConsomme:[data?.budgetConsomme ?? 0,  [Validators.min(0)]],
+      priorite:      [data?.priorite      ?? 'MOYENNE', [Validators.required]],
+      statut:        [data?.statut        ?? 'PLANIFIE', [Validators.required]],
+      adresse:       [data?.adresse       ?? ''],
+      ville:         [data?.ville         ?? ''],
+      codePostal:    [data?.codePostal    ?? ''],
+      coordonnesGPS: [data?.coordonnesGPS ?? ''],
     });
   }
 
@@ -66,7 +83,6 @@ export class ProjectForm {
     if (ctrl.errors['required'])  return 'Ce champ est obligatoire';
     if (ctrl.errors['minlength']) return `Minimum ${ctrl.errors['minlength'].requiredLength} caractères`;
     if (ctrl.errors['min'])       return `Valeur minimum : ${ctrl.errors['min'].min}`;
-    if (ctrl.errors['max'])       return 'Valeur maximum : 100';
     return '';
   }
 

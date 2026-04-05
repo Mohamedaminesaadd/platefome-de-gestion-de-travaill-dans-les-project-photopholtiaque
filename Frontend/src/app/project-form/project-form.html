@@ -1,6 +1,6 @@
 <div class="form-dialog">
 
-  <!-- ── HEADER ──────────────────────────────────────────── -->
+  <!-- ── HEADER ──────────────────────────────────────────────── -->
   <div class="form-header" mat-dialog-title>
     <div class="form-title-block">
       <div class="form-title-icon">
@@ -18,159 +18,216 @@
     </button>
   </div>
 
-  <!-- ── CONTENT ─────────────────────────────────────────── -->
+  <!-- ── CONTENT ─────────────────────────────────────────────── -->
   <mat-dialog-content class="form-content">
     <form [formGroup]="form" autocomplete="off">
 
-      <!-- Nom du projet -->
-      <div class="field-group">
-        <label class="field-label">
-          <mat-icon>business_center</mat-icon>
-          Nom du projet <span class="required">*</span>
-        </label>
-        <div class="input-wrapper" [class.has-error]="isInvalid('name')">
-          <input
-            class="field-input"
-            formControlName="name"
-            placeholder="Ex: Solar Farm West Side"
-          />
-        </div>
-        <span class="error-msg" *ngIf="isInvalid('name')">
-          <mat-icon>error</mat-icon>{{ getError('name') }}
-        </span>
-      </div>
-
-      <!-- Client -->
-      <div class="field-group">
-        <label class="field-label">
-          <mat-icon>person</mat-icon>
-          Client <span class="required">*</span>
-        </label>
-        <div class="input-wrapper" [class.has-error]="isInvalid('client')">
-          <input
-            class="field-input"
-            formControlName="client"
-            placeholder="Ex: Green Energy Co"
-          />
-        </div>
-        <span class="error-msg" *ngIf="isInvalid('client')">
-          <mat-icon>error</mat-icon>{{ getError('client') }}
-        </span>
-      </div>
-
-      <!-- Statut + Progression -->
+      <!-- Code Projet + Nom -->
       <div class="row-2col">
 
-        <!-- Statut -->
+        <div class="field-group">
+          <label class="field-label">
+            <mat-icon>tag</mat-icon>
+            Code Projet <span class="required">*</span>
+          </label>
+          <div class="input-wrapper" [class.has-error]="isInvalid('codeProject')">
+            <input class="field-input" formControlName="codeProject" placeholder="Ex: PRJ-001"/>
+          </div>
+          <span class="error-msg" *ngIf="isInvalid('codeProject')">
+            <mat-icon>error</mat-icon>{{ getError('codeProject') }}
+          </span>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">
+            <mat-icon>business_center</mat-icon>
+            Nom du projet <span class="required">*</span>
+          </label>
+          <div class="input-wrapper" [class.has-error]="isInvalid('nom')">
+            <input class="field-input" formControlName="nom" placeholder="Ex: Solar Farm West"/>
+          </div>
+          <span class="error-msg" *ngIf="isInvalid('nom')">
+            <mat-icon>error</mat-icon>{{ getError('nom') }}
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Description -->
+      <div class="field-group">
+        <label class="field-label">
+          <mat-icon>notes</mat-icon>
+          Description
+        </label>
+        <div class="input-wrapper">
+          <textarea
+            class="field-input field-textarea"
+            formControlName="description"
+            placeholder="Description du projet..."
+            rows="3">
+          </textarea>
+        </div>
+      </div>
+
+      <!-- Statut + Priorité -->
+      <div class="row-2col">
+
         <div class="field-group">
           <label class="field-label">
             <mat-icon>flag</mat-icon>
             Statut <span class="required">*</span>
           </label>
-          <div class="select-wrapper" [class.has-error]="isInvalid('status')">
-            <select class="field-select" formControlName="status">
-              <option *ngFor="let s of statusOptions" [value]="s.value">
+          <div class="select-wrapper" [class.has-error]="isInvalid('statut')">
+            <select class="field-select" formControlName="statut">
+              <option *ngFor="let s of statutOptions" [value]="s.value">
                 {{ s.label }}
               </option>
             </select>
             <mat-icon class="select-chevron">expand_more</mat-icon>
           </div>
-          <span class="error-msg" *ngIf="isInvalid('status')">
-            <mat-icon>error</mat-icon>{{ getError('status') }}
-          </span>
         </div>
 
-        <!-- Progression -->
         <div class="field-group">
           <label class="field-label">
-            <mat-icon>trending_up</mat-icon>
-            Progression (%) <span class="required">*</span>
+            <mat-icon>priority_high</mat-icon>
+            Priorité <span class="required">*</span>
           </label>
-          <div class="input-wrapper" [class.has-error]="isInvalid('progress')">
-            <input
-              class="field-input"
-              type="number" min="0" max="100"
-              formControlName="progress"
-              placeholder="0 – 100"
-            />
-          </div>
-          <span class="error-msg" *ngIf="isInvalid('progress')">
-            <mat-icon>error</mat-icon>{{ getError('progress') }}
-          </span>
-          <!-- Mini progress bar live -->
-          <div class="mini-progress-track" *ngIf="!isInvalid('progress')">
-            <div
-              class="mini-progress-fill"
-              [style.width.%]="form.get('progress')?.value"
-            ></div>
+          <div class="select-wrapper" [class.has-error]="isInvalid('priorite')">
+            <select class="field-select" formControlName="priorite">
+              <option *ngFor="let p of prioriteOptions" [value]="p.value">
+                {{ p.label }}
+              </option>
+            </select>
+            <mat-icon class="select-chevron">expand_more</mat-icon>
           </div>
         </div>
 
       </div>
 
-      <!-- Jours restants + Jours de retard -->
+      <!-- Dates -->
       <div class="row-2col">
 
         <div class="field-group">
           <label class="field-label">
-            <mat-icon>schedule</mat-icon>
-            Jours restants
+            <mat-icon>calendar_today</mat-icon>
+            Date début <span class="required">*</span>
           </label>
-          <div class="input-wrapper" [class.has-error]="isInvalid('daysRemaining')">
-            <input
-              class="field-input"
-              type="number" min="0"
-              formControlName="daysRemaining"
-              placeholder="Ex: 14"
-            />
+          <div class="input-wrapper" [class.has-error]="isInvalid('dateDebut')">
+            <input class="field-input" type="date" formControlName="dateDebut"/>
           </div>
-          <span class="error-msg" *ngIf="isInvalid('daysRemaining')">
-            <mat-icon>error</mat-icon>{{ getError('daysRemaining') }}
+          <span class="error-msg" *ngIf="isInvalid('dateDebut')">
+            <mat-icon>error</mat-icon>{{ getError('dateDebut') }}
           </span>
         </div>
 
         <div class="field-group">
           <label class="field-label">
-            <mat-icon>error_outline</mat-icon>
-            Jours de retard
+            <mat-icon>event</mat-icon>
+            Date fin prévue <span class="required">*</span>
           </label>
-          <div class="input-wrapper" [class.has-error]="isInvalid('daysOverdue')">
-            <input
-              class="field-input"
-              type="number" min="0"
-              formControlName="daysOverdue"
-              placeholder="Ex: 3"
-            />
+          <div class="input-wrapper" [class.has-error]="isInvalid('dateFinPrevue')">
+            <input class="field-input" type="date" formControlName="dateFinPrevue"/>
           </div>
-          <span class="error-msg" *ngIf="isInvalid('daysOverdue')">
-            <mat-icon>error</mat-icon>{{ getError('daysOverdue') }}
+          <span class="error-msg" *ngIf="isInvalid('dateFinPrevue')">
+            <mat-icon>error</mat-icon>{{ getError('dateFinPrevue') }}
           </span>
         </div>
 
       </div>
 
-      <!-- Due Today toggle -->
-      <div class="toggle-row">
-        <div class="toggle-info">
-          <mat-icon>today</mat-icon>
-          <div>
-            <span class="toggle-title">À rendre aujourd'hui</span>
-            <span class="toggle-desc">Marquer ce projet comme dû aujourd'hui</span>
+      <!-- Date fin réelle -->
+      <div class="field-group">
+        <label class="field-label">
+          <mat-icon>event_available</mat-icon>
+          Date fin réelle
+        </label>
+        <div class="input-wrapper">
+          <input class="field-input" type="date" formControlName="dateFinReelle"/>
+        </div>
+      </div>
+
+      <!-- Budget -->
+      <div class="row-2col">
+
+        <div class="field-group">
+          <label class="field-label">
+            <mat-icon>account_balance_wallet</mat-icon>
+            Budget total (DZD) <span class="required">*</span>
+          </label>
+          <div class="input-wrapper" [class.has-error]="isInvalid('budgetTotale')">
+            <input class="field-input" type="number" min="0" formControlName="budgetTotale" placeholder="Ex: 5000000"/>
+          </div>
+          <span class="error-msg" *ngIf="isInvalid('budgetTotale')">
+            <mat-icon>error</mat-icon>{{ getError('budgetTotale') }}
+          </span>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">
+            <mat-icon>payments</mat-icon>
+            Budget consommé (DZD)
+          </label>
+          <div class="input-wrapper" [class.has-error]="isInvalid('budgetConsomme')">
+            <input class="field-input" type="number" min="0" formControlName="budgetConsomme" placeholder="Ex: 1500000"/>
+          </div>
+          <span class="error-msg" *ngIf="isInvalid('budgetConsomme')">
+            <mat-icon>error</mat-icon>{{ getError('budgetConsomme') }}
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Localisation -->
+      <div class="row-2col">
+
+        <div class="field-group">
+          <label class="field-label">
+            <mat-icon>location_city</mat-icon>
+            Ville
+          </label>
+          <div class="input-wrapper">
+            <input class="field-input" formControlName="ville" placeholder="Ex: Alger"/>
           </div>
         </div>
-        <div
-          class="toggle-switch"
-          [class.active]="form.get('dueToday')?.value"
-          (click)="form.get('dueToday')?.setValue(!form.get('dueToday')?.value)"
-        >
-          <div class="toggle-thumb"></div>
+
+        <div class="field-group">
+          <label class="field-label">
+            <mat-icon>markunread_mailbox</mat-icon>
+            Code postal
+          </label>
+          <div class="input-wrapper">
+            <input class="field-input" formControlName="codePostal" placeholder="Ex: 16000"/>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Adresse -->
+      <div class="field-group">
+        <label class="field-label">
+          <mat-icon>place</mat-icon>
+          Adresse
+        </label>
+        <div class="input-wrapper">
+          <input class="field-input" formControlName="adresse" placeholder="Ex: 12 Rue des Palmiers"/>
+        </div>
+      </div>
+
+      <!-- GPS -->
+      <div class="field-group">
+        <label class="field-label">
+          <mat-icon>my_location</mat-icon>
+          Coordonnées GPS
+        </label>
+        <div class="input-wrapper">
+          <input class="field-input" formControlName="coordonnesGPS" placeholder="Ex: 36.7372, 3.0865"/>
         </div>
       </div>
 
     </form>
   </mat-dialog-content>
 
-  <!-- ── ACTIONS ─────────────────────────────────────────── -->
+  <!-- ── ACTIONS ─────────────────────────────────────────────── -->
   <mat-dialog-actions align="end">
     <button class="btn-cancel" (click)="onCancel()">Annuler</button>
     <button class="btn-submit" (click)="onSubmit()">

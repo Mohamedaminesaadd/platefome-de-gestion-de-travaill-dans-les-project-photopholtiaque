@@ -1,10 +1,52 @@
 <div class="shell">
-    <app-sidebar></app-sidebar>
-    <div class="main">
-        <app-topbar></app-topbar>
-        <div class="dashia">
-          <app-timeline></app-timeline>
-          <app-ia-dahsborad></app-ia-dahsborad>
+
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <app-topbar></app-topbar>
+
+    <!-- Dashboard draggable -->
+    <div 
+      cdkDropList 
+      class="dashboard"
+      (cdkDropListDropped)="drop($event)">
+
+      <!-- Loop sur les composants -->
+      <div 
+        *ngFor="let item of dashboardItems; trackBy: trackByString" 
+        cdkDrag 
+        class="card">
+
+        <!-- Drag handle (optionnel mais PRO) -->
+        <div class="drag-header" cdkDragHandle>
+          <span class="drag-icon">⋮⋮</span>
         </div>
+
+        <!-- Components dynamiques -->
+        <app-stats-row *ngIf="item === 'stats'"></app-stats-row>
+
+        <app-timeline *ngIf="item === 'timeline'"></app-timeline>
+
+        <app-ia-dahsborad *ngIf="item === 'ia'"></app-ia-dahsborad>
+
+        <app-pie-dashboard *ngIf="item === 'pie'"></app-pie-dashboard>
+
+        <app-radar-dashboard *ngIf="item === 'radar'"></app-radar-dashboard>
+
+      </div>
+
     </div>
+
+    <!-- Bouton reset layout -->
+    <div class="actions">
+      <button (click)="resetLayout()">
+        Reset Layout
+      </button>
+    </div>
+
+  </div>
 </div>
