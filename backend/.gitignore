@@ -120,3 +120,32 @@ dist
 .pnp.*
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Node
+# Python virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Model files (optionnel si lourd)
+*.pkl
+*.joblib
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# FastAPI / Python env
+.env
