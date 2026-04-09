@@ -1,24 +1,39 @@
+// timeline.ts
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
+import { PredictionService, PredictionRequest, PredictionResponse } from '../../services/prediction';
 
 @Component({
   selector: 'app-timeline',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './timeline.html',
   styleUrl: './timeline.css',
+  providers: [PredictionService]
 })
+
+
 export class Timeline implements AfterViewInit, OnDestroy {
   @ViewChild('timelineCanvas') timelineCanvasRef!: ElementRef<HTMLCanvasElement>;
 
   private timelineChart!: Chart;
   activePeriod: 'week' | 'month' | 'quarter' = 'week';
+  
+  // États de chargement
+  isLoading = false;
+  predictionResult: PredictionResponse | null = null;
+  errorMessage: string | null = null;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private predictionService: PredictionService
+  ) {}
 
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.buildTimelineChart();
+      this.loadPredictions();
       this.cdr.markForCheck();
     }, 0);
   }
@@ -27,9 +42,119 @@ export class Timeline implements AfterViewInit, OnDestroy {
     this.timelineChart?.destroy();
   }
 
+  /**
+   * Charge les prédictions depuis le backend
+   */
+  loadPredictions(): void {
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    // Exemple de données pour la prédiction
+    const predictionRequest: PredictionRequest = {
+      heure_estimee: 17,
+      complexite: 3,
+      priorite: 4,
+      phase: 2,
+      experience_technicien: 1.2,
+      meteo: 1,
+      saison: 3
+    };
+
+    this.predictionService.predict(predictionRequest).subscribe({
+      next: (response: { valeurPredite: any; unite: any; }) => {
+        this.predictionResult = response;
+        console.log(`✅ Prédiction reçue: ${response.valeurPredite} ${response.unite}`);
+        this.updateChartWithPredictions(response);
+        this.isLoading = false;
+      },
+      error: (error: any) => {
+        console.error('❌ Erreur de prédiction:', error);
+        this.errorMessage = 'Impossible de charger les prédictions';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  /**
+   * Met à jour le graphique avec les données de prédiction
+   */
+  private updateChartWithPredictions(prediction: PredictionResponse): void {
+    if (!this.timelineChart) return;
+    
+    // Ajuste les données en fonction de la prédiction
+    const adjustedData = this.getChartDataWithPrediction(prediction);
+    this.timelineChart.data.datasets = adjustedData.datasets;
+    this.timelineChart.data.labels = adjustedData.labels;
+    this.timelineChart.update();
+  }
+
+  /**
+   * Génère les données du graphique en intégrant la prédiction
+   */
+  private getChartDataWithPrediction(prediction: PredictionResponse): { labels: string[]; datasets: any[] } {
+    const predictionValue = prediction.valeurPredite;
+    const unit = prediction.unite;
+    
+    const dataMap = {
+      week: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        target: [65, 25, 35, 42, 85, 72, Math.min(predictionValue * 5, 100)],
+        estimated: [60, 65, 70, 30, 80, 85, 20]
+      },
+      month: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        target: [40, 5, 70, Math.min(predictionValue * 2, 100)],
+        estimated: [15, 50, 5, 80]
+      },
+      quarter: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        target: [30, 45, 60, 75, 85, Math.min(predictionValue, 100)],
+        estimated: [25, 40, 55, 70, 80, 90]
+      }
+    };
+
+    const periodData = dataMap[this.activePeriod];
+    
+    return {
+      labels: periodData.labels,
+      datasets: [
+        {
+          label: 'Target Completed',
+          data: periodData.target,
+          borderColor: '#2563EB',
+          backgroundColor: 'rgba(37, 99, 235, 0.1)',
+          borderWidth: 2,
+          pointBackgroundColor: '#2563EB',
+          pointBorderColor: '#fff',
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          tension: 0.4,
+          fill: true
+        },
+        {
+          label: 'Estimated Completion',
+          data: periodData.estimated,
+          borderColor: '#CBD5E1',
+          backgroundColor: 'rgba(203, 213, 225, 0.1)',
+          borderWidth: 2,
+          pointBackgroundColor: '#94A3B8',
+          pointBorderColor: '#fff',
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          tension: 0.4,
+          fill: true
+        }
+      ]
+    };
+  }
+
   switchPeriod(period: 'week' | 'month' | 'quarter'): void {
     this.activePeriod = period;
-    this.updateChartData();
+    if (this.predictionResult) {
+      this.updateChartWithPredictions(this.predictionResult);
+    } else {
+      this.updateChartData();
+    }
   }
 
   private updateChartData(): void {
@@ -188,5 +313,12 @@ export class Timeline implements AfterViewInit, OnDestroy {
         }
       }
     });
+  }
+
+  /**
+   * Rafraîchir les prédictions manuellement
+   */
+  refreshPredictions(): void {
+    this.loadPredictions();
   }
 }

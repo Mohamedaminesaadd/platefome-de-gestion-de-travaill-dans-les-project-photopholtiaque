@@ -77,7 +77,7 @@ export interface TeamMember {
 @Component({
   selector: 'app-proc',
   standalone: true,
-  imports: [Sidebar, Topbar, ListProject, Timeline, IaDahsborad],
+  imports: [Sidebar, Topbar, ListProject],
   templateUrl: './proc.html',
   styleUrl: './proc.css',
 })

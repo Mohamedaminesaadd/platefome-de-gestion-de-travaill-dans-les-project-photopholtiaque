@@ -1,0 +1,182 @@
+<!-- filter-bar.html -->
+<div class="filter-bar">
+
+  <!-- Recherche -->
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input
+      class="search-input"
+      type="text"
+      placeholder="Search tasks…"
+      [(ngModel)]="searchInput"
+      (ngModelChange)="onSearchInput($event)"
+    />
+  </div>
+
+  <!-- Dropdowns -->
+  <div class="dropdowns">
+
+    <!-- Technician -->
+    <div class="dropdown" [class.active]="filters.technicianId">
+      <button class="dropdown-btn">
+        <ng-container *ngIf="!filters.technicianId">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+          Technician
+        </ng-container>
+        <ng-container *ngIf="filters.technicianId">
+          <span class="selected-label">
+            <span class="mini-avatar"
+              [style.background]="getTechnicianById(filters.technicianId)?.avatarColor">
+              {{ getTechnicianById(filters.technicianId)?.avatar }}
+            </span>
+            {{ getTechnicianById(filters.technicianId)?.name }}
+          </span>
+        </ng-container>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
+      <div class="dropdown-menu">
+        <div
+          *ngFor="let t of technicians"
+          class="dropdown-item"
+          [class.selected]="filters.technicianId === t.id"
+          (click)="setFilter('technicianId', t.id)"
+        >
+          <span class="avatar" [style.background]="t.avatarColor">{{ t.avatar }}</span>
+          <span class="item-info">
+            <span class="item-name">{{ t.name }}</span>
+            <span class="item-role">{{ t.role }}</span>
+          </span>
+          <svg *ngIf="filters.technicianId === t.id" class="check"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="dropdown" [class.active]="filters.status">
+      <button class="dropdown-btn">
+        <ng-container *ngIf="!filters.status">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4l3 3"/>
+          </svg>
+          Status
+        </ng-container>
+        <ng-container *ngIf="filters.status">
+          <span class="selected-label">
+            <span class="status-dot" [class]="'status-dot--' + filters.status"></span>
+            {{ statusOptions | statusLabel: filters.status }}
+          </span>
+        </ng-container>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
+      <div class="dropdown-menu">
+        <div
+          *ngFor="let s of statusOptions"
+          class="dropdown-item"
+          [class.selected]="filters.status === s.value"
+          (click)="setFilter('status', s.value)"
+        >
+          <span class="status-dot" [class]="'status-dot--' + s.value"></span>
+          {{ s.label }}
+          <svg *ngIf="filters.status === s.value" class="check"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Priority -->
+    <div class="dropdown" [class.active]="filters.priority">
+      <button class="dropdown-btn">
+        <ng-container *ngIf="!filters.priority">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M4 6h16M4 12h10M4 18h6"/>
+          </svg>
+          Priority
+        </ng-container>
+        <ng-container *ngIf="filters.priority">
+          <span class="selected-label">
+            <span class="priority-dot" [class]="'priority-dot--' + filters.priority"></span>
+            {{ priorityOptions | priorityLabel: filters.priority }}
+          </span>
+        </ng-container>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
+      <div class="dropdown-menu">
+        <div
+          *ngFor="let p of priorityOptions"
+          class="dropdown-item"
+          [class.selected]="filters.priority === p.value"
+          (click)="setFilter('priority', p.value)"
+        >
+          <span class="priority-dot" [class]="'priority-dot--' + p.value"></span>
+          {{ p.label }}
+          <svg *ngIf="filters.priority === p.value" class="check"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deadline -->
+    <div class="dropdown" [class.active]="filters.deadline">
+      <button class="dropdown-btn">
+        <ng-container *ngIf="!filters.deadline">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <path d="M16 2v4M8 2v4M3 10h18"/>
+          </svg>
+          Deadline
+        </ng-container>
+        <ng-container *ngIf="filters.deadline">
+          {{ deadlineOptions | deadlineLabel: filters.deadline }}
+        </ng-container>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
+      <div class="dropdown-menu">
+        <div
+          *ngFor="let d of deadlineOptions"
+          class="dropdown-item"
+          [class.selected]="filters.deadline === d.value"
+          (click)="setFilter('deadline', d.value)"
+        >
+          {{ d.label }}
+          <svg *ngIf="filters.deadline === d.value" class="check"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Active Chips -->
+  <div class="chips-row" *ngIf="activeChips.length > 0">
+    <span class="chips-label">Active filters:</span>
+    <div *ngFor="let chip of activeChips" class="chip">
+      {{ chip.label }}
+      <button class="chip-remove" (click)="removeChip(chip)">✕</button>
+    </div>
+    <button class="clear-all" (click)="clearAll()">Clear all</button>
+  </div>
+
+</div>

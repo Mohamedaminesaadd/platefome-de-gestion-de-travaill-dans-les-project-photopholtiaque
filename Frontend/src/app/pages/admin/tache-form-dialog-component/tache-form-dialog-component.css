@@ -1,0 +1,162 @@
+/* ── tache-form-dialog.component.css ──────────────────────────────────────── */
+
+.dialog-container {
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+/* ── HEADER ──────────────────────────────────────────────────────────────── */
+.dlg-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px 22px 18px;
+  border-bottom: 1px solid #F1F5F9;
+  flex-shrink: 0;
+}
+
+.dlg-header-left {
+  display: flex; align-items: flex-start; gap: 14px;
+}
+
+.dlg-icon {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+  color: #2563EB;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.dlg-icon.edit-mode {
+  background: linear-gradient(135deg, #F5F3FF, #EDE9FE);
+  color: #7C3AED;
+}
+.dlg-icon mat-icon { font-size: 22px; width: 22px; height: 22px; }
+
+.dlg-title {
+  font-size: 16px; font-weight: 800;
+  color: #0F172A; margin: 0 0 3px;
+  letter-spacing: -0.3px;
+}
+
+.dlg-sub {
+  font-size: 12.5px; color: #94A3B8; margin: 0;
+}
+
+.close-btn {
+  width: 32px; height: 32px;
+  border-radius: 8px; border: none;
+  background: #F8FAFC; color: #64748B;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: all 0.2s;
+}
+.close-btn mat-icon { font-size: 18px; width: 18px; height: 18px; }
+.close-btn:hover { background: #FEE2E2; color: #DC2626; }
+
+/* ── BODY ────────────────────────────────────────────────────────────────── */
+.dlg-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 22px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Field group */
+.field-group {
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+.field-label {
+  font-size: 12px; font-weight: 700;
+  color: #475569; text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+.required { color: #EF4444; }
+
+.field-input {
+  border: 1px solid #E2E8F0;
+  border-radius: 9px;
+  padding: 9px 12px;
+  font-size: 13.5px; color: #0F172A;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
+}
+.field-input:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
+}
+.field-input::placeholder { color: #94A3B8; }
+
+.field-textarea { resize: vertical; min-height: 70px; }
+
+/* Row: two columns */
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* mat-select full width */
+.full-select {
+  width: 100%;
+}
+
+/* Technician option */
+.tech-option {
+  display: flex; align-items: center; gap: 8px;
+}
+.tech-av {
+  width: 22px; height: 22px;
+  border-radius: 6px; background: #2563EB;
+  color: #fff; font-size: 10px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.tech-spec {
+  font-size: 11px; color: #94A3B8; margin-left: auto;
+}
+
+/* ── FOOTER ──────────────────────────────────────────────────────────────── */
+.dlg-footer {
+  display: flex; justify-content: flex-end; align-items: center; gap: 8px;
+  padding: 16px 22px 20px;
+  border-top: 1px solid #F1F5F9;
+  flex-shrink: 0;
+}
+
+.btn-cancel {
+  padding: 0 16px; height: 38px;
+  border-radius: 9px; border: none;
+  background: #F1F5F9; color: #64748B;
+  font-size: 13px; font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer; transition: background 0.2s;
+}
+.btn-cancel:hover { background: #E2E8F0; color: #334155; }
+
+.btn-submit {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 18px; height: 38px;
+  border-radius: 9px; border: none;
+  background: linear-gradient(135deg, #2563EB, #7C3AED);
+  color: #fff;
+  font-size: 13px; font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+  transition: all 0.2s;
+}
+.btn-submit mat-icon { font-size: 16px; width: 16px; height: 16px; }
+.btn-submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37,99,235,0.35); }
+.btn-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }

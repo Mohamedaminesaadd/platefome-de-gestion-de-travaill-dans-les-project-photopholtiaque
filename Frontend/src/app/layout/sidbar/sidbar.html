@@ -1,14 +1,17 @@
 <aside class="sidebar" [class.collapsed]="isCollapsed">
 
-  <!-- LOGO -->
+  <!-- LOGO & TOGGLE -->
   <div class="sidebar-logo">
-    <button (click)="toggleSidebar()">
+    <button (click)="toggleSidebar()" class="toggle-btn" matRipple>
       <mat-icon>solar_power</mat-icon>
     </button>
-    @if(!isCollapsed){<span class="logo-text">PV Manager</span>}
+
+    @if (!isCollapsed) {
+      <span class="logo-text">PV Manager</span>
+    }
   </div>
 
-  <!-- NAV -->
+  <!-- NAVIGATION -->
   <nav class="sidebar-nav">
 
     <a class="nav-item"
@@ -29,7 +32,7 @@
 
     <a class="nav-item"
        matRipple
-       routerLink="/"
+       routerLink="/kanban"
        routerLinkActive="active">
       <mat-icon>calendar_month</mat-icon>
       @if (!isCollapsed) { <span>Schedule</span> }
@@ -37,7 +40,7 @@
 
     <a class="nav-item"
        matRipple
-       routerLink="/"
+       routerLink="/page-technician"
        routerLinkActive="active">
       <mat-icon>group</mat-icon>
       @if (!isCollapsed) { <span>Team</span> }
@@ -45,7 +48,7 @@
 
     <a class="nav-item"
        matRipple
-       routerLink="/"
+       routerLink="/settings"
        routerLinkActive="active">
       <mat-icon>settings</mat-icon>
       @if (!isCollapsed) { <span>Settings</span> }
@@ -69,7 +72,7 @@
 
   <!-- LOGOUT -->
   <div class="sidebar-logout">
-    <button class="logout-btn" matRipple>
+    <button class="logout-btn" matRipple (click)="logout()">
       <mat-icon>logout</mat-icon>
       @if (!isCollapsed) { <span>Logout</span> }
     </button>

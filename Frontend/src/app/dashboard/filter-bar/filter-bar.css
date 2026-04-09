@@ -1,0 +1,133 @@
+/* filter-bar.css */
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 24px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.07);
+  margin-bottom: 24px;
+}
+
+.search-wrap { position: relative; }
+.search-icon {
+  position: absolute; left: 14px; top: 50%;
+  transform: translateY(-50%);
+  width: 18px; height: 18px; color: #94a3b8;
+}
+.search-input {
+  width: 100%;
+  padding: 11px 14px 11px 42px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px; color: #1e293b;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  box-sizing: border-box;
+}
+.search-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+}
+
+.dropdowns { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.dropdown { position: relative; }
+.dropdown:hover .dropdown-menu,
+.dropdown:focus-within .dropdown-menu {
+  opacity: 1; transform: translateY(0);
+  pointer-events: all; visibility: visible;
+}
+
+.dropdown-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 14px;
+  border: 1.5px solid #e2e8f0; border-radius: 10px;
+  background: #f8fafc;
+  font-size: 13px; font-weight: 500; color: #475569;
+  cursor: pointer; white-space: nowrap;
+  transition: all .2s;
+}
+.dropdown-btn svg { width: 16px; height: 16px; }
+.dropdown-btn:hover { border-color: #6366f1; color: #6366f1; background: #f0f0ff; }
+.dropdown.active .dropdown-btn {
+  border-color: #6366f1; background: #eef2ff; color: #4f46e5;
+}
+.chevron { margin-left: 2px; }
+.selected-label { display: flex; align-items: center; gap: 6px; }
+
+.dropdown-menu {
+  position: absolute; top: calc(100% + 6px); left: 0;
+  min-width: 200px;
+  background: #fff; border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  z-index: 100; overflow: hidden;
+  opacity: 0; visibility: hidden;
+  transform: translateY(-6px);
+  transition: all .2s ease;
+}
+.dropdown-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  font-size: 13px; color: #374151;
+  cursor: pointer; transition: background .15s;
+}
+.dropdown-item:hover { background: #f8fafc; }
+.dropdown-item.selected { background: #eef2ff; color: #4f46e5; font-weight: 500; }
+.dropdown-item .check { width: 16px; height: 16px; margin-left: auto; color: #6366f1; }
+
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.mini-avatar {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: #fff;
+}
+.item-info { display: flex; flex-direction: column; }
+.item-name { font-size: 13px; font-weight: 500; color: #1e293b; }
+.item-role { font-size: 11px; color: #94a3b8; }
+
+.status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.status-dot--todo        { background: #94a3b8; }
+.status-dot--in-progress { background: #3b82f6; }
+.status-dot--done        { background: #22c55e; }
+
+.priority-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.priority-dot--low    { background: #94a3b8; }
+.priority-dot--medium { background: #f59e0b; }
+.priority-dot--high   { background: #ef4444; }
+
+.chips-row {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding-top: 4px;
+}
+.chips-label { font-size: 12px; color: #94a3b8; font-weight: 500; }
+
+.chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  background: #eef2ff; border: 1px solid #c7d2fe;
+  border-radius: 999px;
+  font-size: 12px; color: #4f46e5; font-weight: 500;
+  animation: chipIn .2s ease;
+}
+@keyframes chipIn {
+  from { opacity: 0; transform: scale(.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.chip-remove {
+  background: none; border: none; cursor: pointer;
+  font-size: 10px; color: #818cf8; padding: 0; line-height: 1;
+  transition: color .15s;
+}
+.chip-remove:hover { color: #4f46e5; }
+.clear-all {
+  background: none; border: none; cursor: pointer;
+  font-size: 12px; color: #94a3b8; text-decoration: underline; padding: 0;
+  transition: color .15s;
+}
+.clear-all:hover { color: #ef4444; }

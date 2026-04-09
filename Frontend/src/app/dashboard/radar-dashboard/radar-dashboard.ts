@@ -44,12 +44,12 @@ export class RadarDashboard implements OnInit, AfterViewInit, OnDestroy {
 
   chart: Chart | null = null;
 
-  labels = ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'];
+  labels = ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running', 'Testing'];
 
   series: RadarSeries[] = [
     {
       label: 'Series A',
-      data: [65, 59, 80, 81, 56, 55, 40],
+      data: [65, 59, 80, 81, 56, 55, 40, 90],
       color: '#F4738A',
       fill: 'rgba(244, 115, 138, 0.35)',
     },

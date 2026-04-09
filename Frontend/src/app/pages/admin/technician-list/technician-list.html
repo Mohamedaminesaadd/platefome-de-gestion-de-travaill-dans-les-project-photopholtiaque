@@ -1,163 +1,149 @@
 <div class="shell">
-    <app-sidebar></app-sidebar>
-    <div class="main">
-        <app-topbar></app-topbar>
-        <section>
+  <app-sidebar></app-sidebar>
+  <div class="main">
+    <app-topbar></app-topbar>
+    <section>
 
-  <!-- ── HEADER ──────────────────────────────────────────────── -->
-  <div class="section-header">
-    <h2 class="section-title">Techniciens</h2>
-    <div class="header-meta">
-      <span class="count-badge">
-        {{ filtered.length }} technicien{{ filtered.length > 1 ? 's' : '' }}
-      </span>
-    </div>
-  </div>
-
-  <!-- ── TOOLBAR ─────────────────────────────────────────────── -->
-  <div class="toolbar">
-
-    <!-- Recherche -->
-    <div class="search-bar">
-      <mat-icon class="search-icon">search</mat-icon>
-      <input
-        class="search-input"
-        placeholder="Nom, email ou spécialité..."
-        [(ngModel)]="searchTerm"
-        (input)="applyFilter()"
-      />
-    </div>
-
-    <!-- Filtres disponibilité -->
-    <div class="filter-tabs">
-      <button
-        class="filter-tab"
-        [class.active]="filterDisponible === 'all'"
-        (click)="setFilter('all')"
-      >
-        Tous
-      </button>
-      <button
-        class="filter-tab"
-        [class.active]="filterDisponible === 'disponible'"
-        (click)="setFilter('disponible')"
-      >
-        <span class="dot dot-green"></span>
-        Disponible
-      </button>
-      <button
-        class="filter-tab"
-        [class.active]="filterDisponible === 'occupe'"
-        (click)="setFilter('occupe')"
-      >
-        <span class="dot dot-red"></span>
-        Occupé
-      </button>
-    </div>
-
-  </div>
-
-  <!-- ── GRID ────────────────────────────────────────────────── -->
-  <div class="tech-grid" *ngIf="filtered.length > 0; else noData">
-    <div
-      class="tech-card"
-      matRipple
-      *ngFor="let t of filtered; trackBy: trackById"
-    >
-
-      <!-- Badge disponibilité -->
-      <div
-        class="dispo-badge"
-        [class.dispo-on]="t.disponible"
-        [class.dispo-off]="!t.disponible"
-      >
-        <span class="dispo-dot"></span>
-        {{ t.disponible ? 'Disponible' : 'Occupé' }}
-      </div>
-
-      <!-- Avatar + Infos -->
-      <div class="tech-top">
-        <div
-          class="tech-avatar"
-          [style.background]="getAvatarColor(t.username)"
-        >
-          {{ getInitials(t.username) }}
-        </div>
-        <div class="tech-info">
-          <div class="tech-name">{{ t.username }}</div>
-          <div class="tech-email">{{ t.email }}</div>
-          <div class="tech-specialite" *ngIf="t.specialite">
-            <mat-icon>build</mat-icon>
-            {{ t.specialite }}
-          </div>
-        </div>
-      </div>
-
-      <!-- Charge de travail -->
-      <div class="charge-block">
-        <div class="charge-header">
-          <span class="charge-label">Charge de travail</span>
-          <span class="charge-tag" [ngClass]="chargeClass(t.tachesEnCours)">
-            {{ chargeLabel(t.tachesEnCours) }}
+      <!-- ── HEADER ── -->
+      <div class="section-header">
+        <h2 class="section-title">Techniciens</h2>
+        <div class="header-meta">
+          <span class="count-badge">
+            {{ filtered.length }} technicien{{ filtered.length > 1 ? 's' : '' }}
           </span>
         </div>
-        <div class="charge-track">
-          <div
-            class="charge-fill"
-            [ngClass]="chargeClass(t.tachesEnCours)"
-            [style.width.%]="(t.tachesEnCours / 6) * 100"
-          ></div>
+      </div>
+
+      <!-- ── TOOLBAR ── -->
+      <div class="toolbar">
+        <div class="search-bar">
+          <mat-icon class="search-icon">search</mat-icon>
+          <input
+            class="search-input"
+            placeholder="Nom, email ou spécialité..."
+            [(ngModel)]="searchTerm"
+            (input)="applyFilter()"
+          />
         </div>
-        <div class="charge-count">
-          <mat-icon>assignment</mat-icon>
-          {{ t.tachesEnCours }} tâche{{ t.tachesEnCours > 1 ? 's' : '' }} en cours
+
+        <div class="filter-tabs">
+          <button class="filter-tab" [class.active]="filterDisponible === 'all'" (click)="setFilter('all')">
+            Tous
+          </button>
+          <button class="filter-tab" [class.active]="filterDisponible === 'disponible'" (click)="setFilter('disponible')">
+            <span class="dot dot-green"></span> Disponible
+          </button>
+          <button class="filter-tab" [class.active]="filterDisponible === 'occupe'" (click)="setFilter('occupe')">
+            <span class="dot dot-red"></span> Occupé
+          </button>
         </div>
       </div>
 
-      <!-- Actions -->
-      <div class="tech-actions">
-        <button
-          class="action-btn view-btn"
+      <!-- ── GRID ── -->
+      <div class="tech-grid" *ngIf="filtered.length > 0; else noData">
+        <div
+          class="tech-card"
           matRipple
-          matTooltip="Voir les tâches"
-          (click)="onVoirTaches(t); $event.stopPropagation()"
+          *ngFor="let t of filtered; trackBy: trackById"
         >
-          <mat-icon>assignment</mat-icon>
-          Tâches
-        </button>
-        <button
-          class="action-btn assign-btn"
-          matRipple
-          matTooltip="Assigner une tâche"
-          [disabled]="!t.disponible"
-          (click)="onAssignerTache(t); $event.stopPropagation()"
-        >
-          <mat-icon>add_task</mat-icon>
-          Assigner
-        </button>
-        <button
-          class="action-btn profile-btn"
-          matRipple
-          matTooltip="Voir profil"
-          (click)="onVoirProfil(t); $event.stopPropagation()"
-        >
-          <mat-icon>person</mat-icon>
-        </button>
+
+          <!-- Badge disponibilité -->
+          <div class="dispo-badge" [class.dispo-on]="t.disponible" [class.dispo-off]="!t.disponible">
+            <span class="dispo-dot"></span>
+            {{ t.disponible ? 'Disponible' : 'Occupé' }}
+          </div>
+
+          <!-- Avatar + Infos -->
+          <div class="tech-top">
+            <div class="tech-avatar" [style.background]="getAvatarColor(t.username)">
+              {{ getInitials(t.username) }}
+            </div>
+            <div class="tech-info">
+              <div class="tech-name">{{ t.username }}</div>
+              <div class="tech-email">{{ t.email }}</div>
+              <div class="tech-specialite" *ngIf="t.specialite">
+                <mat-icon>build</mat-icon>
+                {{ t.specialite }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Charge de travail -->
+          <div class="charge-block">
+            <div class="charge-header">
+              <span class="charge-label">Charge de travail</span>
+              <span class="charge-tag" [ngClass]="chargeClass(t.tachesEnCours)">
+                {{ chargeLabel(t.tachesEnCours) }}
+              </span>
+            </div>
+            <div class="charge-track">
+              <div
+                class="charge-fill"
+                [ngClass]="chargeClass(t.tachesEnCours)"
+                [style.width.%]="(t.tachesEnCours / 6) * 100"
+              ></div>
+            </div>
+            <div class="charge-count">
+              <mat-icon>assignment</mat-icon>
+              {{ t.tachesEnCours }} tâche{{ t.tachesEnCours > 1 ? 's' : '' }} en cours
+            </div>
+          </div>
+
+          <!-- ── SPARKLINE EFFICACITÉ ── -->
+          <div class="sparkline-block">
+            <div class="sparkline-header">
+              <span class="sparkline-label">Efficacité (7 derniers jours)</span>
+              <span class="sparkline-value" [ngClass]="effClass(t.efficacite)">
+                {{ effAvg(t.efficacite) }}%
+              </span>
+            </div>
+            <div class="sparkline-wrapper">
+              <canvas [id]="'spark-' + t._id"></canvas>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="tech-actions">
+            <button
+              class="action-btn view-btn"
+              matRipple
+              matTooltip="Voir les tâches"
+              (click)="onVoirTaches(t); $event.stopPropagation()"
+            >
+              <mat-icon>assignment</mat-icon>
+              Tâches
+            </button>
+            <button
+              class="action-btn assign-btn"
+              matRipple
+              matTooltip="Assigner une tâche"
+              [disabled]="!t.disponible"
+              (click)="onAssignerTache(t); $event.stopPropagation()"
+            >
+              <mat-icon>add_task</mat-icon>
+              Assigner
+            </button>
+            <button
+              class="action-btn profile-btn"
+              matRipple
+              matTooltip="Voir profil"
+              (click)="onVoirProfil(t); $event.stopPropagation()"
+            >
+              <mat-icon>person</mat-icon>
+            </button>
+          </div>
+
+        </div>
       </div>
 
-    </div>
+      <!-- ── NO DATA ── -->
+      <ng-template #noData>
+        <div class="no-data">
+          <mat-icon>search_off</mat-icon>
+          <span>Aucun technicien trouvé</span>
+        </div>
+      </ng-template>
+
+    </section>
   </div>
-
-  <!-- ── NO DATA ──────────────────────────────────────────────── -->
-  <ng-template #noData>
-    <div class="no-data">
-      <mat-icon>search_off</mat-icon>
-      <span>Aucun technicien trouvé</span>
-    </div>
-  </ng-template>
-
-</section>
-        
-    
-    </div>
 </div>

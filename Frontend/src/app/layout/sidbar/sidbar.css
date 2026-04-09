@@ -21,7 +21,7 @@
 }
 /*tu ne pas besion de ecrire le code totale car il herite de sidbar*/
 .sidebar.collapsed {
-  width: 68px;
+  width: 70px;
 }
 
 .sidebar-logo {
@@ -101,7 +101,6 @@
   opacity: 0;
   transform: translateX(-10px);
   pointer-events: none;
-
   transition-delay: 0s;
 }
 
@@ -113,7 +112,7 @@
   opacity: 1;
   transform: translateX(0);
 
-  transition-delay: 0.15s; /* 🔥 clé magique */
+  transition-delay: 0.15s; 
 }
 /* NAV */
 .sidebar-nav {

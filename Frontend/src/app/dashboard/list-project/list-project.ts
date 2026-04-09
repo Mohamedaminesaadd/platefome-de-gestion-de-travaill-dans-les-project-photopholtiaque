@@ -26,7 +26,6 @@ import { Project } from '../../core/models/project.model';
   ],
   templateUrl: './list-project.html',
   styleUrls: ['./list-project.css']
-  // ❌ IMPORTANT: laisse Default (ne mets pas OnPush pour éviter ton bug)
 })
 export class ListProject implements OnInit {
 
@@ -39,7 +38,7 @@ export class ListProject implements OnInit {
   constructor(
     private dialog: MatDialog,
     private projectService: ProjectService,
-    private cdr: ChangeDetectorRef // 🔥 important
+    private cdr: ChangeDetectorRef 
   ) {}
 
   ngOnInit(): void {
@@ -55,13 +54,11 @@ export class ListProject implements OnInit {
 
         console.log('Projects loaded:', data);
 
-        // ✅ IMPORTANT: new references (fix Angular detection issues)
         this.projects = [...data];
         this.filteredProjects = [...data];
 
         this.isLoading = false;
 
-        // 🔥 force UI refresh (fix “click to appear” bug)
         this.cdr.detectChanges();
       },
 

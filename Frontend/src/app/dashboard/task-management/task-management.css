@@ -1,0 +1,305 @@
+
+/* =========================
+   GLOBAL
+========================= */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f9fafb;
+}
+
+.page {
+  padding: 16px;
+}
+
+/* =========================
+   HEADER (FIX HEIGHT)
+========================= */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 12px 20px;
+  min-height: 70px;
+  max-height: 90px;
+
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
+  overflow: hidden;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.page-title svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.task-count {
+  font-size: 13px;
+  color: #777;
+  margin-top: 2px;
+}
+
+/* =========================
+   STAT PILLS
+========================= */
+.stat-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.pill--todo {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.pill--in-progress {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.pill--done {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.pill--late {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* =========================
+   FILTER BAR (spacing only)
+========================= */
+app-filter-bar {
+  display: block;
+  margin: 16px 0;
+}
+
+/* =========================
+   TOOLBAR
+========================= */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 16px;
+}
+
+.results-info {
+  font-size: 14px;
+  color: #555;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 12px;
+  font-size: 13px;
+
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: white;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn:hover {
+  background: #f3f4f6;
+}
+
+.btn--active {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.btn--primary {
+  background: #3b82f6;
+  color: white;
+  border: none;
+}
+
+.btn--primary:hover {
+  background: #2563eb;
+}
+
+.btn--danger {
+  background: #ef4444;
+  color: white;
+  border: none;
+}
+
+.btn--danger:hover {
+  background: #dc2626;
+}
+
+.btn--ghost {
+  background: transparent;
+  border: none;
+  color: #6b7280;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================
+   🔥 MULTI SELECT BAR FIXE
+========================= */
+.multi-select-bar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  width: fit-content;
+  min-width: 380px;
+  max-width: 90%;
+
+  padding: 12px 20px;
+
+  background: #111827;
+  color: white;
+
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+  z-index: 999;
+
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.multi-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.multi-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.selected-count {
+  font-weight: 600;
+  font-size: 14px;
+  color: #38bdf8;
+}
+
+/* =========================
+   TASK LIST (spacing)
+========================= */
+app-task-list {
+  display: block;
+  margin-bottom: 80px; /* 🔥 évite overlap avec la bar fixe */
+}
+
+/* =========================
+   MODAL + TOAST (safe spacing)
+========================= */
+app-assign-modal {
+  z-index: 1000;
+}
+
+app-toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1100;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .stat-pills {
+    flex-wrap: wrap;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .multi-select-bar {
+    flex-direction: column;
+    gap: 10px;
+    min-width: auto;
+    width: 90%;
+  }
+
+}

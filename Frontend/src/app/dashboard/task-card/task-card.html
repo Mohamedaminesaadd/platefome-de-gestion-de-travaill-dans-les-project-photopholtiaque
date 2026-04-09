@@ -1,0 +1,62 @@
+<!-- task-card.html -->
+<div
+  class="card"
+  [class.card--selected]="selected"
+  [class.card--multi]="multiSelectMode"
+  [class.card--late]="isLate"
+  [attr.data-status]="task.status"
+  (click)="onCardClick()"
+>
+  <!-- Checkbox multi-select -->
+  <div class="card-check" *ngIf="multiSelectMode">
+    <span class="checkbox" [class.checkbox--checked]="selected">
+      <svg *ngIf="selected" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          stroke-width="3" d="M5 13l4 4L19 7"/>
+      </svg>
+    </span>
+  </div>
+
+  <div class="card-body">
+    <!-- Header -->
+    <div class="card-header">
+      <span class="phase-tag">{{ task.phaseName }}</span>
+      <div class="badges">
+        <span class="badge" [class]="'badge--' + priorityConfig.cls">
+          {{ priorityConfig.label }}
+        </span>
+        <span class="badge" [class]="'badge--' + statusConfig.cls">
+          {{ statusConfig.label }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Titre + Description -->
+    <h3 class="card-title">{{ task.title }}</h3>
+    <p class="card-desc">{{ task.description }}</p>
+
+    <!-- Footer -->
+    <div class="card-footer">
+      <div class="tech-wrap">
+        <ng-container *ngIf="task.assignedTo; else unassigned">
+          <span class="tech-avatar" [style.background]="task.assignedTo.avatarColor">
+            {{ task.assignedTo.avatar }}
+          </span>
+          <span class="tech-name">{{ task.assignedTo.name }}</span>
+        </ng-container>
+        <ng-template #unassigned>
+          <span class="tech-avatar tech-avatar--empty">?</span>
+          <span class="tech-name tech-name--empty">Unassigned</span>
+        </ng-template>
+      </div>
+
+      <span class="deadline" [class.deadline--late]="isLate">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <path d="M16 2v4M8 2v4M3 10h18"/>
+        </svg>
+        {{ deadlineLabel }}
+      </span>
+    </div>
+  </div>
+</div>

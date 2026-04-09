@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Sidebar } from "../../../layout/sidbar/sidbar";
 import { Topbar } from "../../../layout/topbar/topbar";
 import { CommonModule } from '@angular/common';
@@ -7,8 +7,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
+import { Chart, registerables } from 'chart.js';
 
-// ── MODEL LOCAL ───────────────────────────────────────────────
+Chart.register(...registerables);
+
+// ── INTERFACE ─────────────────────────────────────────────────
 export interface Technician {
   _id:           string;
   username:      string;
@@ -17,43 +20,127 @@ export interface Technician {
   specialite?:   string;
   tachesEnCours: number;
   disponible:    boolean;
+  efficacite:    number[];
 }
 
 @Component({
   selector: 'app-technician-list',
   standalone: true,
   imports: [
-    CommonModule, // ✅ *ngIf, *ngFor, ngClass
-    FormsModule, // ✅ [(ngModel)]
-    MatIconModule, // ✅ <mat-icon>
-    MatRippleModule, // ✅ matRipple
-    MatTooltipModule, // ✅ matTooltip
+    CommonModule,
+    FormsModule,
+    MatIconModule,
+    MatRippleModule,
+    MatTooltipModule,
     MatDialogModule,
     Sidebar,
     Topbar
-],
+  ],
   templateUrl: './technician-list.html',
   styleUrls:   ['./technician-list.css']
 })
-export class TechnicianList implements OnInit {
+export class TechnicianList implements OnInit, AfterViewInit {
 
   searchTerm       = '';
-  filterDisponible = 'all'; // 'all' | 'disponible' | 'occupe'
+  filterDisponible = 'all';
 
   technicians: Technician[] = [
-    { _id:'t1', username:'Amine Sadda',    email:'amine@mail.com',  role:'technician', specialite:'Électricité',  tachesEnCours:2, disponible:true  },
-    { _id:'t2', username:'Sara Benmoussa', email:'sara@mail.com',   role:'technician', specialite:'Mécanique',    tachesEnCours:5, disponible:false },
-    { _id:'t3', username:'Karim Ouali',    email:'karim@mail.com',  role:'technician', specialite:'Informatique', tachesEnCours:1, disponible:true  },
-    { _id:'t4', username:'Nadia Ferhat',   email:'nadia@mail.com',  role:'technician', specialite:'Hydraulique',  tachesEnCours:4, disponible:false },
-    { _id:'t5', username:'Youcef Amrani',  email:'youcef@mail.com', role:'technician', specialite:'Électricité',  tachesEnCours:0, disponible:true  },
-    { _id:'t6', username:'Lina Hadjadj',   email:'lina@mail.com',   role:'technician', specialite:'Topographie',  tachesEnCours:3, disponible:true  },
+    { _id:'t1', username:'Amine Sadda',    email:'amine@mail.com',  role:'technician', specialite:'Électricité',  tachesEnCours:2, disponible:true,  efficacite:[72,75,68,80,85,78,88] },
+    { _id:'t2', username:'Sara Benmoussa', email:'sara@mail.com',   role:'technician', specialite:'Mécanique',    tachesEnCours:5, disponible:false, efficacite:[50,45,55,48,52,46,44] },
+    { _id:'t3', username:'Karim Ouali',    email:'karim@mail.com',  role:'technician', specialite:'Informatique', tachesEnCours:1, disponible:true,  efficacite:[90,88,92,95,91,94,96] },
+    { _id:'t4', username:'Nadia Ferhat',   email:'nadia@mail.com',  role:'technician', specialite:'Hydraulique',  tachesEnCours:4, disponible:false, efficacite:[60,55,62,58,65,60,57] },
+    { _id:'t5', username:'Youcef Amrani',  email:'youcef@mail.com', role:'technician', specialite:'Électricité',  tachesEnCours:0, disponible:true,  efficacite:[82,80,85,88,84,90,87] },
+    { _id:'t6', username:'Lina Hadjadj',   email:'lina@mail.com',   role:'technician', specialite:'Topographie',  tachesEnCours:3, disponible:true,  efficacite:[70,74,72,78,76,80,79] },
   ];
 
   filtered: Technician[] = [];
 
-  // ── INIT ──────────────────────────────────────────────────────
+  private charts: Map<string, Chart> = new Map();
+
+  // ── LIFECYCLE ─────────────────────────────────────────────────
   ngOnInit(): void {
     this.filtered = [...this.technicians];
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.filtered.forEach(t => this.renderSparkline(t));
+    }, 0);
+  }
+
+  // ── SPARKLINE ─────────────────────────────────────────────────
+  private renderSparkline(t: Technician): void {
+    const canvas = document.getElementById('spark-' + t._id) as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const existing = this.charts.get(t._id);
+    if (existing) {
+      existing.destroy();
+      this.charts.delete(t._id);
+    }
+
+    const avg   = this.effAvg(t.efficacite);
+    const color = avg >= 80 ? '#10B981' : avg >= 60 ? '#F59E0B' : '#EF4444';
+    const fill  = avg >= 80 ? 'rgba(16,185,129,0.12)' : avg >= 60 ? 'rgba(245,158,11,0.12)' : 'rgba(239,68,68,0.12)';
+
+    const chart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
+        datasets: [{
+          data: t.efficacite,
+          borderColor: color,
+          backgroundColor: fill,
+          borderWidth: 2,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          pointHoverBackgroundColor: color,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: { label: ctx => ` ${ctx.parsed.y}%` },
+            backgroundColor: 'rgba(15,23,42,0.85)',
+            titleFont: { size: 11 },
+            bodyFont:  { size: 11 },
+            padding: 6,
+            cornerRadius: 6
+          }
+        },
+        scales: {
+          x: { display: false },
+          y: {
+            display: false,
+            min: Math.min(...t.efficacite) - 10,
+            max: 100
+          }
+        }
+      }
+    });
+
+    this.charts.set(t._id, chart);
+  }
+
+  private renderAllSparklines(): void {
+    setTimeout(() => {
+      this.filtered.forEach(t => this.renderSparkline(t));
+    }, 0);
+  }
+
+  // ── EFFICACITÉ ────────────────────────────────────────────────
+  effAvg(eff: number[]): number {
+    return Math.round(eff.reduce((a, b) => a + b, 0) / eff.length);
+  }
+
+  effClass(eff: number[]): string {
+    const avg = this.effAvg(eff);
+    return avg >= 80 ? 'good' : avg >= 60 ? 'mid' : 'low';
   }
 
   // ── FILTRE ────────────────────────────────────────────────────
@@ -61,16 +148,18 @@ export class TechnicianList implements OnInit {
     const term = this.searchTerm.toLowerCase().trim();
     this.filtered = this.technicians.filter(t => {
       const matchSearch =
-        t.username.toLowerCase().includes(term) ||
-        t.email.toLowerCase().includes(term)    ||
+        t.username.toLowerCase().includes(term)              ||
+        t.email.toLowerCase().includes(term)                 ||
         (t.specialite?.toLowerCase().includes(term) ?? false);
 
       const matchDispo =
-        this.filterDisponible === 'all'        ? true :
+        this.filterDisponible === 'all'        ? true         :
         this.filterDisponible === 'disponible' ? t.disponible :
                                                  !t.disponible;
       return matchSearch && matchDispo;
     });
+
+    this.renderAllSparklines();
   }
 
   setFilter(val: string): void {

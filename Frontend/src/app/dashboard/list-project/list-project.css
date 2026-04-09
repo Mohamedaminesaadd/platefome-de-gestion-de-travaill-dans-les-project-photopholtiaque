@@ -6,6 +6,9 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 14px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
 }
 
 .section-title {
@@ -61,6 +64,7 @@
   padding: 8px 14px;
   margin-bottom: 18px;
   transition: border-color 0.2s ease;
+  margin: 5px 10px 10px 10px;
 }
 
 .search-bar:focus-within {
@@ -130,6 +134,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 14px;
+  margin: 10px ;
 }
 
 /* ══════════════════════════════════════════════════════════

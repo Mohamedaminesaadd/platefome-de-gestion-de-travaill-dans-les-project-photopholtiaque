@@ -12,6 +12,10 @@ import { ListProject } from './dashboard/list-project/list-project';
 import { IaDahsborad } from './dashboard/ia-dahsborad/ia-dahsborad';
 import { Proc } from './pages/admin/proc/proc';
 import { TechnicianList } from './pages/admin/technician-list/technician-list';
+import { GanttChart } from './dashboard/diagramme-grantt/diagramme-grantt';
+// ✅ Chemin correct selon votre architecture
+import { KanbanBoardComponent } from './pages/admin/kanban-board-component/kanban-board-component';
+import { TaskManagementComponent } from './dashboard/task-management/task-management';
 
 
 export const routes: Routes = [
@@ -20,7 +24,9 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'forget-password', component: PasswordForget },
   { path: 'reset/:token', component: ResetPassword },
-  { path: 'page-technician', component: TechnicianList },
+  {path: 'grantchart', component: GanttChart },
+  {path:'tasks', component: TaskManagementComponent}, // Route pour le composant de gestion des tâches
+
   
   // Remove these standalone routes - they should be part of your main layout
   // { path: 'side-bar', component: Sidebar }, // REMOVE
@@ -42,6 +48,20 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { role: 'admin' }
   },
+  {
+    path: 'kanban',
+    component: KanbanBoardComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'admin' }
+  },
+  {
+    path: 'page-technician',
+    component: TechnicianList,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'admin' }
+  },
+
+  
   {
     path: 'director-profil',
     component: Profildirector,

@@ -6,80 +6,64 @@
   font-family: 'DM Sans', sans-serif;
 }
 
+
+/* état collapsed */
+app-sidebar.collapsed {
+  width: 70px;
+  min-width: 70px;
+}
+
+/* ── MAIN CONTENT ───────────────────────── */
 .main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: hidden;
   min-width: 0;
 }
 
-/* ── DASHBOARD CONTAINER ─────────────────── */
+/* ── SCROLL AREA ────────────────────────── */
 .dashboard {
+  flex: 1;
+  overflow-y: auto;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* ── KPI ROW ────────────────────────────── */
-.stats {
-  width: 100%;
-}
-
-/* ── MAIN CHARTS (Timeline + IA) ────────── */
-.main-charts {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
-}
-
-/* ── SECONDARY CHARTS ───────────────────── */
-.secondary-charts {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-/* ========== 🎯 DRAG & DROP : TRANSITIONS & EFFETS ========== */
+/* ── DRAG & DROP CARDS ──────────────────── */
 .card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: grab;
+  border-radius: 16px;
 }
 
 .card:active {
   cursor: grabbing;
 }
 
-/* Élément en cours de glissement (clone) */
+/* drag preview */
 .cdk-drag-preview {
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
   border-radius: 16px;
-  opacity: 0.95;
   transform: rotate(2deg) scale(1.02);
-  transition: transform 0.1s ease;
 }
 
-/* Placeholder pendant le glissement (espace laissé vide) */
+/* placeholder */
 .cdk-drag-placeholder {
-  opacity: 0.4;
+  opacity: 0.3;
   background: #e2e8f0;
   border: 2px dashed #94a3b8;
   border-radius: 16px;
-  transition: all 0.2s ease;
 }
 
-/* Animation de retour à la position d'origine (annulation) */
-.cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-/* Animation de réorganisation des autres éléments */
+/* animation reorder */
 .dashboard.cdk-drop-list-dragging .card:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  transition: transform 250ms ease;
 }
 
-/* Handle de drag (optionnel) */
+/* ── DRAG HEADER ────────────────────────── */
 .drag-header {
   cursor: grab;
   padding: 8px 12px;
@@ -88,77 +72,42 @@
   border-radius: 16px 16px 0 0;
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.drag-header:active {
-  cursor: grabbing;
 }
 
 .drag-icon {
-  font-size: 20px;
+  font-size: 18px;
   color: #94a3b8;
   user-select: none;
 }
 
-/* ========== 🎨 BOUTON RESET DESIGN ========== */
+/* ── ACTIONS BUTTON ─────────────────────── */
 .actions {
   padding: 20px;
   display: flex;
   justify-content: flex-end;
   border-top: 1px solid #e2e8f0;
-  margin-top: auto;
 }
 
 button {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  background: linear-gradient(135deg, #f59e0b, #d97706);
   border: none;
   padding: 10px 24px;
   border-radius: 40px;
-  font-family: 'DM Sans', sans-serif;
   font-weight: 600;
-  font-size: 14px;
   color: white;
   cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  transition: 0.2s ease;
 }
 
 button:hover {
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
 }
 
-button:active {
-  transform: translateY(1px);
-  transition: 0.05s;
-}
-
-/* Option : ajouter une icône avant le texte (via pseudo-élément) */
-button::before {
-  content: "↺";
-  font-size: 16px;
-  font-weight: bold;
-}
-
-/* Responsive */
-@media (max-width: 1600px) {
-  .main-charts {
-    grid-template-columns: 1fr;
-  }
-}
-
+/* ── RESPONSIVE ─────────────────────────── */
 @media (max-width: 1024px) {
-  .main-charts {
-    grid-template-columns: 1fr;
-  }
-
-  .secondary-charts {
-    grid-template-columns: 1fr;
+  app-sidebar {
+    width: 70px;
+    min-width: 70px;
   }
 
   .actions {
@@ -167,6 +116,17 @@ button::before {
 
   button {
     width: 100%;
-    justify-content: center;
   }
+}
+
+/* Largeur normale */
+app-sidebar {
+  width: 250px;
+  min-width: 250px;
+}
+
+/* État collapsed */
+app-sidebar.collapsed {
+  width: 70px;
+  min-width: 70px;
 }

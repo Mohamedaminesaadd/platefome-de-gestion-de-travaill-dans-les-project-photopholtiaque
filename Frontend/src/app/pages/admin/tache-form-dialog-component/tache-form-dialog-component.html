@@ -1,0 +1,141 @@
+<!-- ── tache-form-dialog.component.html ──────────────────────────────────── -->
+<div class="dialog-container">
+
+  <!-- HEADER -->
+  <div class="dlg-header">
+    <div class="dlg-header-left">
+      <div class="dlg-icon" [class.edit-mode]="isEdit">
+        <mat-icon>{{ isEdit ? 'edit' : 'add_task' }}</mat-icon>
+      </div>
+      <div>
+        <h2 class="dlg-title">{{ isEdit ? 'Modifier la tâche' : 'Nouvelle tâche' }}</h2>
+        <p class="dlg-sub">{{ isEdit ? 'Mettez à jour les informations' : 'Remplissez les informations de base' }}</p>
+      </div>
+    </div>
+    <button class="close-btn" matRipple (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- BODY -->
+  <div class="dlg-body">
+
+    <!-- Titre -->
+    <div class="field-group">
+      <label class="field-label">Titre <span class="required">*</span></label>
+      <input
+        class="field-input"
+        placeholder="Ex: Développer le module de connexion..."
+        [(ngModel)]="form.titre"
+      />
+    </div>
+
+    <!-- Description -->
+    <div class="field-group">
+      <label class="field-label">Description</label>
+      <textarea
+        class="field-input field-textarea"
+        placeholder="Décrivez la tâche en détail..."
+        rows="3"
+        [(ngModel)]="form.description"
+      ></textarea>
+    </div>
+
+    <!-- Row: Statut + Priorité -->
+    <div class="field-row">
+
+      <div class="field-group">
+        <label class="field-label">Statut <span class="required">*</span></label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full-select">
+          <mat-select [(ngModel)]="form.statut">
+            <mat-option value="A FAIRE">⚪ À Faire</mat-option>
+            <mat-option value="EN COURS">🔵 En Cours</mat-option>
+            <mat-option value="TERMINEE">🟢 Terminée</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Priorité <span class="required">*</span></label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full-select">
+          <mat-select [(ngModel)]="form.priorite">
+            <mat-option value="BASSE">⚪ Basse</mat-option>
+            <mat-option value="MOYENNE">🔵 Moyenne</mat-option>
+            <mat-option value="HAUTE">🟠 Haute</mat-option>
+            <mat-option value="CRITIQUE">🔴 Critique</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <!-- Row: Complexité + Heures estimées -->
+    <div class="field-row">
+
+      <div class="field-group">
+        <label class="field-label">Complexité</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full-select">
+          <mat-select [(ngModel)]="form.complexite">
+            <mat-option value="BASSE">Basse</mat-option>
+            <mat-option value="MOYENNE">Moyenne</mat-option>
+            <mat-option value="ELEVEE">Élevée</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Heures estimées</label>
+        <input
+          class="field-input"
+          type="number" min="0" step="0.5"
+          placeholder="0"
+          [(ngModel)]="form.heureEstimees"
+        />
+      </div>
+
+    </div>
+
+    <!-- Assigné à -->
+    <div class="field-group">
+      <label class="field-label">Assigné à</label>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full-select">
+        <mat-select [(ngModel)]="selectedTech" (selectionChange)="onTechChange()">
+          <mat-option [value]="undefined">Non assigné</mat-option>
+          <mat-option *ngFor="let t of data.techniciens" [value]="t">
+            <div class="tech-option">
+              <span class="tech-av">{{ t.nom[0] }}</span>
+              <span>{{ t.nom }}</span>
+              <span class="tech-spec">{{ t.specialite }}</span>
+            </div>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Date d'échéance -->
+    <div class="field-group">
+      <label class="field-label">Date d'échéance</label>
+      <input
+        class="field-input"
+        type="date"
+        [(ngModel)]="form.dateEcheance"
+      />
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="dlg-footer">
+    <button class="btn-cancel" matRipple (click)="cancel()">Annuler</button>
+    <button
+      class="btn-submit"
+      matRipple
+      [disabled]="!isValid()"
+      (click)="submit()"
+    >
+      <mat-icon>{{ isEdit ? 'save' : 'add_task' }}</mat-icon>
+      {{ isEdit ? 'Enregistrer' : 'Créer la tâche' }}
+    </button>
+  </div>
+
+</div>
