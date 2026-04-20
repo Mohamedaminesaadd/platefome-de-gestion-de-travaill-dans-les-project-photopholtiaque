@@ -1,7 +1,7 @@
 // task-list.ts
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Task } from '../../core/models/task-filter.model';
+import { Task } from '../../../core/models/task-filter.model';
 import {  TaskCardComponent} from '../task-card/task-card';
 
 @Component({

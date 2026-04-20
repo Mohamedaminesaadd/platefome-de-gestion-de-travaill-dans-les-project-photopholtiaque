@@ -38,41 +38,7 @@
   margin-top: 1px;
 }
 
-.search-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg, #F1F5F9);
-  border: 1px solid var(--border, #E2E8F0);
-  border-radius: 24px;
-  padding: 0 14px;
-  height: 38px;
-  width: 220px;
-  transition: var(--transition, all .2s ease);
-}
 
-.search-bar:focus-within {
-  border-color: var(--primary, #2563EB);
-  background: #fff;
-  box-shadow: 0 0 0 3px #DBEAFE;
-}
-
-.search-bar mat-icon {
-  font-size: 17px;
-  color: var(--text-m, #94A3B8);
-}
-
-.search-bar input {
-  border: none;
-  background: none;
-  font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
-  color: var(--text-b, #334155);
-  width: 100%;
-  outline: none;
-}
-
-.search-bar input::placeholder { color: var(--text-m, #94A3B8); }
 
 .notif-btn {
   width: 38px;

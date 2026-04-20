@@ -1,296 +1,305 @@
+<div class="shell">
+  <app-sidebar></app-sidebar>
+  <div class="main">
+      <div class="gantt-page">
 
-<div class="gantt-page">
-
-  <!-- ══════════════════════════════════════
-       HEADER
-  ══════════════════════════════════════ -->
-  <div class="gantt-header">
-    <div class="header-left">
-      <h1 class="gantt-title">
-        <mat-icon>timeline</mat-icon>
-        Gantt — Planning Projets
-      </h1>
-      <p class="gantt-sub">Vue d'ensemble des tâches et dépendances</p>
-    </div>
-
-    <div class="header-right">
-      <!-- KPI chips -->
-      <div class="kpi-chips">
-        <div class="kpi-chip">
-          <span class="kpi-num">{{ totalTaskCount() }}</span>
-          <span class="kpi-lbl">Tâches</span>
-        </div>
-        <div class="kpi-chip success">
-          <span class="kpi-num">{{ completedCount() }}</span>
-          <span class="kpi-lbl">Terminées</span>
-        </div>
-        <div class="kpi-chip danger" *ngIf="delayedCount() > 0">
-          <span class="kpi-num">{{ delayedCount() }}</span>
-          <span class="kpi-lbl">En retard</span>
-        </div>
-      </div>
-
-      <!-- View switcher -->
-      <div class="view-switcher">
-        <button class="view-btn" [class.active]="viewMode() === 'week'"
-          (click)="setViewMode('week')" matRipple>Semaine</button>
-        <button class="view-btn" [class.active]="viewMode() === 'month'"
-          (click)="setViewMode('month')" matRipple>Mois</button>
-        <button class="view-btn" [class.active]="viewMode() === 'quarter'"
-          (click)="setViewMode('quarter')" matRipple>Trimestre</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       LEGEND
-  ══════════════════════════════════════ -->
-  <div class="legend-row">
-    <div class="legend-item">
-      <span class="legend-dot" style="background:#10B981"></span> Terminé
-    </div>
-    <div class="legend-item">
-      <span class="legend-dot" style="background:#2563EB"></span> En cours
-    </div>
-    <div class="legend-item">
-      <span class="legend-dot" style="background:#EF4444"></span> En retard
-    </div>
-    <div class="legend-item">
-      <span class="legend-dot" style="background:#94A3B8"></span> En attente
-    </div>
-    <div class="legend-item">
-      <span class="today-line-demo"></span> Aujourd'hui
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       GANTT TABLE
-  ══════════════════════════════════════ -->
-  <div class="gantt-card">
-
-    <!-- GRID LAYOUT : label col + timeline col -->
-    <div class="gantt-grid">
-
-      <!-- ── LABEL COLUMN (sticky left) ── -->
-      <div class="label-col">
-
-        <!-- Header cell -->
-        <div class="label-header">
-          <span>Tâche / Projet</span>
-        </div>
-
-        <!-- Project rows -->
-        <ng-container *ngFor="let project of projects; trackBy: trackById">
-
-          <!-- Project group header -->
-          <div class="project-row" (click)="toggleProject(project)" matRipple>
-            <span class="project-dot" [style.background]="project.color"></span>
-            <span class="project-name">{{ project.name }}</span>
-            <mat-icon class="collapse-icon">
-              {{ project.collapsed ? 'expand_more' : 'expand_less' }}
-            </mat-icon>
+        <!-- ══════════════════════════════════════
+            HEADER
+        ══════════════════════════════════════ -->
+        <div class="gantt-header">
+          <div class="header-left">
+            <h1 class="gantt-title">
+              <mat-icon>timeline</mat-icon>
+              Gantt — Planning Projets
+            </h1>
+            <p class="gantt-sub">Vue d'ensemble des tâches et dépendances</p>
           </div>
 
-          <!-- Task rows -->
-          <ng-container *ngIf="!project.collapsed">
-            <div
-              class="task-label-row"
-              *ngFor="let task of project.tasks; trackBy: trackById"
-              [class.selected]="selectedTask?.id === task.id"
-              (click)="selectTask(task)"
-              matRipple
-            >
-              <!-- Status dot -->
-              <span class="status-dot" [style.background]="statusColor(task.status)"></span>
+          <div class="header-right">
+            <!-- KPI chips -->
+            <div class="kpi-chips">
+              <div class="kpi-chip">
+                <span class="kpi-num">{{ totalTaskCount() }}</span>
+                <span class="kpi-lbl">Tâches</span>
+              </div>
+              <div class="kpi-chip success">
+                <span class="kpi-num">{{ completedCount() }}</span>
+                <span class="kpi-lbl">Terminées</span>
+              </div>
+              <div class="kpi-chip danger" *ngIf="delayedCount() > 0">
+                <span class="kpi-num">{{ delayedCount() }}</span>
+                <span class="kpi-lbl">En retard</span>
+              </div>
+            </div>
 
-              <!-- Task name -->
-              <div class="task-label-info">
-                <span class="task-label-name">{{ task.name }}</span>
-                <span class="task-label-meta">{{ task.duration }}j · {{ task.progress }}%</span>
+            <!-- View switcher -->
+            <div class="view-switcher">
+
+              <button class="view-btn" [class.active]="viewMode() === 'week'"
+                (click)="setViewMode('week')" matRipple>Semaine</button>
+
+              <button class="view-btn" [class.active]="viewMode() === 'month'"
+                (click)="setViewMode('month')" matRipple>Mois</button>
+
+              <button class="view-btn" [class.active]="viewMode() === 'quarter'"
+                (click)="setViewMode('quarter')" matRipple>Trimestre</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════
+            LEGEND
+        ══════════════════════════════════════ -->
+        <div class="legend-row">
+          <div class="legend-item">
+            <span class="legend-dot" style="background:#10B981"></span> Terminé
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background:#2563EB"></span> En cours
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background:#EF4444"></span> En retard
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background:#94A3B8"></span> En attente
+          </div>
+          <div class="legend-item">
+            <span class="today-line-demo"></span> Aujourd'hui
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════
+            GANTT TABLE
+        ══════════════════════════════════════ -->
+        <div class="gantt-card">
+
+          <!-- GRID LAYOUT : label col + timeline col -->
+          <div class="gantt-grid">
+
+            <!-- ── LABEL COLUMN (sticky left) ── -->
+            <div class="label-col">
+
+              <!-- Header cell -->
+              <div class="label-header">
+                <span>Tâche / Projet</span>
               </div>
 
-              <!-- Assignee avatar -->
-              <div class="task-avatar"
-                [style.background]="task.assigneeColor"
-                [matTooltip]="task.assignee"
-              >{{ task.assigneeInitials }}</div>
-            </div>
-          </ng-container>
+              <!-- Project rows -->
+              <ng-container *ngFor="let project of projects; trackBy: trackById">
 
-        </ng-container>
-      </div>
+                <!-- Project group header -->
+                <div class="project-row" (click)="toggleProject(project)" matRipple>
+                  <span class="project-dot" [style.background]="project.color"></span>
+                  <span class="project-name">{{ project.name }}</span>
+                  <mat-icon class="collapse-icon">
+                    {{ project.collapsed ? 'expand_more' : 'expand_less' }}
+                  </mat-icon>
+                </div>
 
-      <!-- ── TIMELINE COLUMN ── -->
-      <div class="timeline-col">
-
-        <!-- Column headers -->
-        <div class="timeline-header">
-          <div class="timeline-header-inner">
-            <div
-              class="col-header"
-              *ngFor="let h of columnHeaders(); let i = index; trackBy: trackById"
-              [style.width.%]="100 / columnHeaders().length"
-            >{{ h }}</div>
-          </div>
-        </div>
-
-        <!-- Timeline body (scrollable) -->
-        <div class="timeline-body">
-
-          <!-- Background grid lines -->
-          <div class="grid-lines">
-            <div
-              class="grid-line"
-              *ngFor="let i of colRange(columnHeaders().length)"
-              [style.left.%]="(i / columnHeaders().length) * 100"
-            ></div>
-          </div>
-
-          <!-- TODAY marker -->
-          <div class="today-marker" [style.left.%]="todayOffset()">
-            <div class="today-label">Aujourd'hui</div>
-            <div class="today-line"></div>
-          </div>
-
-          <!-- Project groups -->
-          <ng-container *ngFor="let project of projects; trackBy: trackById">
-
-            <!-- Project row spacer -->
-            <div class="project-spacer">
-              <div class="project-bar-bg" [style.background]="project.color + '18'"></div>
-            </div>
-
-            <!-- Task bars -->
-            <ng-container *ngIf="!project.collapsed">
-              <div
-                class="task-bar-row"
-                *ngFor="let task of project.tasks; trackBy: trackById"
-                [class.selected]="selectedTask?.id === task.id"
-              >
-                <!-- Dependency lines (simplified visual) -->
-
-                <!-- Main bar -->
-                <div
-                  class="task-bar"
-                  [style.left.%]="getBarLeft(task)"
-                  [style.width.%]="getBarWidth(task)"
-                  [style.background]="statusColor(task.status) + '22'"
-                  [style.border-color]="statusColor(task.status)"
-                  [class.bar-delayed]="task.status === 'delayed'"
-                  (click)="selectTask(task)"
-                  [matTooltip]="task.name + ' · ' + task.progress + '%'"
-                  matRipple
-                >
-                  <!-- Progress fill -->
+                <!-- Task rows -->
+                <ng-container *ngIf="!project.collapsed">
                   <div
-                    class="task-bar-fill"
-                    [style.width.%]="task.progress"
-                    [style.background]="statusColor(task.status)"
-                  ></div>
+                    class="task-label-row"
+                    *ngFor="let task of project.tasks; trackBy: trackById"
+                    [class.selected]="selectedTask?.id === task.id"
+                    (click)="selectTask(task)"
+                    matRipple
+                  >
+                    <!-- Status dot -->
+                    <span class="status-dot" [style.background]="statusColor(task.status)"></span>
 
-                  <!-- Bar label -->
-                  <span class="task-bar-label">{{ task.name }}</span>
+                    <!-- Task name -->
+                    <div class="task-label-info">
+                      <span class="task-label-name">{{ task.name }}</span>
+                      <span class="task-label-meta">{{ task.duration }}j · {{ task.progress }}%</span>
+                    </div>
 
-                  <!-- % indicator -->
-                  <span class="task-bar-pct" *ngIf="task.progress > 0">
-                    {{ task.progress }}%
-                  </span>
+                    <!-- Assignee avatar -->
+                    <div class="task-avatar"
+                      [style.background]="task.assigneeColor"
+                      [matTooltip]="task.assignee"
+                    >{{ task.assigneeInitials }}</div>
+                  </div>
+                </ng-container>
+
+              </ng-container>
+            </div>
+
+            <!-- ── TIMELINE COLUMN ── -->
+            <div class="timeline-col">
+
+              <!-- Column headers -->
+              <div class="timeline-header">
+                <div class="timeline-header-inner">
+                  <div
+                    class="col-header"
+                    *ngFor="let h of columnHeaders(); let i = index; trackBy: trackById"
+                    [style.width.%]="100 / columnHeaders().length"
+                  >{{ h }}</div>
                 </div>
               </div>
-            </ng-container>
 
-          </ng-container>
-        </div><!-- end timeline-body -->
-      </div><!-- end timeline-col -->
+              <!-- Timeline body (scrollable) -->
+              <div class="timeline-body">
 
-    </div><!-- end gantt-grid -->
-  </div><!-- end gantt-card -->
+                <!-- Background grid lines -->
+                <div class="grid-lines">
+                  <div
+                    class="grid-line"
+                    *ngFor="let i of colRange(columnHeaders().length)"
+                    [style.left.%]="(i / columnHeaders().length) * 100"
+                  ></div>
+                </div>
 
-  <!-- ══════════════════════════════════════
-       TASK DETAIL PANEL (slide-in)
-  ══════════════════════════════════════ -->
-  <div class="detail-panel" [class.open]="selectedTask !== null" *ngIf="selectedTask">
-    <div class="detail-header">
-      <div>
-        <div class="detail-eyebrow">Détail de la tâche</div>
-        <h3 class="detail-title">{{ selectedTask.name }}</h3>
-      </div>
-      <button class="detail-close" (click)="closeDetail()">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
+                <!-- TODAY marker -->
+                <div class="today-marker" [style.left.%]="todayOffset()">
+                  <div class="today-label">Aujourd'hui</div>
+                  <div class="today-line"></div>
+                </div>
 
-    <!-- Status badge -->
-    <div class="detail-status-row">
-      <span class="detail-badge"
-        [style.background]="statusColor(selectedTask.status) + '22'"
-        [style.color]="statusColor(selectedTask.status)"
-        [style.border-color]="statusColor(selectedTask.status) + '44'"
-      >
-        <span class="detail-badge-dot" [style.background]="statusColor(selectedTask.status)"></span>
-        {{ statusLabel(selectedTask.status) }}
-      </span>
-      <span class="detail-project-chip"
-        [style.border-color]="projectOf(selectedTask).color + '55'"
-        [style.color]="projectOf(selectedTask).color"
-      >{{ projectOf(selectedTask).name }}</span>
-    </div>
+                <!-- Project groups -->
+                <ng-container *ngFor="let project of projects; trackBy: trackById">
 
-    <!-- Progress ring area -->
-    <div class="detail-progress-section">
-      <div class="detail-progress-label">
-        <span>Avancement</span>
-        <strong>{{ selectedTask.progress }}%</strong>
-      </div>
-      <div class="detail-progress-track">
-        <div class="detail-progress-fill"
-          [style.width.%]="selectedTask.progress"
-          [style.background]="statusColor(selectedTask.status)"
-        ></div>
-      </div>
-    </div>
+                  <!-- Project row spacer -->
+                  <div class="project-spacer">
+                    <div class="project-bar-bg" [style.background]="project.color + '18'"></div>
+                  </div>
 
-    <!-- Metadata grid -->
-    <div class="detail-meta-grid">
-      <div class="detail-meta-item">
-        <mat-icon>calendar_today</mat-icon>
-        <div>
-          <div class="meta-key">Début</div>
-          <div class="meta-val">Jour {{ selectedTask.startDay + 1 }}</div>
+                  <!-- Task bars -->
+                  <ng-container *ngIf="!project.collapsed">
+                    <div
+                      class="task-bar-row"
+                      *ngFor="let task of project.tasks; trackBy: trackById"
+                      [class.selected]="selectedTask?.id === task.id"
+                    >
+                      <!-- Dependency lines (simplified visual) -->
+
+                      <!-- Main bar -->
+                      <div
+                        class="task-bar"
+                        [style.left.%]="getBarLeft(task)"
+                        [style.width.%]="getBarWidth(task)"
+                        [style.background]="statusColor(task.status) + '22'"
+                        [style.border-color]="statusColor(task.status)"
+                        [class.bar-delayed]="task.status === 'delayed'"
+                        (click)="selectTask(task)"
+                        [matTooltip]="task.name + ' · ' + task.progress + '%'"
+                        matRipple
+                      >
+                        <!-- Progress fill -->
+                        <div
+                          class="task-bar-fill"
+                          [style.width.%]="task.progress"
+                          [style.background]="statusColor(task.status)"
+                        ></div>
+
+                        <!-- Bar label -->
+                        <span class="task-bar-label">{{ task.name }}</span>
+
+                        <!-- % indicator -->
+                        <span class="task-bar-pct" *ngIf="task.progress > 0">
+                          {{ task.progress }}%
+                        </span>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                </ng-container>
+              </div><!-- end timeline-body -->
+            </div><!-- end timeline-col -->
+
+          </div><!-- end gantt-grid -->
+        </div><!-- end gantt-card -->
+
+        <!-- ══════════════════════════════════════
+            TASK DETAIL PANEL (slide-in)
+        ══════════════════════════════════════ -->
+        <div class="detail-panel" [class.open]="selectedTask !== null" *ngIf="selectedTask">
+          <div class="detail-header">
+            <div>
+              <div class="detail-eyebrow">Détail de la tâche</div>
+              <h3 class="detail-title">{{ selectedTask.name }}</h3>
+            </div>
+            <button class="detail-close" (click)="closeDetail()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+          <!-- Status badge -->
+          <div class="detail-status-row">
+            <span class="detail-badge"
+              [style.background]="statusColor(selectedTask.status) + '22'"
+              [style.color]="statusColor(selectedTask.status)"
+              [style.border-color]="statusColor(selectedTask.status) + '44'"
+            >
+              <span class="detail-badge-dot" [style.background]="statusColor(selectedTask.status)"></span>
+              {{ statusLabel(selectedTask.status) }}
+            </span>
+            <span class="detail-project-chip"
+              [style.border-color]="projectOf(selectedTask).color + '55'"
+              [style.color]="projectOf(selectedTask).color"
+            >{{ projectOf(selectedTask).name }}</span>
+          </div>
+
+          <!-- Progress ring area -->
+          <div class="detail-progress-section">
+            <div class="detail-progress-label">
+              <span>Avancement</span>
+              <strong>{{ selectedTask.progress }}%</strong>
+            </div>
+            <div class="detail-progress-track">
+              <div class="detail-progress-fill"
+                [style.width.%]="selectedTask.progress"
+                [style.background]="statusColor(selectedTask.status)"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Metadata grid -->
+          <div class="detail-meta-grid">
+            <div class="detail-meta-item">
+              <mat-icon>calendar_today</mat-icon>
+              <div>
+                <div class="meta-key">Début</div>
+                <div class="meta-val">Jour {{ selectedTask.startDay + 1 }}</div>
+              </div>
+            </div>
+            <div class="detail-meta-item">
+              <mat-icon>event</mat-icon>
+              <div>
+                <div class="meta-key">Fin estimée</div>
+                <div class="meta-val">Jour {{ selectedTask.startDay + selectedTask.duration }}</div>
+              </div>
+            </div>
+            <div class="detail-meta-item">
+              <mat-icon>schedule</mat-icon>
+              <div>
+                <div class="meta-key">Durée</div>
+                <div class="meta-val">{{ selectedTask.duration }} jours</div>
+              </div>
+            </div>
+            <div class="detail-meta-item">
+              <mat-icon>person</mat-icon>
+              <div>
+                <div class="meta-key">Responsable</div>
+                <div class="meta-val">{{ selectedTask.assignee }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dependencies -->
+          <div class="detail-deps" *ngIf="selectedTask.dependencies?.length">
+            <div class="deps-label">Dépendances</div>
+            <div class="deps-list">
+              <span class="dep-chip" *ngFor="let dep of selectedTask.dependencies">
+                <mat-icon>link</mat-icon> {{ dep }}
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="detail-meta-item">
-        <mat-icon>event</mat-icon>
-        <div>
-          <div class="meta-key">Fin estimée</div>
-          <div class="meta-val">Jour {{ selectedTask.startDay + selectedTask.duration }}</div>
-        </div>
-      </div>
-      <div class="detail-meta-item">
-        <mat-icon>schedule</mat-icon>
-        <div>
-          <div class="meta-key">Durée</div>
-          <div class="meta-val">{{ selectedTask.duration }} jours</div>
-        </div>
-      </div>
-      <div class="detail-meta-item">
-        <mat-icon>person</mat-icon>
-        <div>
-          <div class="meta-key">Responsable</div>
-          <div class="meta-val">{{ selectedTask.assignee }}</div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Dependencies -->
-    <div class="detail-deps" *ngIf="selectedTask.dependencies?.length">
-      <div class="deps-label">Dépendances</div>
-      <div class="deps-list">
-        <span class="dep-chip" *ngFor="let dep of selectedTask.dependencies">
-          <mat-icon>link</mat-icon> {{ dep }}
-        </span>
-      </div>
-    </div>
-  </div>
-
-</div><!-- end gantt-page -->
+      </div><!-- end gantt-page -->
+  
+  </div><!-- /main -->
+</div><!-- /shell -->

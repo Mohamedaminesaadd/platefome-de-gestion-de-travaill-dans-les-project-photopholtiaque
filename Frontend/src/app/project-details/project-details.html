@@ -9,7 +9,7 @@
         {{ data.codeProject }}
       </span>
     </div>
-    <button mat-icon-button (click)="close()">
+    <button (click)="close()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
@@ -20,13 +20,13 @@
     <!-- Statut + Priorité -->
     <div class="detail-row">
       <mat-icon>flag</mat-icon>
-      <span>Statut :</span>
+      <span>Statut</span>
       <span class="badge" [ngClass]="statusClass(data.statut!)">
         {{ statusLabel(data.statut!) }}
       </span>
       <span class="separator">·</span>
       <mat-icon>priority_high</mat-icon>
-      <span>Priorité :</span>
+      <span>Priorité</span>
       <span class="priority-tag" [ngClass]="prioriteClass(data.priorite)">
         {{ prioriteLabel(data.priorite) }}
       </span>
@@ -52,17 +52,17 @@
     <!-- Dates -->
     <div class="detail-row">
       <mat-icon>calendar_today</mat-icon>
-      <span>Début :</span>
+      <span>Début</span>
       <strong>{{ data.dateDebut | date:'dd/MM/yyyy' }}</strong>
       <mat-icon class="arrow-icon">arrow_forward</mat-icon>
-      <span>Fin prévue :</span>
+      <span>Fin prévue</span>
       <strong>{{ data.dateFinPrevue | date:'dd/MM/yyyy' }}</strong>
     </div>
 
     <!-- Date fin réelle -->
     <div class="detail-row" *ngIf="data.dateFinReelle">
       <mat-icon>event_available</mat-icon>
-      <span>Fin réelle :</span>
+      <span>Fin réelle</span>
       <strong>{{ data.dateFinReelle | date:'dd/MM/yyyy' }}</strong>
     </div>
 
@@ -85,7 +85,7 @@
     <!-- GPS -->
     <div class="detail-row" *ngIf="data.coordonnesGPS">
       <mat-icon>my_location</mat-icon>
-      <span>GPS :</span>
+      <span>GPS</span>
       <span class="gps-value">{{ data.coordonnesGPS }}</span>
     </div>
 

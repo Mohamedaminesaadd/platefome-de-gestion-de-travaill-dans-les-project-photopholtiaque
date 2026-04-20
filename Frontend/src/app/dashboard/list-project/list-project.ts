@@ -1,3 +1,4 @@
+// ── src/app/projects/list-project/list-project.ts ────────────────────────────
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -11,6 +12,7 @@ import { ProjectDetail } from '../../project-details/project-details';
 import { ProjectForm } from '../../project-form/project-form';
 import { ProjectService } from '../../services/service-project';
 import { Project } from '../../core/models/project.model';
+import { AddPhasesDialogComponent, AddPhasesDialogData } from '../add-phases-dialog/add-phases-dialog';
 
 @Component({
   selector: 'app-list-project',
@@ -38,7 +40,7 @@ export class ListProject implements OnInit {
   constructor(
     private dialog: MatDialog,
     private projectService: ProjectService,
-    private cdr: ChangeDetectorRef 
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -51,22 +53,15 @@ export class ListProject implements OnInit {
 
     this.projectService.getAll().subscribe({
       next: (data: Project[]) => {
-
-        console.log('Projects loaded:', data);
-
         this.projects = [...data];
         this.filteredProjects = [...data];
-
         this.isLoading = false;
-
         this.cdr.detectChanges();
       },
-
       error: (err) => {
         console.error(err);
         this.errorMsg = 'Impossible de charger les projets.';
         this.isLoading = false;
-
         this.cdr.detectChanges();
       }
     });
@@ -74,7 +69,6 @@ export class ListProject implements OnInit {
 
   applyFilter(): void {
     const term = this.searchTerm.toLowerCase().trim();
-
     this.filteredProjects = this.projects.filter(p =>
       p.nom?.toLowerCase().includes(term) ||
       p.codeProject?.toLowerCase().includes(term) ||
@@ -96,9 +90,7 @@ export class ListProject implements OnInit {
       width: '520px',
       panelClass: 'detail-panel'
     }).afterClosed().subscribe((result: Partial<Project> | null) => {
-
       if (!result) return;
-
       this.projectService.create(result).subscribe({
         next: (created) => {
           this.projects = [created, ...this.projects];
@@ -115,16 +107,12 @@ export class ListProject implements OnInit {
       width: '520px',
       panelClass: 'detail-panel'
     }).afterClosed().subscribe((result: Partial<Project> | null) => {
-
       if (!result) return;
-
       this.projectService.update(project._id!, result).subscribe({
         next: (updated) => {
           const i = this.projects.findIndex(p => p._id === project._id);
-
           if (i !== -1) {
             this.projects[i] = updated;
-
             this.projects = [...this.projects];
             this.applyFilter();
           }
@@ -136,7 +124,6 @@ export class ListProject implements OnInit {
 
   onDeleteProject(project: Project): void {
     if (!confirm(`Supprimer "${project.nom}" ?`)) return;
-
     this.projectService.delete(project._id!).subscribe({
       next: () => {
         this.projects = this.projects.filter(p => p._id !== project._id);
@@ -146,36 +133,48 @@ export class ListProject implements OnInit {
     });
   }
 
+  // ── FIX : project passé en paramètre ─────────────────────────────────────
+  openAddPhases(project: Project): void {
+    const ref = this.dialog.open(AddPhasesDialogComponent, {
+      data: {
+        projectId:  project._id,   // ← project, pas this.data
+        projectNom: project.nom,
+      } as AddPhasesDialogData,
+      panelClass: 'apd-overlay',
+      maxWidth: '120vw',
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (result?.success) {
+        console.log(`${result.count} phase(s) créées avec succès`);
+      }
+    });
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+
   statusLabel(status: string): string {
     const map: Record<string, string> = {
-      PLANIFIE: 'Planifié',
-      'EN COURS': 'En cours',
-      'EN RETARD': 'En retard',
-      SUSPENDU: 'Suspendu',
-      TERMINE: 'Terminé',
-      ANNULE: 'Annulé'
+      PLANIFIE: 'Planifié', 'EN COURS': 'En cours',
+      'EN RETARD': 'En retard', SUSPENDU: 'Suspendu',
+      TERMINE: 'Terminé', ANNULE: 'Annulé'
     };
     return map[status] ?? status;
   }
 
   statusClass(status: string): string {
     const map: Record<string, string> = {
-      PLANIFIE: 'badge-planned',
-      'EN COURS': 'badge-inprogress',
-      'EN RETARD': 'badge-delayed',
-      SUSPENDU: 'badge-suspended',
-      TERMINE: 'badge-completed',
-      ANNULE: 'badge-cancelled'
+      PLANIFIE: 'badge-planned', 'EN COURS': 'badge-inprogress',
+      'EN RETARD': 'badge-delayed', SUSPENDU: 'badge-suspended',
+      TERMINE: 'badge-completed', ANNULE: 'badge-cancelled'
     };
     return map[status] ?? '';
   }
 
   priorityClass(priority: string): string {
     const map: Record<string, string> = {
-      BASSE: 'priority-low',
-      MOYENNE: 'priority-medium',
-      HAUTE: 'priority-high',
-      CRITIQUE: 'priority-critical'
+      BASSE: 'priority-low', MOYENNE: 'priority-medium',
+      HAUTE: 'priority-high', CRITIQUE: 'priority-critical'
     };
     return map[priority] ?? '';
   }
@@ -186,10 +185,7 @@ export class ListProject implements OnInit {
 
   budgetPct(project: Project): number {
     if (!project.budgetTotale) return 0;
-
-    const pct =
-      ((project.budgetConsomme ?? 0) / project.budgetTotale) * 100;
-
+    const pct = ((project.budgetConsomme ?? 0) / project.budgetTotale) * 100;
     return Math.min(Math.round(pct), 100);
   }
 }

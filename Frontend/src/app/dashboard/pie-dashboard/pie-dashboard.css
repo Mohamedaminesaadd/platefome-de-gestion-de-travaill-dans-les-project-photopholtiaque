@@ -1,19 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&family=JetBrains+Mono:wght@600;700&display=swap');
 
 :host {
   display: block;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Outfit', sans-serif;
 }
 
 /* ───────── Wrapper ───────── */
 .dashboard-wrapper {
-  background: #0f1428;
+  background: #080d1f;
+  border: 1px solid rgba(108, 142, 245, 0.15);
   margin: 20px;
-  border-radius: 20px;
+  border-radius: 22px;
   overflow: hidden;
-  width: 540px;
+  width: 560px;
   color: #e2e8f0;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 0 0 1px rgba(108,142,245,0.08),
+    0 24px 60px rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(108, 142, 245, 0.06) inset;
 }
 
 /* ───────── Header ───────── */
@@ -30,30 +34,44 @@
   gap: 12px;
 }
 
-.dash-title h2 {
-  margin: 0;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #f0f4ff;
-  line-height: 1.2;
+.title-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(108, 142, 245, 0.12);
+  border: 1px solid rgba(108, 142, 245, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .title-icon {
   color: #6c8ef5;
-  font-size: 28px;
-  width: 28px;
-  height: 28px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.dash-title h2 {
+  margin: 0 0 2px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f0f4ff;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 .dash-subtitle {
-  font-size: 0.72rem;
-  color: #64748b;
+  font-size: 0.7rem;
+  color: #3d4f6b;
   letter-spacing: 0.03em;
+  font-weight: 500;
 }
 
 .refresh-btn {
-  color: #64748b !important;
+  color: #3d4f6b !important;
   transition: color 0.2s;
 }
 
@@ -61,24 +79,34 @@
   color: #6c8ef5 !important;
 }
 
-mat-divider {
-  border-color: rgba(255, 255, 255, 0.07) !important;
+/* ───────── Divider ───────── */
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /* ───────── Body ───────── */
 .dash-body {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   padding: 24px;
   align-items: center;
 }
 
-/* ───────── Chart ───────── */
+/* ───────── Donut Chart ───────── */
 .chart-container {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 190px;
+  height: 190px;
   flex-shrink: 0;
+}
+
+.glow-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(108,142,245,0.06) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .chart-center {
@@ -91,20 +119,22 @@ mat-divider {
   pointer-events: none;
 }
 
-.chart-center .center-value {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.6rem;
+.center-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2rem;
   font-weight: 700;
   color: #f0f4ff;
   line-height: 1;
+  text-shadow: 0 0 20px rgba(108, 142, 245, 0.5);
 }
 
-.chart-center .center-label {
-  font-size: 0.65rem;
-  color: #64748b;
+.center-label {
+  font-size: 0.6rem;
+  color: #3d4f6b;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-top: 4px;
+  letter-spacing: 0.12em;
+  margin-top: 5px;
+  font-weight: 600;
 }
 
 /* ───────── Stats Panel ───────── */
@@ -112,16 +142,16 @@ mat-divider {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .panel-heading {
-  margin: 0 0 4px;
-  font-size: 0.7rem;
+  margin: 0 0 6px;
+  font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #475569;
-  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #2d3a52;
+  font-weight: 700;
 }
 
 /* ───────── Stat Row ───────── */
@@ -133,38 +163,45 @@ mat-divider {
   border-radius: 10px;
   cursor: default;
   transition: background 0.2s;
+  border: 1px solid transparent;
 }
 
 .stat-row:hover,
 .stat-row.active {
-  background: rgba(108, 142, 245, 0.08);
+  background: rgba(108, 142, 245, 0.07);
+  border-color: rgba(108, 142, 245, 0.1);
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.stat-icon {
+  font-size: 14px !important;
+  width: 14px !important;
+  height: 14px !important;
   flex-shrink: 0;
 }
 
-.flag {
-  font-size: 1rem;
-  line-height: 1;
-}
-
 .country-name {
-  width: 54px;
-  font-size: 0.8rem;
+  width: 66px;
+  font-size: 0.78rem;
   font-weight: 500;
-  color: #cbd5e1;
+  color: #8899bb;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* ───────── Progress Bar ───────── */
+/* ───────── Bar ───────── */
 .bar-track {
   flex: 1;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.07);
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 99px;
   overflow: hidden;
 }
@@ -172,15 +209,17 @@ mat-divider {
 .bar-fill {
   height: 100%;
   border-radius: 99px;
-  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  opacity: 0.85;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.9;
+  box-shadow: 0 0 8px currentColor;
 }
 
 .pct-badge {
-  width: 36px;
+  width: 20px;
   text-align: right;
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
   flex-shrink: 0;
 }
 
@@ -188,30 +227,135 @@ mat-divider {
 .kpi-strip {
   display: flex;
   justify-content: space-around;
-  padding: 14px 16px;
+  padding: 14px 16px 18px;
+  gap: 8px;
+  background: rgba(255,255,255,0.015);
 }
 
 .kpi {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 3px;
 }
 
-.kpi-flag {
-  font-size: 1.1rem;
+.kpi-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin-bottom: 1px;
+  filter: drop-shadow(0 0 6px currentColor);
 }
 
 .kpi-val {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.1rem;
   font-weight: 700;
   line-height: 1.1;
+  text-shadow: 0 0 12px currentColor;
 }
 
 .kpi-label {
-  font-size: 0.62rem;
-  color: #475569;
+  font-size: 0.58rem;
+  color: #2d3a52;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ───────── Skeleton ───────── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.skeleton-chart,
+.skeleton-heading,
+.skeleton-row,
+.skeleton-kpi {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.03) 25%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.03) 75%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: 10px;
+}
+
+.skeleton-chart {
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeleton-heading {
+  width: 60px;
+  height: 10px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.skeleton-row {
+  width: 100%;
+  height: 32px;
+  border-radius: 10px;
+  margin-bottom: 2px;
+}
+
+.skeleton-kpi {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+}
+
+/* ───────── States ───────── */
+.state-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 24px;
+  color: #3d4f6b;
+  font-size: 0.85rem;
+}
+
+.state-block.error { color: #F56C8E; }
+
+.state-block mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.retry-btn {
+  margin-top: 4px;
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(245, 108, 142, 0.3);
+  background: transparent;
+  color: #F56C8E;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.retry-btn:hover {
+  background: rgba(245, 108, 142, 0.1);
+}
+
+/* ───────── Spin ───────── */
+.spinning {
+  animation: spin 0.3s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }

@@ -7,8 +7,9 @@ export interface Project {
   nom:            string;
   description?:   string;
   dateDebut:      string;
-  dateFinPrevue:  string;
+  dateFinPrevue:  string;//predicte with the machine learning with the help of the product mananger 
   dateFinReelle?: string;
+  tempsPredict?:   number;//predicte with the machine learning with the help of the product mananger 
   budgetTotale:   number;
   budgetConsomme?: number;
   coordonnesGPS?: string;
@@ -22,3 +23,4 @@ export interface Project {
   createdAt?:     string;
   updatedAt?:     string;
 }
+//ajoute le valeur de tempsPredict dans le interface de project 

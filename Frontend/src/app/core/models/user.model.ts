@@ -6,6 +6,9 @@ export interface User {
   email:     string;
   password?: string;
   role?:     Role;
+  status?:   'active' | 'inactive';
+  tacheHistory?: string[]; // IDs of tasks assigned to this user
+  projectHistory?: string[]; // IDs of projects this user is involved in
 }
 
 export interface AuthResponse {

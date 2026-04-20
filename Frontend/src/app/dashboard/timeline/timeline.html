@@ -1,14 +1,18 @@
 <div class="timeline-card">
   <div class="card-header">
     <span class="card-title">Timeline Preview</span>
+   
     <div class="tab-group">
-      <button
+       <button class="toggleChart" class="tab" id="toggleChart" (click)="toggleChart()"> Toggle Chart</button>
+      <div class="buttonPeriod">
+        <button
         class="tab"
         [class.active]="activePeriod === 'week'"
         (click)="switchPeriod('week')"
       >
         Week
       </button>
+
       <button
         class="tab"
         [class.active]="activePeriod === 'month'"
@@ -16,6 +20,7 @@
       >
         Month
       </button>
+      
       <button
         class="tab"
         [class.active]="activePeriod === 'quarter'"
@@ -23,6 +28,7 @@
       >
         Quarter
       </button>
+      </div>
     </div>
   </div>
 

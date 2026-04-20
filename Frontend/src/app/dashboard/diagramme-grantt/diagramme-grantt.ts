@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule }    from '@angular/material/icon';
 import { MatRippleModule }  from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Sidebar } from "../../layout/sidbar/sidbar";
 
 /* ── MODELS ─────────────────────────────────────────────── */
 export type TaskStatus = 'completed' | 'in-progress' | 'delayed' | 'pending';
@@ -42,7 +43,7 @@ export interface GanttProject {
   selector: 'app-gantt-chart',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MatIconModule, MatRippleModule, MatTooltipModule],
+  imports: [CommonModule, MatIconModule, MatRippleModule, MatTooltipModule, Sidebar],
   templateUrl: './diagramme-grantt.html',
   styleUrls: ['./diagramme-grantt.css'],
 })
@@ -79,7 +80,7 @@ export class GanttChart implements OnInit {
   /* ── TODAY MARKER ────────────────────────── */
   todayOffset = computed(() => {
     // Simule que "aujourd'hui" = jour 12 dans la période
-    return (12 / this.totalDays()) * 100;
+    return (12 / this.totalDays()) * 50;
   });
 
   /* ── DATA ────────────────────────────────── */
@@ -227,16 +228,19 @@ export class GanttChart implements OnInit {
   setViewMode(mode: ViewMode): void {
     this.viewMode.set(mode);
     this.cdr.markForCheck();
+    console.log(`View mode changed to ${mode}. Total days: ${this.totalDays()}.`);
   }
 
   toggleProject(project: GanttProject): void {
     project.collapsed = !project.collapsed;
     this.cdr.markForCheck();
+    console.log(`Project ${project.name} is now ${project.collapsed ? 'collapsed' : 'expanded'}.`);
   }
 
   selectTask(task: GanttTask): void {
     this.selectedTask = this.selectedTask?.id === task.id ? null : task;
     this.cdr.markForCheck();
+    console.log(`Task ${task.name} selected:`, this.selectedTask);
   }
 
   closeDetail(): void {

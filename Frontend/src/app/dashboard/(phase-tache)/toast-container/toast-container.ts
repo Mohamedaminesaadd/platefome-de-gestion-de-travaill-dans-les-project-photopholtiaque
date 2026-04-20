@@ -1,7 +1,7 @@
-// toast-container.ts — composant inline (pas de fichiers séparés nécessaires)
+// src/app/dashboard/(phase-tache)/toast-container/toast-container.ts
 import { Component, inject } from '@angular/core';
 import { CommonModule }      from '@angular/common';
-import { ToastService }      from '../../services/toast.service';
+import { ToastService, Toast } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-toast-container',
@@ -10,15 +10,16 @@ import { ToastService }      from '../../services/toast.service';
   template: `
     <div class="toast-container">
       <div
-        *ngFor="let t of toastSvc.toasts()"
+        *ngFor="let t of toasts"
         class="toast"
         [class]="'toast--' + t.type"
-        (click)="toastSvc.remove(t.id)"
+        (click)="toastSvc.dismiss(t.id)"
       >
         <span class="toast-icon">
           <ng-container [ngSwitch]="t.type">
             <span *ngSwitchCase="'success'">✓</span>
             <span *ngSwitchCase="'error'">✕</span>
+            <span *ngSwitchCase="'warning'">⚠</span>
             <span *ngSwitchDefault>ℹ</span>
           </ng-container>
         </span>
@@ -46,6 +47,7 @@ import { ToastService }      from '../../services/toast.service';
     }
     .toast--success { background: linear-gradient(135deg, #22c55e, #16a34a); }
     .toast--error   { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .toast--warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
     .toast--info    { background: linear-gradient(135deg, #3b82f6, #2563eb); }
     .toast-icon {
       width: 22px; height: 22px; border-radius: 50%;
@@ -57,4 +59,8 @@ import { ToastService }      from '../../services/toast.service';
 })
 export class ToastContainerComponent {
   toastSvc = inject(ToastService);
+
+  get toasts(): Toast[] {
+    return this.toastSvc.toasts();
+  }
 }

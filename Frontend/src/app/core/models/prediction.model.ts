@@ -16,5 +16,5 @@ export interface Prediction {
   raisonsRetard: string; 
   facteursInfluents: any; 
   modelVersion: string;
-  idProject: string;
+  idTache: string; // Relation vers la tâche concernée
 } 

@@ -462,3 +462,89 @@
     height: 14px;
   }
 }
+/* ══════════════════════════════════════════════════════════
+   SKELETON LOADER
+══════════════════════════════════════════════════════════ */
+@keyframes skShimmer {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.35; }
+  100% { opacity: 1; }
+}
+
+.sk-card {
+  pointer-events: none;
+}
+
+.sk-line,
+.sk-badge,
+.sk-track,
+.sk-btn {
+  background: #E2E8F0;
+  border-radius: 6px;
+  animation: skShimmer 1.4s ease-in-out infinite;
+}
+
+.sk-line {
+  display: block;
+}
+
+.sk-badge {
+  width: 60px;
+  height: 20px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.sk-track {
+  height: 7px;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.sk-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+
+/* Décalages pour effet de vague entre les éléments */
+.sk-card:nth-child(1) .sk-line,
+.sk-card:nth-child(1) .sk-badge,
+.sk-card:nth-child(1) .sk-track,
+.sk-card:nth-child(1) .sk-btn { animation-delay: 0s; }
+
+.sk-card:nth-child(2) .sk-line,
+.sk-card:nth-child(2) .sk-badge,
+.sk-card:nth-child(2) .sk-track,
+.sk-card:nth-child(2) .sk-btn { animation-delay: 0.15s; }
+
+.sk-card:nth-child(3) .sk-line,
+.sk-card:nth-child(3) .sk-badge,
+.sk-card:nth-child(3) .sk-track,
+.sk-card:nth-child(3) .sk-btn { animation-delay: 0.3s; }
+
+.sk-card:nth-child(4) .sk-line,
+.sk-card:nth-child(4) .sk-badge,
+.sk-card:nth-child(4) .sk-track,
+.sk-card:nth-child(4) .sk-btn { animation-delay: 0.45s; }
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .sk-line,
+  .sk-badge,
+  .sk-track,
+  .sk-btn { background: #1E293B; }
+}
+
+/* ── À AJOUTER dans list-project.css ─────────────────────────────────────
+   Juste après les règles de .edit-btn et .delete-btn                       */
+
+.action-btn.phases-btn {
+  color: #7C3AED;          /* violet, couleur distincte des autres boutons  */
+  background: transparent;
+}
+
+.action-btn.phases-btn:hover {
+  background: #EDE9FE;     /* violet très clair au survol                   */
+  color: #5B21B6;
+}

@@ -1,7 +1,7 @@
 // assign-modal.ts
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Technician } from '../../core/models/task-filter.model';
+import { Technician } from '../../../core/models/task-filter.model';
 
 @Component({
   selector: 'app-assign-modal',

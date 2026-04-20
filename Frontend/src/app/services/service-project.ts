@@ -3,12 +3,27 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Project } from '../core/models/project.model';
 
+export interface ProjectStats {
+  total: number;
+  byStatus: Record<string, number>;
+  budget: {
+    total: number;
+    consumed: number;
+  };
+}
+
+
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
 
   private readonly API = 'http://localhost:3000/api/projects';
 
   constructor(private http: HttpClient) {}
+
+  // GET /api/projects/stats
+  getStats(): Observable<ProjectStats> {
+    return this.http.get<ProjectStats>(`${this.API}/stats`);
+  }
 
   // GET /api/projects
   getAll(): Observable<Project[]> {

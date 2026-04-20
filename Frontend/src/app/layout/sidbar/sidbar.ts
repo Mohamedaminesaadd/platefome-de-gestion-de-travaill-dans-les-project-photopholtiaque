@@ -1,44 +1,37 @@
+// sidebar.component.ts
 import { Component, HostBinding } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { Auth } from '../../services/auth';
+import { SidebarState } from '../../service/sidebar-state';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
   templateUrl: './sidbar.html',
   styleUrls: ['./sidbar.css'],
-  imports: [
-    MatIconModule,
-    MatRippleModule,
-    RouterLink,
-    RouterLinkActive
-  ],
+  imports: [MatIconModule, MatRippleModule, RouterLink, RouterLinkActive],
 })
 export class Sidebar {
 
-  isCollapsed = false;
-
   constructor(
     private auth: Auth,
-    private router: Router
-  ) {
-    const saved = localStorage.getItem('sidebarCollapsed');
-    if (saved) {
-      this.isCollapsed = JSON.parse(saved);
-    }
-  }
+    private router: Router,
+    public sidebarState: SidebarState   // public → accessible dans le template
+  ) {}
 
-  // 🔥 applique class "collapsed" sur <app-sidebar>
   @HostBinding('class.collapsed')
   get collapsed() {
-    return this.isCollapsed;
+    return this.sidebarState.isCollapsed;
+  }
+
+  get isCollapsed() {
+    return this.sidebarState.isCollapsed;
   }
 
   toggleSidebar(): void {
-    this.isCollapsed = !this.isCollapsed;
-    localStorage.setItem('sidebarCollapsed', JSON.stringify(this.isCollapsed));
+    this.sidebarState.toggle();
   }
 
   logout(): void {

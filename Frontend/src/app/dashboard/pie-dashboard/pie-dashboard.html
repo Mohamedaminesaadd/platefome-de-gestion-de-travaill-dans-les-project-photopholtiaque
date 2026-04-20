@@ -1,79 +1,113 @@
-
-
 <div class="dashboard-wrapper">
- 
+
   <!-- Header -->
   <div class="dash-header">
     <div class="dash-title">
-      <mat-icon class="title-icon">pie_chart</mat-icon>
+      <div class="title-icon-wrap">
+        <mat-icon class="title-icon">donut_large</mat-icon>
+      </div>
       <div>
-        <h2>Market Distribution</h2>
-        <span class="dash-subtitle">Revenue by Country · 2024</span>
+        <h2>Répartition des projets</h2>
+        <span class="dash-subtitle">Distribution par statut · {{ totalValue }} projets</span>
       </div>
     </div>
-    <button mat-icon-button matTooltip="Refresh data" class="refresh-btn">
-      <mat-icon>refresh</mat-icon>
+    <button mat-icon-button matTooltip="Rafraîchir" class="refresh-btn" (click)="refresh()">
+      <mat-icon [class.spinning]="isLoading">refresh</mat-icon>
     </button>
   </div>
- 
-  <mat-divider></mat-divider>
- 
-  <!-- Main Content -->
-  <div class="dash-body">
- 
-    <!-- Chart -->
-    <div class="chart-container">
-      <canvas #pieCanvas></canvas>
-      <!-- Center label -->
-      <div class="chart-center">
-        <span class="center-value">{{ totalValue }}</span>
-        <span class="center-label">Total Units</span>
+
+  <div class="divider"></div>
+
+  <!-- ── SKELETON ── -->
+  <ng-container *ngIf="isLoading">
+    <div class="dash-body">
+      <div class="skeleton-chart"></div>
+      <div class="stats-panel">
+        <div class="skeleton-heading"></div>
+        <div class="skeleton-row" *ngFor="let i of [1,2,3,4]"></div>
       </div>
     </div>
- 
-    <!-- Legend + Stats -->
-    <div class="stats-panel">
-      <p class="panel-heading">Breakdown</p>
- 
-      <div
-        class="stat-row"
-        *ngFor="let item of countryData; let i = index"
-        [class.active]="activeIndex === i"
-        (mouseenter)="highlightSlice(i)"
-        (mouseleave)="resetHighlight()"
-      >
-        <!-- Color dot + flag -->
-        <span class="dot" [style.background]="item.color"></span>
-        <span class="flag">{{ item.flag }}</span>
-        <span class="country-name">{{ item.country }}</span>
- 
-        <!-- Bar -->
-        <div class="bar-track">
-          <div
-            class="bar-fill"
-            [style.width.%]="getPercentage(item.value)"
-            [style.background]="item.color"
-          ></div>
+    <div class="divider"></div>
+    <div class="kpi-strip">
+      <div class="skeleton-kpi" *ngFor="let i of [1,2,3,4]"></div>
+    </div>
+  </ng-container>
+
+  <!-- ── ERROR ── -->
+  <div class="state-block error" *ngIf="hasError && !isLoading">
+    <mat-icon>error_outline</mat-icon>
+    <span>Erreur de chargement</span>
+    <button class="retry-btn" (click)="refresh()">Réessayer</button>
+  </div>
+
+  <!-- ── CONTENT ── -->
+  <ng-container *ngIf="!isLoading && !hasError">
+
+    <div class="dash-body">
+
+      <!-- Donut -->
+      <div class="chart-container">
+        <canvas #pieCanvas></canvas>
+        <div class="chart-center">
+          <span class="center-value">{{ totalValue }}</span>
+          <span class="center-label">Projets</span>
         </div>
- 
-        <!-- Percentage -->
-        <span class="pct-badge" [style.color]="item.color">
-          {{ getPercentage(item.value) }}%
-        </span>
+        <!-- Glow ring -->
+        <div class="glow-ring"></div>
       </div>
- 
+
+      <!-- Legend -->
+      <div class="stats-panel">
+        <p class="panel-heading">Statuts</p>
+        <div
+          class="stat-row"
+          *ngFor="let item of slices; let i = index"
+          [class.active]="activeIndex === i"
+          (mouseenter)="highlightSlice(i)"
+          (mouseleave)="resetHighlight()"
+        >
+          <span class="dot" [style.background]="item.color"></span>
+          <mat-icon class="stat-icon" [style.color]="item.color">{{ item.icon }}</mat-icon>
+          <span class="country-name">{{ item.label }}</span>
+          <div class="bar-track">
+            <div
+              class="bar-fill"
+              [style.width.%]="getPercentage(item.value)"
+              [style.background]="item.color"
+            ></div>
+          </div>
+          <span class="pct-badge" [style.color]="item.color">{{ item.value }}</span>
+        </div>
+      </div>
+
     </div>
-  </div>
- 
-  <!-- Footer KPIs -->
-  <mat-divider></mat-divider>
-  <div class="kpi-strip">
-    <div class="kpi" *ngFor="let item of countryData">
-      <span class="kpi-flag">{{ item.flag }}</span>
-      <span class="kpi-val" [style.color]="item.color">{{ item.value }}</span>
-      <span class="kpi-label">{{ item.country }}</span>
+
+    <div class="divider"></div>
+
+    <!-- KPI Strip -->
+    <div class="kpi-strip">
+      <div class="kpi">
+        <mat-icon class="kpi-icon" style="color:#42C8F5">autorenew</mat-icon>
+        <span class="kpi-val" style="color:#42C8F5">{{ enCours }}</span>
+        <span class="kpi-label">En cours</span>
+      </div>
+      <div class="kpi">
+        <mat-icon class="kpi-icon" style="color:#F5C842">warning_amber</mat-icon>
+        <span class="kpi-val" style="color:#F5C842">{{ enRetard }}</span>
+        <span class="kpi-label">En retard</span>
+      </div>
+      <div class="kpi">
+        <mat-icon class="kpi-icon" style="color:#42F5A2">check_circle</mat-icon>
+        <span class="kpi-val" style="color:#42F5A2">{{ termines }}</span>
+        <span class="kpi-label">Terminés</span>
+      </div>
+      <div class="kpi">
+        <mat-icon class="kpi-icon" style="color:#6C8EF5">account_balance_wallet</mat-icon>
+        <span class="kpi-val" style="color:#6C8EF5">{{ budgetPct }}%</span>
+        <span class="kpi-label">Budget cons.</span>
+      </div>
     </div>
-  </div>
- 
+
+  </ng-container>
+
 </div>
- 

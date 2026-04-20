@@ -1,3 +1,4 @@
+<!-- sidbar.html -->
 <aside class="sidebar" [class.collapsed]="isCollapsed">
 
   <!-- LOGO & TOGGLE -->
@@ -32,10 +33,10 @@
 
     <a class="nav-item"
        matRipple
-       routerLink="/kanban"
+       routerLink="/tasks"
        routerLinkActive="active">
       <mat-icon>calendar_month</mat-icon>
-      @if (!isCollapsed) { <span>Schedule</span> }
+      @if (!isCollapsed) { <span>Task Management</span> }
     </a>
 
     <a class="nav-item"
@@ -44,6 +45,14 @@
        routerLinkActive="active">
       <mat-icon>group</mat-icon>
       @if (!isCollapsed) { <span>Team</span> }
+    </a>
+
+    <a class="nav-item"
+       matRipple
+       routerLink="/grantchart"
+       routerLinkActive="active">
+      <mat-icon>view_timeline</mat-icon>
+      @if (!isCollapsed) { <span>Grant Chart</span> }
     </a>
 
     <a class="nav-item"

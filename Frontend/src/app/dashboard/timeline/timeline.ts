@@ -19,6 +19,7 @@ export class Timeline implements AfterViewInit, OnDestroy {
 
   private timelineChart!: Chart;
   activePeriod: 'week' | 'month' | 'quarter' = 'week';
+  chartType: 'line' | 'bar' = 'line';
   
   // États de chargement
   isLoading = false;
@@ -41,6 +42,15 @@ export class Timeline implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.timelineChart?.destroy();
   }
+
+  /*builde toggle chart button*/
+  toggleChart(): void {
+  this.chartType = this.chartType === 'line' ? 'bar' : 'line';
+  if (this.timelineChart) {
+    this.timelineChart.destroy();
+  }
+  this.buildTimelineChart();
+}
 
   /**
    * Charge les prédictions depuis le backend
@@ -227,7 +237,7 @@ export class Timeline implements AfterViewInit, OnDestroy {
     const data = this.getChartData();
 
     this.timelineChart = new Chart(ctx, {
-      type: 'line',
+      type: this.chartType,
       data: {
         labels: data.labels,
         datasets: data.datasets

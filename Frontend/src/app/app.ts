@@ -4,10 +4,11 @@ import { RouterOutlet } from '@angular/router';
 
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
+import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,HttpClientModule,],
+  imports: [RouterOutlet, HttpClientModule,],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

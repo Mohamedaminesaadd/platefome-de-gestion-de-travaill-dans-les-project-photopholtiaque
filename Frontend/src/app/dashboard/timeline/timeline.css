@@ -29,6 +29,7 @@
   background: #F1F5F9;
   border-radius: 8px;
   padding: 3px;
+  align-items:self-end;
 }
 
 .tab {
@@ -132,4 +133,25 @@ canvas {
   .legend-item {
     font-size: 10px;
   }
+}
+.toggleChart {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  background: #2a85e0;
+  border-radius: 6px;
+  padding: 5px 35px;
+  font-size: 12px;
+  color: #adafb1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 4px;
+}
+#toggleChart {
+  background: #eb25e1;
+  color: #ffffff;
+}
+#toggleChart:hover {  
+  background: #e96fe3;
+  color: #ffffff;
 }

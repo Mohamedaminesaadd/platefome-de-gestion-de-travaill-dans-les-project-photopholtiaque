@@ -31,7 +31,6 @@ export class IaDahsborad implements AfterViewInit, OnDestroy {
   private buildDurationChart(): void {
     if (!this.durationChartRef) return;
     const ctx = this.durationChartRef.nativeElement.getContext('2d')!;
-
     const fillGradient = ctx.createLinearGradient(0, 0, 0, 220);
     fillGradient.addColorStop(0, 'rgba(16,185,129,.12)');
     fillGradient.addColorStop(1, 'rgba(16,185,129,.01)');
@@ -48,17 +47,17 @@ export class IaDahsborad implements AfterViewInit, OnDestroy {
             borderWidth: 2,
             pointBackgroundColor: '#7C3AED',
             pointRadius: 4,
-            tension: 0.4,
+            tension: 0.2,
             fill: false,
           },
           {
             label: 'Actual',
-            data: [52, 50, 51, 50, 47, null],
+            data: [52, 50, 51, 50, 47, 50],
             borderColor: '#F59E0B',
             borderWidth: 2,
             pointBackgroundColor: '#F59E0B',
             pointRadius: 4,
-            tension: 0.4,
+            tension: 0.2,
             fill: false,
           },
           {
@@ -68,7 +67,7 @@ export class IaDahsborad implements AfterViewInit, OnDestroy {
             borderWidth: 2,
             pointBackgroundColor: '#10B981',
             pointRadius: 4,
-            tension: 0.4,
+            tension: 0.2,
             fill: {
               target: 'end',
               above: fillGradient,
@@ -76,6 +75,7 @@ export class IaDahsborad implements AfterViewInit, OnDestroy {
           },
         ],
       },
+      
       options: {
         responsive: true,
         maintainAspectRatio: false,

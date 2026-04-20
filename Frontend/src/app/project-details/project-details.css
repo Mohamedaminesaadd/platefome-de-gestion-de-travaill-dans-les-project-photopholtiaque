@@ -1,134 +1,206 @@
-/* ============================================ */
-/* DETAIL DIALOG - Styles unifiés avec project-list */
-/* ============================================ */
+/* ══════════════════════════════════════════════
+   detail-dialog.css
+══════════════════════════════════════════════ */
 
+/* ── CONTAINER ────────────────────────────── */
 .detail-dialog {
-  min-width: 420px;
+  min-width: 460px;
+  max-width: 560px;
   background: #ffffff;
   border-radius: 16px;
   overflow: hidden;
-  animation: fadeUp 0.3s ease;
+  font-family: 'DM Sans', sans-serif;
+  animation: fadeUp 0.28s ease;
 }
 
-/* Header - aligné avec les cartes projets */
+/* ── HEADER ───────────────────────────────── */
 .detail-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 20px 24px 16px 24px;
+  padding: 22px 24px 18px;
   border-bottom: 1px solid #F1F5F9;
-  background: #ffffff;
+  background: #FAFBFC;
 }
 
 .detail-title-block {
   flex: 1;
+  min-width: 0;
 }
 
 .detail-title-block h2 {
-  margin: 0 0 4px 0;
-  font-size: 18px;
+  margin: 0 0 4px;
+  font-size: 17px;
   font-weight: 700;
   color: #0F172A;
   letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .client-name {
-  font-size: 13px;
+  font-size: 12.5px;
   color: #64748B;
   font-weight: 500;
-  margin-top: 2px;
   display: inline-block;
 }
 
-/* Bouton close - style épuré */
 .detail-header button {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
   color: #94A3B8;
-  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
 }
 
 .detail-header button:hover {
+  background: #F1F5F9;
   color: #475569;
-  background: #F8FAFC;
 }
 
-/* Content */
+/* ── CONTENT ──────────────────────────────── */
 .detail-content {
-  padding: 24px !important;
+  padding: 22px 24px !important;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 8px;
   background: #ffffff;
+  max-height: 62vh;
+  overflow-y: auto;
 }
 
-/* Lignes d'information - style uniforme */
+.detail-content::-webkit-scrollbar { width: 5px; }
+.detail-content::-webkit-scrollbar-track { background: #F8FAFC; }
+.detail-content::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+
+/* ── DETAIL ROWS ──────────────────────────── */
 .detail-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: 13.5px;
   color: #334155;
-  padding: 8px 12px;
+  padding: 9px 13px;
   background: #F8FAFC;
   border-radius: 10px;
-  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.detail-row:hover {
+  border-color: #E2E8F0;
 }
 
 .detail-row mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-  color: #64748B;
+  font-size: 17px;
+  width: 17px;
+  height: 17px;
+  color: #94A3B8;
+  flex-shrink: 0;
 }
 
 .detail-row span:first-of-type {
-  font-weight: 500;
+  font-weight: 600;
   color: #475569;
-  min-width: 48px;
+  min-width: 52px;
+  font-size: 12.5px;
 }
 
 .detail-row.overdue {
   background: #FEF2F2;
+  border-color: #FECACA;
   color: #DC2626;
 }
 
 .detail-row.overdue mat-icon {
-  color: #DC2626;
+  color: #EF4444;
 }
 
-/* Badges - réutilisation exacte des styles project-list */
+/* ── SEPARATOR ────────────────────────────── */
+.separator {
+  color: #CBD5E1;
+  font-size: 14px;
+  margin: 0 3px;
+}
+
+/* ── BADGES ───────────────────────────────── */
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 4px 12px;
+  padding: 3px 10px;
   border-radius: 20px;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  line-height: 1.2;
   margin-left: auto;
+  flex-shrink: 0;
 }
 
-.badge-inprogress {
-  background: #DBEAFE;
-  color: #1D4ED8;
+.badge-planned    { background: #F1F5F9; color: #475569; }
+.badge-inprogress { background: #DBEAFE; color: #1D4ED8; }
+.badge-delayed    { background: #FEF3C7; color: #92400E; }
+.badge-suspended  { background: #FEE2E2; color: #DC2626; }
+.badge-completed  { background: #D1FAE5; color: #065F46; }
+.badge-cancelled  { background: #F1F5F9; color: #94A3B8; }
+
+/* ── PRIORITY TAG ─────────────────────────── */
+.priority-tag {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-.badge-delayed {
-  background: #FEF3C7;
-  color: #92400E;
+.priority-low      { color: #22C55E; }
+.priority-medium   { color: #F59E0B; }
+.priority-high     { color: #EF4444; }
+.priority-critical { color: #7C3AED; }
+
+/* ── GPS VALUE ────────────────────────────── */
+.gps-value {
+  font-size: 11.5px;
+  color: #475569;
+  font-family: 'JetBrains Mono', monospace;
+  background: #F1F5F9;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #E2E8F0;
+  letter-spacing: 0.02em;
 }
 
-.badge-completed {
-  background: #D1FAE5;
-  color: #065F46;
+/* ── META ICON ────────────────────────────── */
+.meta-icon {
+  font-size: 13px !important;
+  width: 13px !important;
+  height: 13px !important;
+  color: #94A3B8;
+  vertical-align: middle;
+  margin-right: 3px;
 }
 
-/* Progress Block - aligné avec project-list */
+.arrow-icon {
+  font-size: 12px !important;
+  width: 12px !important;
+  height: 12px !important;
+  color: #CBD5E1;
+}
+
+/* ── PROGRESS BLOCK ───────────────────────── */
 .detail-progress-block {
   background: #F8FAFC;
   border-radius: 12px;
   padding: 14px 16px;
+  border: 1px solid #F1F5F9;
+  margin-top: 4px;
 }
 
 .progress-meta {
@@ -139,18 +211,17 @@
 }
 
 .progress-meta span {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 500;
   color: #64748B;
 }
 
 .progress-meta strong {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: #0F172A;
 }
 
-/* Personnalisation de la barre de progression Angular Material */
 ::ng-deep .detail-progress-block .mat-progress-bar {
   height: 8px !important;
   border-radius: 8px !important;
@@ -166,19 +237,21 @@
   background: linear-gradient(90deg, #F59E0B, #FCD34D) !important;
 }
 
-/* Actions du dialogue */
+/* ── ACTIONS ──────────────────────────────── */
 mat-dialog-actions {
-  padding: 16px 24px 24px 24px !important;
-  gap: 12px;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 10px;
+  padding: 16px 24px !important;
   border-top: 1px solid #F1F5F9;
-  background: #ffffff;
+  background: #FAFBFC;
+  margin: 0 !important;
 }
 
-/* Boutons - réutilisation des styles btn-primary */
 mat-dialog-actions button[mat-stroked-button] {
-  padding: 0 20px;
   height: 38px;
-  border-radius: 8px;
+  padding: 0 18px;
+  border-radius: 9px;
   font-size: 13.5px;
   font-weight: 600;
   font-family: 'DM Sans', sans-serif;
@@ -188,158 +261,55 @@ mat-dialog-actions button[mat-stroked-button] {
 }
 
 mat-dialog-actions button[mat-stroked-button]:hover {
-  background: #F8FAFC;
+  background: #F1F5F9;
   border-color: #CBD5E1;
-  transform: translateY(-1px);
+  color: #334155;
 }
 
 mat-dialog-actions button[mat-flat-button][color="primary"] {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 0 24px;
   height: 38px;
-  border-radius: 8px;
+  padding: 0 22px;
+  border-radius: 9px;
   background: #2563EB;
   color: #fff;
   font-size: 13.5px;
   font-weight: 600;
   font-family: 'DM Sans', sans-serif;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.22);
 }
 
 mat-dialog-actions button[mat-flat-button][color="primary"]:hover {
   background: #1D4ED8;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
   transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.32);
 }
 
-/* Animation - identique à project-list */
+/* ── ANIMATION ────────────────────────────── */
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive */
+/* ── RESPONSIVE ───────────────────────────── */
 @media (max-width: 640px) {
   .detail-dialog {
     min-width: calc(100vw - 32px);
     max-width: calc(100vw - 32px);
-    margin: 16px;
   }
 
-  .detail-header {
-    padding: 16px 20px 12px 20px;
-  }
-
-  .detail-title-block h2 {
-    font-size: 16px;
-  }
-
-  .client-name {
-    font-size: 12px;
-  }
-
-  .detail-content {
-    padding: 20px !important;
-    gap: 16px;
-  }
-
-  .detail-row {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
-
-  .detail-progress-block {
-    padding: 12px 14px;
-  }
-
-  mat-dialog-actions {
-    padding: 12px 20px 20px 20px !important;
-  }
-
-  mat-dialog-actions button {
-    flex: 1;
-  }
+  .detail-header { padding: 16px 18px 14px; }
+  .detail-title-block h2 { font-size: 15px; }
+  .detail-content { padding: 16px 18px !important; }
+  mat-dialog-actions { padding: 12px 18px !important; }
+  mat-dialog-actions button { flex: 1; }
 }
 
 @media (max-width: 480px) {
-  .badge {
-    font-size: 9px;
-    padding: 3px 8px;
-  }
-
-  .detail-row {
-    flex-wrap: wrap;
-  }
-
-  .badge {
-    margin-left: 0;
-    margin-top: 4px;
-    width: fit-content;
-  }
-}
-
-/* ── SEPARATOR ───────────────────────────────────────────── */
-.separator {
-  color: #CBD5E1;
-  font-size: 16px;
-  margin: 0 4px;
-}
-
-/* ── PRIORITY TAG ─────────────────────────────────────────── */
-.priority-tag {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.priority-low      { color: #22C55E; }
-.priority-medium   { color: #F59E0B; }
-.priority-high     { color: #EF4444; }
-.priority-critical { color: #7C3AED; }
-
-/* ── STATUS BADGES ────────────────────────────────────────── */
-.badge-planned    { background: #F1F5F9; color: #475569; }
-.badge-inprogress { background: #DBEAFE; color: #1D4ED8; }
-.badge-delayed    { background: #FEF3C7; color: #92400E; }
-.badge-suspended  { background: #FEE2E2; color: #DC2626; }
-.badge-completed  { background: #D1FAE5; color: #065F46; }
-.badge-cancelled  { background: #F1F5F9; color: #94A3B8; }
-
-/* ── META ICON ────────────────────────────────────────────── */
-.meta-icon {
-  font-size: 13px !important;
-  width: 13px !important;
-  height: 13px !important;
-  color: #94A3B8;
-  vertical-align: middle;
-  margin-right: 3px;
-}
-
-/* ── ARROW ICON ───────────────────────────────────────────── */
-.arrow-icon {
-  font-size: 12px !important;
-  width: 12px !important;
-  height: 12px !important;
-  color: #CBD5E1;
-}
-
-/* ── GPS VALUE ────────────────────────────────────────────── */
-.gps-value {
-  font-size: 12px;
-  color: #475569;
-  font-family: monospace;
-  background: #F8FAFC;
-  padding: 2px 8px;
-  border-radius: 6px;
-  border: 1px solid #E2E8F0;
+  .badge { font-size: 9.5px; padding: 2px 8px; }
+  .detail-row { flex-wrap: wrap; }
+  .badge { margin-left: 0; margin-top: 6px; }
 }

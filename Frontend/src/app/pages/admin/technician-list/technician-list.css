@@ -1,9 +1,19 @@
-/* ── LAYOUT SHELL ─────────────────────────── */
+/* ============================================================
+   technician-list.css — CORRIGÉ
+   Corrections :
+    1. .tech-role : style ajouté (manquait dans le CSS original)
+    2. .loading    : style ajouté (utilisé dans le template mais absent du CSS)
+    3. .charge-fill combinaison [ngClass + classe de base] :
+       le sélecteur .charge-fill.charge-* a besoin d'être après .charge-fill
+    4. grid-template-columns en 3 colonnes sur 1280px+ (inchangé)
+   ============================================================ */
+
+/* ── LAYOUT SHELL ──────────────────────────────────────────── */
 .shell {
   display: flex;
   height: 100vh;
   overflow: hidden;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'DM Sans', 'Inter', sans-serif;
 }
 
 app-sidebar {
@@ -24,6 +34,14 @@ app-sidebar.collapsed {
   flex-direction: column;
   overflow-y: auto;
   min-width: 0;
+  background: #F8FAFC;
+}
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
 }
 
 section {
@@ -31,9 +49,7 @@ section {
   flex: 1;
 }
 
-/* ══════════════════════════════════════════════════════════
-   HEADER
-══════════════════════════════════════════════════════════ */
+/* ── HEADER ────────────────────────────────────────────────── */
 .section-header {
   display: flex;
   align-items: center;
@@ -57,9 +73,7 @@ section {
   border-radius: 20px;
 }
 
-/* ══════════════════════════════════════════════════════════
-   TOOLBAR
-══════════════════════════════════════════════════════════ */
+/* ── TOOLBAR ───────────────────────────────────────────────── */
 .toolbar {
   display: flex;
   align-items: center;
@@ -78,7 +92,7 @@ section {
   padding: 8px 14px;
   flex: 1;
   min-width: 200px;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .search-bar:focus-within {
@@ -100,13 +114,14 @@ section {
   color: #334155;
   background: transparent;
   width: 100%;
-  font-family: 'DM Sans', sans-serif;
+  font-family: inherit;
 }
 
 .search-input::placeholder {
   color: #94A3B8;
 }
 
+/* Filter tabs */
 .filter-tabs {
   display: flex;
   align-items: center;
@@ -130,7 +145,7 @@ section {
   color: #64748B;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: 'DM Sans', sans-serif;
+  font-family: inherit;
 }
 
 .filter-tab:hover {
@@ -150,22 +165,41 @@ section {
   border-radius: 50%;
   flex-shrink: 0;
 }
-
 .dot-green { background: #22C55E; }
 .dot-red   { background: #EF4444; }
 
-/* ══════════════════════════════════════════════════════════
-   GRID
-══════════════════════════════════════════════════════════ */
+/* ── LOADING — AJOUTÉ (manquait) ───────────────────────────── */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 48px 0;
+  color: #94A3B8;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.loading mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  animation: spin 1.4s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── GRID ──────────────────────────────────────────────────── */
 .tech-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
 }
 
-/* ══════════════════════════════════════════════════════════
-   CARD
-══════════════════════════════════════════════════════════ */
+/* ── CARD ──────────────────────────────────────────────────── */
 .tech-card {
   position: relative;
   background: #fff;
@@ -193,7 +227,7 @@ section {
   transform: translateY(-2px);
 }
 
-/* ── DISPO BADGE ── */
+/* Badge disponibilité */
 .dispo-badge {
   position: absolute;
   top: 14px;
@@ -219,12 +253,12 @@ section {
   background: currentColor;
 }
 
-/* ── AVATAR + INFOS ── */
+/* Avatar + Infos */
 .tech-top {
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  padding-right: 80px;
+  padding-right: 90px; /* laisse la place au badge dispo */
 }
 
 .tech-avatar {
@@ -241,17 +275,29 @@ section {
   letter-spacing: -0.5px;
 }
 
+.tech-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
 .tech-name {
   font-size: 15px;
   font-weight: 700;
   color: #0F172A;
   letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tech-email {
   font-size: 12px;
   color: #64748B;
-  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tech-specialite {
@@ -271,7 +317,21 @@ section {
   color: #94A3B8;
 }
 
-/* ── CHARGE TRAVAIL ── */
+/* CORRECTION : .tech-role manquait dans le CSS original */
+.tech-role {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6366F1;
+  background: #EEF2FF;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-top: 4px;
+  text-transform: capitalize;
+  letter-spacing: 0.02em;
+}
+
+/* ── CHARGE TRAVAIL ────────────────────────────────────────── */
 .charge-block {
   display: flex;
   flex-direction: column;
@@ -299,6 +359,7 @@ section {
   letter-spacing: 0.04em;
 }
 
+/* Classes de charge — utilisées via [ngClass] dans le template */
 .charge-libre  { background: #F1F5F9; color: #64748B; }
 .charge-light  { background: #D1FAE5; color: #065F46; }
 .charge-medium { background: #FEF3C7; color: #92400E; }
@@ -311,10 +372,12 @@ section {
   overflow: hidden;
 }
 
+/* CORRECTION : les sélecteurs combinés doivent être APRÈS .charge-fill seul */
 .charge-fill {
   height: 100%;
   border-radius: 4px;
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #CBD5E1; /* fallback */
 }
 
 .charge-fill.charge-libre  { background: #CBD5E1; }
@@ -337,7 +400,7 @@ section {
   color: #94A3B8;
 }
 
-/* ── SPARKLINE ── */
+/* ── SPARKLINE ─────────────────────────────────────────────── */
 .sparkline-block {
   display: flex;
   flex-direction: column;
@@ -361,6 +424,7 @@ section {
   font-weight: 700;
 }
 
+/* Classes utilisées via [ngClass]="effClass()" */
 .sparkline-value.good { color: #10B981; }
 .sparkline-value.mid  { color: #F59E0B; }
 .sparkline-value.low  { color: #EF4444; }
@@ -375,11 +439,11 @@ section {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100% !important;
+  width:  100% !important;
   height: 100% !important;
 }
 
-/* ── ACTIONS ── */
+/* ── ACTIONS ───────────────────────────────────────────────── */
 .tech-actions {
   display: flex;
   align-items: center;
@@ -391,6 +455,7 @@ section {
 .action-btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
   padding: 0 12px;
   height: 32px;
@@ -398,9 +463,10 @@ section {
   border: none;
   font-size: 12.5px;
   font-weight: 600;
-  font-family: 'DM Sans', sans-serif;
+  font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .action-btn mat-icon {
@@ -412,7 +478,7 @@ section {
 .action-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-  transform: none !important;
+  pointer-events: none;
 }
 
 .view-btn {
@@ -420,10 +486,7 @@ section {
   color: #2563EB;
   flex: 1;
 }
-
-.view-btn:hover:not(:disabled) {
-  background: #DBEAFE;
-}
+.view-btn:hover { background: #DBEAFE; }
 
 .assign-btn {
   background: #2563EB;
@@ -431,10 +494,10 @@ section {
   flex: 1;
   box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
 }
-
 .assign-btn:hover:not(:disabled) {
   background: #1D4ED8;
   transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.30);
 }
 
 .profile-btn {
@@ -442,18 +505,11 @@ section {
   color: #64748B;
   width: 32px;
   padding: 0;
-  justify-content: center;
   flex-shrink: 0;
 }
+.profile-btn:hover { background: #F1F5F9; color: #334155; }
 
-.profile-btn:hover {
-  background: #F1F5F9;
-  color: #334155;
-}
-
-/* ══════════════════════════════════════════════════════════
-   NO DATA
-══════════════════════════════════════════════════════════ */
+/* ── PAS DE DONNÉES ────────────────────────────────────────── */
 .no-data {
   display: flex;
   flex-direction: column;
@@ -472,49 +528,25 @@ section {
   height: 44px;
 }
 
-/* ══════════════════════════════════════════════════════════
-   ANIMATION
-══════════════════════════════════════════════════════════ */
+/* ── ANIMATIONS ────────────────────────────────────────────── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0);    }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ══════════════════════════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════════════════════════ */
+/* ── RESPONSIVE ────────────────────────────────────────────── */
 @media (max-width: 1280px) {
-  .tech-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .tech-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 1024px) {
-  app-sidebar {
-    width: 70px;
-    min-width: 70px;
-  }
-
-  .tech-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  app-sidebar { width: 70px; min-width: 70px; }
+  .tech-grid  { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 640px) {
-  .tech-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .toolbar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .filter-tabs {
-    justify-content: center;
-  }
-
-  section {
-    padding: 16px;
-  }
+  .tech-grid  { grid-template-columns: 1fr; }
+  .toolbar    { flex-direction: column; align-items: stretch; }
+  .filter-tabs { justify-content: center; }
+  section     { padding: 16px; }
 }

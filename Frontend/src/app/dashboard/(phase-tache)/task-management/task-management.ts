@@ -2,14 +2,14 @@
 import { Component, inject, OnInit, computed, signal } from '@angular/core';
 import { CommonModule }           from '@angular/common';
 import { FilterBar }     from '../filter-bar/filter-bar';
-import { TaskListComponent }      from '../task-list/task-list';
+import { TaskListComponent } from '../task-list/task-list';
 import { AssignModalComponent }   from '../assign-modal/assign-modal';
 import { ToastContainerComponent } from '../toast-container/toast-container';
-import { MockDataService }        from '../../services/mock-data.service';
-import { ToastService }           from '../../services/toast.service';
+import { MockDataService }        from '../../../services/mock-data.service';
+import { ToastService }           from '../../../services/toast.service';
 import {
   Task, Technician, TaskFilters
-} from '../../core/models/task-filter.model';
+} from '../../../core/models/task-filter.model';
 
 @Component({
   selector: 'app-task-management',
