@@ -550,3 +550,31 @@ section {
   .filter-tabs { justify-content: center; }
   section     { padding: 16px; }
 }
+
+
+/* ── SKELETON ── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.sk {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 6px;
+}
+
+.sk-badge   { height: 24px; width: 90px; margin-bottom: 16px; }
+.sk-avatar  { width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0; }
+.sk-line    { height: 12px; margin-bottom: 8px; }
+.sk-name    { width: 120px; }
+.sk-email   { width: 160px; }
+.sk-spec    { width: 90px; }
+.sk-block   { height: 60px; margin: 12px 0; border-radius: 8px; }
+.sk-actions { height: 36px; border-radius: 8px; }
+
+.skeleton-card {
+  pointer-events: none;
+  opacity: 0.85;
+}

@@ -41,14 +41,30 @@
           </div>
         </div>
 
+        <!-- ── SKELETON ── -->
+        <div class="tech-grid" *ngIf="isLoading">
+          <div class="tech-card skeleton-card" *ngFor="let s of skeletonItems">
+            <div class="sk sk-badge"></div>
+            <div class="tech-top">
+              <div class="sk sk-avatar"></div>
+              <div class="tech-info">
+                <div class="sk sk-line sk-name"></div>
+                <div class="sk sk-line sk-email"></div>
+                <div class="sk sk-line sk-spec"></div>
+              </div>
+            </div>
+            <div class="sk sk-block"></div>
+            <div class="sk sk-block"></div>
+            <div class="sk sk-actions"></div>
+          </div>
+        </div>
+
         <!-- ── GRID ── -->
-        <div class="tech-grid" *ngIf="filtered.length > 0; else noData">
+        <div class="tech-grid" *ngIf="!isLoading && filtered.length > 0">
           <div
             class="tech-card"
-            matRipple
             *ngFor="let t of filtered; trackBy: trackById"
           >
-
             <!-- Badge disponibilité -->
             <div class="dispo-badge" [class.dispo-on]="t.disponible" [class.dispo-off]="!t.disponible">
               <span class="dispo-dot"></span>
@@ -91,7 +107,7 @@
               </div>
             </div>
 
-            <!-- ── SPARKLINE EFFICACITÉ ── -->
+            <!-- Sparkline -->
             <div class="sparkline-block">
               <div class="sparkline-header">
                 <span class="sparkline-label">Efficacité (7 derniers jours)</span>
@@ -104,13 +120,14 @@
               </div>
             </div>
 
-            <!-- Actions -->
+            <!-- Actions -->  
+            <!-- ✅ matRipple retiré de la card, gardé uniquement sur les boutons -->
             <div class="tech-actions">
               <button
                 class="action-btn view-btn"
                 matRipple
                 matTooltip="Voir les tâches"
-                (click)="onVoirTaches(t); $event.stopPropagation()"
+                (click)="onVoirTaches(t)"
               >
                 <mat-icon>assignment</mat-icon>
                 Tâches
@@ -120,7 +137,7 @@
                 matRipple
                 matTooltip="Assigner une tâche"
                 [disabled]="!t.disponible"
-                (click)="onAssignerTache(t); $event.stopPropagation()"
+                (click)="onAssignerTache(t)"
               >
                 <mat-icon>add_task</mat-icon>
                 Assigner
@@ -129,7 +146,7 @@
                 class="action-btn profile-btn"
                 matRipple
                 matTooltip="Voir profil"
-                (click)="onVoirProfil(t); $event.stopPropagation()"
+                (click)="onVoirProfil(t)"
               >
                 <mat-icon>person</mat-icon>
               </button>
@@ -140,11 +157,16 @@
 
         <!-- ── NO DATA ── -->
         <ng-template #noData>
-          <div class="no-data">
+          <div class="no-data" *ngIf="!isLoading">
             <mat-icon>search_off</mat-icon>
             <span>Aucun technicien trouvé</span>
           </div>
         </ng-template>
+
+        <div class="no-data" *ngIf="!isLoading && filtered.length === 0">
+          <mat-icon>search_off</mat-icon>
+          <span>Aucun technicien trouvé</span>
+        </div>
 
       </section>
     </div>
