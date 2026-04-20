@@ -18,10 +18,12 @@
         (click)="pick(t)"
       >
         <span class="avatar" [style.background]="t.avatarColor">{{ t.avatar }}</span>
+
         <div class="tech-info">
           <span class="tech-name">{{ t.name }}</span>
           <span class="tech-role">{{ t.role }}</span>
         </div>
+        
         <div class="pick-indicator" [class.pick-indicator--on]="pickedTechnician?.id === t.id">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round"

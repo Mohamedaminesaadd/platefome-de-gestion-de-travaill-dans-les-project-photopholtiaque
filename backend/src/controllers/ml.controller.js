@@ -1,8 +1,8 @@
-import { predict as mlPredict } from "../services/ml.service.js";
+import {} from "../services/ml.service.js"
 
-export const predict = async (req, res) => {
+export const mlpredict = async (req, res) => {
   try {
-    const result = await mlPredict(req.body);
+    const result = await Predict(req.body);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: "Prediction failed" });

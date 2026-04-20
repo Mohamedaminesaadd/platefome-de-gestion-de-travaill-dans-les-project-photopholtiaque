@@ -12,10 +12,10 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import {
   ActiveChip, TaskFilters, TaskPriority,
   TaskStatus, Technician, DeadlineFilter
-} from '../../../core/models/task-filter.model';
+} from '../../core/models/task-filter.model';
 import {
   StatusLabelPipe, PriorityLabelPipe, DeadlineLabelPipe
-} from '../../../core/pipes/label.pipes';
+} from '../../core/pipes/label.pipes';
 
 @Component({
   selector: 'app-filter-bar',

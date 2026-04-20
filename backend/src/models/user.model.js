@@ -14,10 +14,25 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   role: {
-  type: String,
-  enum:    Object.values(ROLES),
-  default: 'technician' 
+    type: String,
+    enum: Object.values(ROLES),
+    default: 'technician'
   },
+
+  status: { type: String, default: 'inactive' },
+
+  // 🔥 AJOUTS FRONTEND
+  specialite: { type: String },
+
+  disponible: { type: Boolean, default: true },
+
+  tachesEnCours: { type: Number, default: 0 },
+
+  efficacite: { type: [Number], default: [] },
+
+  tacheHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tache' }],
+  projectHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
+
   resetPasswordToken: String,
   resetPasswordExpires: Date
 });

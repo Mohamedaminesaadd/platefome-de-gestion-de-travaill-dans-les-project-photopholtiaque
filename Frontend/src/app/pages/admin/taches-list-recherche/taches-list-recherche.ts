@@ -5,7 +5,7 @@ import { Sidebar } from "../../../layout/sidbar/sidbar";
 import { Topbar } from "../../../layout/topbar/topbar";
 
 // ✅ chemin corrigé avec (phase-tache)
-import { TaskManagementComponent } from "../../../dashboard/(phase-tache)/task-management/task-management";
+import { TaskManagementComponent } from "../../../(phase-tache)/task-management/task-management";
 
 @Component({
   selector: 'app-taches-list-recherche',

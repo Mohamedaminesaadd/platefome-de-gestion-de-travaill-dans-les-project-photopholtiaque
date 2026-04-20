@@ -17,33 +17,26 @@ export const createTache = async (req, res) => {
       idUtilisateur
     } = req.body;
 
-    /* ===== VALIDATION MINIMALE ===== */
     if (!titre || !dateEcheance || !idPhase) {
-      return res.status(400).json({
-        message: "❌ titre, dateEcheance et idPhase sont obligatoires"
-      });
+      return res.status(400).json({ message: "Champs obligatoires manquants" });
     }
 
-    /* ===== CHECK PHASE ===== */
     const phase = await Phase.findById(idPhase);
     if (!phase) {
-      return res.status(404).json({ message: "❌ Phase introuvable" });
+      return res.status(404).json({ message: "Phase introuvable" });
     }
 
-    /* ===== CHECK USER ===== */
     let user = null;
     if (idUtilisateur) {
       user = await User.findById(idUtilisateur);
       if (!user) {
-        return res.status(404).json({ message: "❌ User introuvable" });
+        return res.status(404).json({ message: "Utilisateur introuvable" });
       }
     }
 
-    /* ===== CREATE ===== */
     const tache = await Tache.create({
       titre,
       description,
-      dateCreation: new Date(),
       dateEcheance,
       heureEstimees: heureEstimees || 0,
       heureRelles: 0,
@@ -54,113 +47,144 @@ export const createTache = async (req, res) => {
       idUtilisateur: idUtilisateur || null
     });
 
-    return res.status(201).json({
-      message: "✅ Tache créée avec succès",
-      tache,
-      phase: {
-        id: phase._id,
-        nom: phase.nom,
-        idProject: phase.idProject
-      },
-      user: user ? { id: user._id, name: user.name } : null
-    });
+    res.status(201).json(tache);
 
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
-/* ================= GET ALL ================= */
+// ================= READ =================
 export const getAllTaches = async (req, res) => {
   try {
     const taches = await Tache.find()
-      .populate("idPhase")
-      .populate("idUtilisateur");
+      .populate("idPhase", "nom")
+      .populate("idUtilisateur", "name");
 
-    res.status(200).json(taches);
+    res.json(taches);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-/* ================= GET BY ID ================= */
+
+//================== READ BY ID =================
 export const getTacheById = async (req, res) => {
   try {
     const tache = await Tache.findById(req.params.id)
-      .populate("idPhase")
-      .populate("idUtilisateur");
+      .populate("idPhase", "nom")
+      .populate("idUtilisateur", "name");
 
     if (!tache) {
-      return res.status(404).json({ message: "❌ Tache introuvable" });
+      return res.status(404).json({ message: "Tache introuvable" });
     }
 
-    res.status(200).json(tache);
+    res.json(tache);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-/* ================= UPDATE ================= */
+//================== UPDATE =================
 export const updateTache = async (req, res) => {
   try {
-    const { id } = req.params;
-
     const updated = await Tache.findByIdAndUpdate(
-      id,
-      { $set: req.body },   // ⭐ IMPORTANT
+      req.params.id,
+      req.body,
       { new: true, runValidators: true }
     );
 
     if (!updated) {
-      return res.status(404).json({ message: "Tache not found" });
+      return res.status(404).json({ message: "Tache introuvable" });
     }
 
     res.json(updated);
-
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-/* ================= DELETE ================= */
-export const deleteTache = async (req, res) => {
-  try {
-    const tache = await Tache.findByIdAndDelete(req.params.id);
-
-    if (!tache) {
-      return res.status(404).json({ message: "❌ Tache introuvable" });
-    }
-
-    res.status(200).json({ message: "🗑️ Tache supprimée" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-/* ================= BY PHASE ================= */
+//================== DELETE =================
+export const deleteTache = async (req, res) => {
+  try {
+    const deleted = await Tache.findByIdAndDelete(req.params.id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Tache introuvable" });
+    }
+
+    res.json({ message: "Tache supprimée" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//==================Assigner une tâche à un utilisateur =================
+
+export const assignTaches = async (req, res) => {
+  try {
+    const { taskIds, technicianId } = req.body;
+
+    if (!taskIds || !technicianId) {
+      return res.status(400).json({ message: "taskIds et technicianId requis" });
+    }
+
+    const user = await User.findById(technicianId);
+    if (!user) {
+      return res.status(404).json({ message: "Technicien introuvable" });
+    }
+
+    await Tache.updateMany(
+      { _id: { $in: taskIds } },
+      { idUtilisateur: technicianId }
+    );
+
+    res.json({ message: "Taches assignées avec succès" });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//================Delete all task ================
+export const deleteManyTaches = async (req, res) => {
+  try {
+    const { taskIds } = req.body;
+
+    await Tache.deleteMany({ _id: { $in: taskIds } });
+
+    res.json({ message: "Taches supprimées" });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//==================Gettache by phase by phaseId =================
 export const getTachesByPhase = async (req, res) => {
   try {
     const taches = await Tache.find({ idPhase: req.params.phaseId })
-      .populate("idUtilisateur");
+      .populate("idUtilisateur", "name");
 
-    res.status(200).json(taches);
+    res.json(taches);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-/* ================= BY USER ================= */
+//==================Gettache by user by userId =================
 export const getTachesByUser = async (req, res) => {
   try {
     const taches = await Tache.find({ idUtilisateur: req.params.userId })
-      .populate("idPhase");
+      .populate("idPhase", "nom");
 
-    res.status(200).json(taches);
+    res.json(taches);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-/* ================= BY PROJECT ================= */
+//==================GET BY PTOJECT ID =================
 export const getTachesByProject = async (req, res) => {
   try {
     const phases = await Phase.find({ idProject: req.params.projectId });
@@ -169,10 +193,14 @@ export const getTachesByProject = async (req, res) => {
 
     const taches = await Tache.find({
       idPhase: { $in: phaseIds }
-    }).populate("idUtilisateur");
+    }).populate("idUtilisateur", "name");
 
-    res.status(200).json(taches);
+    res.json(taches);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
+//==================estimation ML =================
+//==================recommandation ML =================
+//==================priorisation ML =================

@@ -1,7 +1,7 @@
 // src/app/dashboard/(phase-tache)/toast-container/toast-container.ts
 import { Component, inject } from '@angular/core';
 import { CommonModule }      from '@angular/common';
-import { ToastService, Toast } from '../../../services/toast.service';
+import { ToastService, Toast } from '../../services/toast.service';
 
 @Component({
   selector: 'app-toast-container',

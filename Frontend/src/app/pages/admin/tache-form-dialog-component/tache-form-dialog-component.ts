@@ -1,5 +1,3 @@
-// ── src/app/pages/project-manager/kanban-board/tache-form-dialog/tache-form-dialog.component.ts
-
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule }              from '@angular/common';
 import { FormsModule }               from '@angular/forms';
@@ -11,14 +9,15 @@ import { MatFormFieldModule }        from '@angular/material/form-field';
 import { MatInputModule }            from '@angular/material/input';
 import { MatButtonModule }           from '@angular/material/button';
 
-// Ligne à corriger
 import { Tache, StatutTache, PrioriteTache, Complexite } from '../../../core/models/tache.model';
-import { Technicien } from '../kanban-board-component/kanban-board-component';
+
+// ✅ Import depuis technician-list qui a la bonne interface
+import { Technician } from '../../../services/technicien';
 
 export interface DialogData {
-  task:          Tache | null;         // null = create mode
+  task:          Tache | null;
   defaultStatut: StatutTache;
-  techniciens:   Technicien[];
+  techniciens:   Technician[];
 }
 
 @Component({
@@ -36,19 +35,23 @@ export class TacheFormDialogComponent implements OnInit {
 
   isEdit = false;
 
-  // Form model
   form: Partial<Tache> = {
-    titre: '', description: '',
-    statut: 'A FAIRE', priorite: 'MOYENNE', complexite: 'MOYENNE',
-    heureEstimees: 0, dateEcheance: '',
-    idPhase: 'ph-1', idProject: 'proj-1',
+    titre:         '',
+    description:   '',
+    statut:        'A FAIRE',
+    priorite:      'MOYENNE',
+    complexite:    'MOYENNE',
+    heureEstimees: 0,
+    dateEcheance:  '',
+    idPhase:       'ph-1',
+    idProject:     'proj-1',
   };
 
-  selectedTech?: Technicien;
+  selectedTech?: Technician;
 
-  readonly statuts:    StatutTache[]   = ['A FAIRE', 'EN COURS', 'TERMINEE'];
-  readonly priorites:  PrioriteTache[] = ['BASSE', 'MOYENNE', 'HAUTE', 'CRITIQUE'];
-  readonly complexites: Complexite[]   = ['BASSE', 'MOYENNE', 'ELEVEE'];
+  readonly statuts:     StatutTache[]   = ['A FAIRE', 'EN COURS', 'TERMINEE'];
+  readonly priorites:   PrioriteTache[] = ['BASSE', 'MOYENNE', 'HAUTE', 'CRITIQUE'];
+  readonly complexites: Complexite[]    = ['BASSE', 'MOYENNE', 'ELEVEE'];
 
   constructor(
     public dialogRef: MatDialogRef<TacheFormDialogComponent>,
@@ -57,22 +60,20 @@ export class TacheFormDialogComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data.task) {
-      // Edit mode
       this.isEdit = true;
       this.form   = { ...this.data.task };
       this.selectedTech = this.data.techniciens.find(
-        t => t.id === this.data.task?.idUtilisateur
+        t => t._id === this.data.task?.idUtilisateur
       );
     } else {
-      // Create mode
       this.form.statut = this.data.defaultStatut ?? 'A FAIRE';
     }
   }
 
   onTechChange(): void {
     if (this.selectedTech) {
-      this.form.idUtilisateur = this.selectedTech.id;
-      this.form.assigneNom    = this.selectedTech.nom;
+      this.form.idUtilisateur = this.selectedTech._id;
+      this.form.assigneNom    = this.selectedTech.username;
       this.form.assigneEmail  = this.selectedTech.email;
     } else {
       this.form.idUtilisateur = undefined;

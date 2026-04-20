@@ -1,19 +1,30 @@
 import { Injectable } from '@angular/core';
-import { User } from '../core/models/user.model';
 import { HttpClient } from '@angular/common/http';
 
-@Injectable({
+// ✅ Interface
+export interface Technician {
+  _id:            string;
+  username:       string;
+  email:          string;
+  role:           string;
+  status?:        string;
+  specialite?:    string;
+  disponible?:    boolean;
+  tachesEnCours?: number;
+  efficacite?:    number[];
+}
+
+
+
+  @Injectable({
   providedIn: 'root',
 })
-export class Technicien {
-  private readonly API = 'http://localhost:3000/api/users/role';
+export class TechnicienService {
+  private readonly API = 'http://localhost:3000/api/users';  // ✅ sans /role
 
   constructor(private http: HttpClient) {}
 
-  //get /api/role:technicien
   getTechniciens() {
-    return this.http.get<User[]>(`${this.API}/technicien`);
+    return this.http.get<Technician[]>(`${this.API}/technicians`);  // ✅ /technicians
   }
-  
-  
 }

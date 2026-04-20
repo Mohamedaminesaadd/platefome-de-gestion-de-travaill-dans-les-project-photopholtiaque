@@ -9,19 +9,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { Chart, registerables } from 'chart.js';
 
-Chart.register(...registerables);
+import { Technician, TechnicienService } from '../../../services/technicien';
 
-// ── INTERFACE ─────────────────────────────────────────────────
-export interface Technician {
-  _id:           string;
-  username:      string;
-  email:         string;
-  role:          string;
-  specialite?:   string;
-  tachesEnCours: number;
-  disponible:    boolean;
-  efficacite:    number[];
-}
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-technician-list',
@@ -44,28 +34,32 @@ export class TechnicianList implements OnInit, AfterViewInit {
   searchTerm       = '';
   filterDisponible = 'all';
 
-  technicians: Technician[] = [
-    { _id:'t1', username:'Amine Sadda',    email:'amine@mail.com',  role:'technician', specialite:'Électricité',  tachesEnCours:2, disponible:true,  efficacite:[72,75,68,80,85,78,88] },
-    { _id:'t2', username:'Sara Benmoussa', email:'sara@mail.com',   role:'technician', specialite:'Mécanique',    tachesEnCours:5, disponible:false, efficacite:[50,45,55,48,52,46,44] },
-    { _id:'t3', username:'Karim Ouali',    email:'karim@mail.com',  role:'technician', specialite:'Informatique', tachesEnCours:1, disponible:true,  efficacite:[90,88,92,95,91,94,96] },
-    { _id:'t4', username:'Nadia Ferhat',   email:'nadia@mail.com',  role:'technician', specialite:'Hydraulique',  tachesEnCours:4, disponible:false, efficacite:[60,55,62,58,65,60,57] },
-    { _id:'t5', username:'Youcef Amrani',  email:'youcef@mail.com', role:'technician', specialite:'Électricité',  tachesEnCours:0, disponible:true,  efficacite:[82,80,85,88,84,90,87] },
-    { _id:'t6', username:'Lina Hadjadj',   email:'lina@mail.com',   role:'technician', specialite:'Topographie',  tachesEnCours:3, disponible:true,  efficacite:[70,74,72,78,76,80,79] },
-  ];
-
-  filtered: Technician[] = [];
+  technicians: Technician[] = [];
+  filtered:    Technician[] = [];
 
   private charts: Map<string, Chart> = new Map();
 
+  constructor(private technicienService: TechnicienService) {}
+
   // ── LIFECYCLE ─────────────────────────────────────────────────
   ngOnInit(): void {
-    this.filtered = [...this.technicians];
+    this.technicienService.getTechniciens().subscribe({
+      next: (data) => {
+        this.technicians = data;
+        this.filtered    = [...data];
+        // sparklines après rendu
+        setTimeout(() => {
+          this.filtered.forEach(t => this.renderSparkline(t));
+        }, 0);
+      },
+      error: (err) => {
+        console.error('Erreur chargement techniciens:', err);
+      }
+    });
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.filtered.forEach(t => this.renderSparkline(t));
-    }, 0);
+    // géré dans ngOnInit après réception des données
   }
 
   // ── SPARKLINE ─────────────────────────────────────────────────
@@ -79,7 +73,10 @@ export class TechnicianList implements OnInit, AfterViewInit {
       this.charts.delete(t._id);
     }
 
-    const avg   = this.effAvg(t.efficacite);
+    const eff   = t.efficacite ?? [];
+    if (eff.length === 0) return;
+
+    const avg   = this.effAvg(eff);
     const color = avg >= 80 ? '#10B981' : avg >= 60 ? '#F59E0B' : '#EF4444';
     const fill  = avg >= 80 ? 'rgba(16,185,129,0.12)' : avg >= 60 ? 'rgba(245,158,11,0.12)' : 'rgba(239,68,68,0.12)';
 
@@ -88,7 +85,7 @@ export class TechnicianList implements OnInit, AfterViewInit {
       data: {
         labels: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
         datasets: [{
-          data: t.efficacite,
+          data: eff,
           borderColor: color,
           backgroundColor: fill,
           borderWidth: 2,
@@ -117,7 +114,7 @@ export class TechnicianList implements OnInit, AfterViewInit {
           x: { display: false },
           y: {
             display: false,
-            min: Math.min(...t.efficacite) - 10,
+            min: Math.min(...eff) - 10,
             max: 100
           }
         }
@@ -135,11 +132,12 @@ export class TechnicianList implements OnInit, AfterViewInit {
 
   // ── EFFICACITÉ ────────────────────────────────────────────────
   effAvg(eff: number[]): number {
+    if (!eff || eff.length === 0) return 0;
     return Math.round(eff.reduce((a, b) => a + b, 0) / eff.length);
   }
 
   effClass(eff: number[]): string {
-    const avg = this.effAvg(eff);
+    const avg = this.effAvg(eff ?? []);
     return avg >= 80 ? 'good' : avg >= 60 ? 'mid' : 'low';
   }
 
@@ -153,8 +151,8 @@ export class TechnicianList implements OnInit, AfterViewInit {
         (t.specialite?.toLowerCase().includes(term) ?? false);
 
       const matchDispo =
-        this.filterDisponible === 'all'        ? true         :
-        this.filterDisponible === 'disponible' ? t.disponible :
+        this.filterDisponible === 'all'        ? true          :
+        this.filterDisponible === 'disponible' ? t.disponible  :
                                                  !t.disponible;
       return matchSearch && matchDispo;
     });
@@ -209,3 +207,5 @@ export class TechnicianList implements OnInit, AfterViewInit {
     return tech._id;
   }
 }
+
+

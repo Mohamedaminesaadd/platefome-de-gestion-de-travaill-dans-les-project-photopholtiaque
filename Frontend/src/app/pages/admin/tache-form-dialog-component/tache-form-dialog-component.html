@@ -103,9 +103,9 @@
           <mat-option [value]="undefined">Non assigné</mat-option>
           <mat-option *ngFor="let t of data.techniciens" [value]="t">
             <div class="tech-option">
-              <span class="tech-av">{{ t.nom[0] }}</span>
-              <span>{{ t.nom }}</span>
-              <span class="tech-spec">{{ t.specialite }}</span>
+              <span class="tech-av">{{ t.username[0] | uppercase }}</span>
+              <span>{{ t.username }}</span>
+              <span class="tech-spec">{{ t.specialite ?? 'Non définie' }}</span>
             </div>
           </mat-option>
         </mat-select>

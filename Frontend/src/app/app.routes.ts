@@ -13,10 +13,9 @@ import { IaDahsborad } from './dashboard/ia-dahsborad/ia-dahsborad';
 import { Proc } from './pages/admin/proc/proc';
 import { TechnicianList } from './pages/admin/technician-list/technician-list';
 import { GanttChart } from './dashboard/diagramme-grantt/diagramme-grantt';
-import { KanbanBoardComponent } from './pages/admin/kanban-board-component/kanban-board-component';
 
 // ✅ CHEMIN CORRIGÉ — (phase-tache) ajouté
-import { TaskManagementComponent } from './dashboard/(phase-tache)/task-management/task-management';
+import { TaskManagementComponent } from './(phase-tache)/task-management/task-management';
 import { TachesListRecherche } from './pages/admin/taches-list-recherche/taches-list-recherche';
 
 export const routes: Routes = [
@@ -46,12 +45,7 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { role: 'admin' }
   },
-  {
-    path: 'kanban',
-    component: KanbanBoardComponent,
-    canActivate: [authGuard, roleGuard],
-    data: { role: 'admin' }
-  },
+
   {
     path: 'page-technician',
     component: TechnicianList,

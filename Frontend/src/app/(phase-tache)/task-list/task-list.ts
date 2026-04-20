@@ -1,7 +1,7 @@
 // task-list.ts
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Task } from '../../../core/models/task-filter.model';
+import { Task } from '../../core/models/task-filter.model';
 import {  TaskCardComponent} from '../task-card/task-card';
 
 @Component({
@@ -16,6 +16,8 @@ export class TaskListComponent {
   @Input()  multiSelectMode       = false;
   @Input()  selectedIds: Set<string> = new Set();
   @Output() selectionToggled      = new EventEmitter<string>();
+  //un Set contenant les IDs sélectionnés
+  // Méthode pour vérifier si une tâche est sélectionnée
 
   isSelected(id: string): boolean { return this.selectedIds.has(id); }
 

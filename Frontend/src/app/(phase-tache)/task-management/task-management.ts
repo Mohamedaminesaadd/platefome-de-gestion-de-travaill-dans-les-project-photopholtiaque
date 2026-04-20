@@ -5,11 +5,11 @@ import { FilterBar }     from '../filter-bar/filter-bar';
 import { TaskListComponent } from '../task-list/task-list';
 import { AssignModalComponent }   from '../assign-modal/assign-modal';
 import { ToastContainerComponent } from '../toast-container/toast-container';
-import { MockDataService }        from '../../../services/mock-data.service';
-import { ToastService }           from '../../../services/toast.service';
+import { MockDataService }        from '../../services/mock-data.service';
+import { ToastService }           from '../../services/toast.service';
 import {
   Task, Technician, TaskFilters
-} from '../../../core/models/task-filter.model';
+} from '../../core/models/task-filter.model';
 
 @Component({
   selector: 'app-task-management',
@@ -24,6 +24,7 @@ import {
   templateUrl: './task-management.html',
   styleUrls: ['./task-management.css'],
 })
+
 export class TaskManagementComponent implements OnInit {
   private mockData = inject(MockDataService);
   private toastSvc = inject(ToastService);

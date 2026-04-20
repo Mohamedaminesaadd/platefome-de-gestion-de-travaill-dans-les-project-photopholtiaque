@@ -1,8 +1,8 @@
 import express from "express";
-import { predict } from "../controllers/ml.controller.js";
+import { mlpredict } from "../controllers/ml.controller.js";
 
 const router = express.Router();
 
-router.post("/predict", predict);
+router.post("/predict", mlpredict);
 
 export default router;

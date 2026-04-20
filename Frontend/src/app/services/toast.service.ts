@@ -16,7 +16,7 @@ export class ToastService {
   readonly toasts  = this._toasts.asReadonly();
   private counter  = 0;
 
-  show(message: string, type: ToastType = 'success', duration = 3500): void {
+  show(message: string, type: ToastType = 'success', duration = 3000): void {
     const id = ++this.counter;
     this._toasts.update(list => [...list, { id, message, type }]);
     setTimeout(() => this.dismiss(id), duration);
@@ -32,3 +32,5 @@ export class ToastService {
     this.dismiss(id);
   }
 }
+
+//service de toast pour afficher des notifications temporaires à l'utilisateur. Il utilise un signal pour stocker la liste des toasts et fournit des méthodes pour afficher et supprimer les toasts.  

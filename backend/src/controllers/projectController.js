@@ -68,3 +68,61 @@ export const deleteProject = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+//getPrject for pie chart
+
+
+// GET STATS FOR PIE CHART
+export const getProjectStats = async (req, res) => {
+  try {
+    const stats = await Project.aggregate([
+      
+      // 1. Group by statut
+      {
+        $group: {
+          _id: "$statut",
+          count: { $sum: 1 },
+          totalBudget: { $sum: "$budgetTotale" },
+          totalConsumed: { $sum: "$budgetConsomme" }
+        }
+      },
+
+      // 2. Format output
+      {
+        $project: {
+          _id: 0,
+          statut: "$_id",
+          count: 1,
+          totalBudget: 1,
+          totalConsumed: 1
+        }
+      }
+    ]);
+
+    // 3. Total projets
+  const totalProjects = await Project.countDocuments();
+
+    // 4. Construire réponse propre
+    const byStatus = {};
+    let budgetTotal = 0;
+    let budgetConsumed = 0;
+
+    stats.forEach(s => {
+      byStatus[s.statut] = s.count;
+      budgetTotal += s.totalBudget;
+      budgetConsumed += s.totalConsumed;
+    });
+
+    res.status(200).json({
+      total: totalProjects,
+      byStatus,
+      budget: {
+        total: budgetTotal,
+        consumed: budgetConsumed
+      }
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

@@ -20,6 +20,7 @@ import { Project, StatutProject, Priorite } from '../core/models/project.model';
   styleUrls: ['./project-details.css']
 })
 export class ProjectDetail {
+dismissed: any;
 
   constructor(
     public dialogRef: MatDialogRef<ProjectDetail>,

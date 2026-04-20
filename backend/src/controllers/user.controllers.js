@@ -159,4 +159,37 @@ const resetPassword = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser, forgotPassword, resetPassword };
+// ================= GET ALL TECHNOLOGIES =================
+export const getAllTechnicians = async (req, res) => {
+  try {
+    const technicians = await User.find({ role: 'technician' })
+      .select('-password');
+
+    res.status(200).json(technicians);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// ================= GET USERS BY ROLE =================
+const getUsersByRole = async (req, res) => {
+  try {
+    const { role } = req.params;
+
+    if (!Object.values(ROLES).includes(role.toLowerCase())) {
+      return res.status(400).json({ message: "Invalid role" });
+    }
+
+    const users = await User.find({ role: role.toLowerCase() })
+      .select('-password'); // 🔒 sécurité
+
+    res.status(200).json(users);
+
+  } catch (error) {
+    console.error("Get users by role error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export { registerUser, loginUser, forgotPassword, resetPassword , getUsersByRole };
