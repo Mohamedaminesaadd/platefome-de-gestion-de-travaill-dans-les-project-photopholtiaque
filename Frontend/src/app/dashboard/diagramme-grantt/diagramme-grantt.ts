@@ -11,6 +11,7 @@ import { MatIconModule }    from '@angular/material/icon';
 import { MatRippleModule }  from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Sidebar } from "../../layout/sidbar/sidbar";
+import { Topbar } from "../../layout/topbar/topbar";
 
 /* ── MODELS ─────────────────────────────────────────────── */
 export type TaskStatus = 'completed' | 'in-progress' | 'delayed' | 'pending';
@@ -43,7 +44,7 @@ export interface GanttProject {
   selector: 'app-gantt-chart',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MatIconModule, MatRippleModule, MatTooltipModule, Sidebar],
+  imports: [CommonModule, MatIconModule, MatRippleModule, MatTooltipModule, Sidebar, Topbar],
   templateUrl: './diagramme-grantt.html',
   styleUrls: ['./diagramme-grantt.css'],
 })

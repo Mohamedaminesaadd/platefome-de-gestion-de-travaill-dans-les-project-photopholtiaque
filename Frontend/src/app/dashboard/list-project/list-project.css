@@ -468,7 +468,7 @@
 @keyframes skShimmer {
   0%   { opacity: 1; }
   50%  { opacity: 0.35; }
-  100% { opacity: 1; }
+  100% { opacity: 0.7; }
 }
 
 .sk-card {
@@ -479,7 +479,7 @@
 .sk-badge,
 .sk-track,
 .sk-btn {
-  background: #E2E8F0;
+   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   border-radius: 6px;
   animation: skShimmer 1.4s ease-in-out infinite;
 }
@@ -533,7 +533,7 @@
   .sk-line,
   .sk-badge,
   .sk-track,
-  .sk-btn { background: #1E293B; }
+  .sk-btn { background: #646970; }
 }
 
 /* ── À AJOUTER dans list-project.css ─────────────────────────────────────

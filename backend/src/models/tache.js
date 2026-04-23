@@ -5,7 +5,6 @@ const TacheSchema = new mongoose.Schema(
   // 🔹 Infos principales
   title: {
     type: String,
-    required: true,
     trim: true
   },
 
@@ -31,7 +30,6 @@ const TacheSchema = new mongoose.Schema(
   // ⏱ Temps
   estimatedHours: {
     type: Number,
-    required: true,
     min: 0
   },
 

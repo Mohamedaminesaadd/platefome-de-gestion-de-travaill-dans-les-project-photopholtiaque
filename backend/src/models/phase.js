@@ -11,7 +11,7 @@ const PhaseSchema = new mongoose.Schema(
 
   description: {
     type: String,
-    required: true,
+    required: false,
     trim: true
   },
 
@@ -24,12 +24,12 @@ const PhaseSchema = new mongoose.Schema(
   // 📅 Dates prévues
   dateDebutPrevue: {
     type: Date,
-    required: true
+    /*required: true*/
   },
 
   dateFinPrevue: {
     type: Date,
-    required: true
+    /*required: true*/
   },
 
   // 📅 Dates réelles
@@ -46,7 +46,7 @@ const PhaseSchema = new mongoose.Schema(
   // ⏱ Durées
   dureeEstimee: {
     type: Number,
-    required: true,
+    required: false,
     min: 0
   },
 

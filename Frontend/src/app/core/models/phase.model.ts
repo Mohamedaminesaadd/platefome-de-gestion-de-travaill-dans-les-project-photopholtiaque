@@ -1,4 +1,4 @@
-export type StatutPhase = 'NOM COMMENCEE' | 'EN COURS' | 'TERMINE' | 'BLOQUE' | 'EN ATTENTE';
+export type StatutPhase = 'NON COMMENCEE' | 'EN COURS' | 'TERMINE' | 'BLOQUE' | 'EN ATTENTE';
 
 export interface Phase {
   _id?:              string;

@@ -1,52 +1,67 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Tache } from '../core/models/tache.model';
 
-// adapte selon ton environnement
-const API_URL = 'http://localhost:3000/api/users';
+@Injectable({ providedIn: 'root' })
+export class TacheService {
 
-export interface Technician {
-  _id: string;
-  username: string;
-  email: string;
-  role: string;
-
-  // champs backend ajoutés
-  specialite?: string;
-  disponible?: boolean;
-  tachesEnCours?: number;
-  efficacite?: number[];
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class TechnicienService {
+  private readonly API = 'http://localhost:3000/api/taches';
 
   constructor(private http: HttpClient) {}
 
-  // ================= GET ALL TECHNICIANS =================
-  getAll(): Observable<Technician[]> {
-    return this.http.get<Technician[]>(`${API_URL}/technicians`);
+  // GET /api/taches
+  getAll(): Observable<Tache[]> {
+    return this.http.get<Tache[]>(this.API);
   }
 
-  // ================= GET BY ROLE =================
-  getByRole(role: string): Observable<Technician[]> {
-    return this.http.get<Technician[]>(`${API_URL}/role/${role}`);
+  // GET /api/taches/:id
+  getById(id: string): Observable<Tache> {
+    return this.http.get<Tache>(`${this.API}/${id}`);
   }
 
-  // ================= GET ONE TECHNICIAN =================
-  getById(id: string): Observable<Technician> {
-    return this.http.get<Technician>(`${API_URL}/${id}`);
+  // GET /api/taches/phase/:phaseId
+  getByPhase(phaseId: string): Observable<Tache[]> {
+    return this.http.get<Tache[]>(`${this.API}/phase/${phaseId}`);
   }
 
-  // ================= UPDATE TECHNICIAN =================
-  update(id: string, data: Partial<Technician>): Observable<Technician> {
-    return this.http.put<Technician>(`${API_URL}/${id}`, data);
+  // GET /api/taches/project/:projectId
+  getByProject(projectId: string): Observable<Tache[]> {
+    return this.http.get<Tache[]>(`${this.API}/project/${projectId}`);
   }
 
-  // ================= DELETE TECHNICIAN =================
-  delete(id: string): Observable<any> {
-    return this.http.delete(`${API_URL}/${id}`);
+  // GET /api/taches/user/:userId
+  getByUser(userId: string): Observable<Tache[]> {
+    return this.http.get<Tache[]>(`${this.API}/user/${userId}`);
+  }
+
+  // POST /api/taches
+  create(tache: Partial<Tache>): Observable<Tache> {
+    return this.http.post<Tache>(this.API, tache);
+  }
+
+  // PUT /api/taches/:id
+  update(id: string, tache: Partial<Tache>): Observable<Tache> {
+    return this.http.put<Tache>(`${this.API}/${id}`, tache);
+  }
+
+  // DELETE /api/taches/:id
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.API}/${id}`);
+  }
+
+  // POST /api/taches/assign
+  assign(taskIds: string[], technicianId: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.API}/assign`, {
+      taskIds,
+      technicianId
+    });
+  }
+
+  // DELETE /api/taches/many
+  deleteMany(taskIds: string[]): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.API}/many`, {
+      body: { taskIds }
+    });
   }
 }

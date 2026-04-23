@@ -23,6 +23,7 @@ app-sidebar.collapsed {
   font-family: 'DM Sans', sans-serif;
 }
 
+
 .main {
   flex: 1;
   display: flex;
@@ -30,7 +31,17 @@ app-sidebar.collapsed {
   height: 100%;
   overflow: hidden;
   min-width: 0;
-  overflow-y: scroll;
+  overflow: hidden;
+
+}
+.content {
+  flex: 1;
+  overflow-y: auto; /* SCROLL ICI */
+  min-height: 0;
+}
+app-topbar {
+  flex-shrink: 0;
+  z-index: 10;
 }
 /* ── PAGE ─────────────────────────────────── */
 .gantt-page {
@@ -40,6 +51,7 @@ app-sidebar.collapsed {
   padding: 24px 28px;
   font-family: 'DM Sans', sans-serif;
   position: relative;
+    overflow-y: scroll;
 }
 
 /* ══════════════════════════════════════════════

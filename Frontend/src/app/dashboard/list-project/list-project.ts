@@ -84,23 +84,27 @@ export class ListProject implements OnInit {
     });
   }
 
-  onNewProject(): void {
-    this.dialog.open(ProjectForm, {
-      data: null,
-      width: '520px',
-      panelClass: 'detail-panel'
-    }).afterClosed().subscribe((result: Partial<Project> | null) => {
-      if (!result) return;
-      this.projectService.create(result).subscribe({
-        next: (created) => {
-          this.projects = [created, ...this.projects];
-          this.applyFilter();
-        },
-        error: (err) => console.error(err)
-      });
-    });
-  }
+onNewProject(): void {
+  this.dialog.open(ProjectForm, {
+    data: null,
+    width: '520px',
+    panelClass: 'detail-panel'
+  }).afterClosed().subscribe((result: Partial<Project> | null) => {
+    if (!result) return;
 
+    this.projectService.create(result).subscribe({
+      next: (created) => {
+        // ✅ Ajouter à la liste
+        this.projects = [created, ...this.projects];
+        this.applyFilter();
+
+        // ✅ Ouvrir automatiquement le dialog des phases
+        this.openAddPhases(created);
+      },
+      error: (err) => console.error(err)
+    });
+  });
+}
   onEditProject(project: Project): void {
     this.dialog.open(ProjectForm, {
       data: project,
@@ -134,22 +138,23 @@ export class ListProject implements OnInit {
   }
 
   // ── FIX : project passé en paramètre ─────────────────────────────────────
-  openAddPhases(project: Project): void {
-    const ref = this.dialog.open(AddPhasesDialogComponent, {
-      data: {
-        projectId:  project._id,   // ← project, pas this.data
-        projectNom: project.nom,
-      } as AddPhasesDialogData,
-      panelClass: 'apd-overlay',
-      maxWidth: '120vw',
-    });
+openAddPhases(project: Project): void {
+  const ref = this.dialog.open(AddPhasesDialogComponent, {
+    data: {
+      projectId:  project._id,
+      projectNom: project.nom,
+    } as AddPhasesDialogData,
+    panelClass: 'apd-overlay',
+    maxWidth:   '120vw',
+  });
 
-    ref.afterClosed().subscribe(result => {
-      if (result?.success) {
-        console.log(`${result.count} phase(s) créées avec succès`);
-      }
-    });
-  }
+  ref.afterClosed().subscribe(result => {
+    if (result?.success) {
+      console.log(`${result.count} phase(s) créées`);
+      this.loadProjects(); // ✅ Recharge pour avoir les données à jour
+    }
+  });
+}
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 

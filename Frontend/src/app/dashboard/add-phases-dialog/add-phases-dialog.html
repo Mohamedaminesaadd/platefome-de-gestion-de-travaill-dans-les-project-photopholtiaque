@@ -1,9 +1,6 @@
-<!-- ── add-phases-dialog.component.html ──────────────────────────────────── -->
 <div class="apd-shell">
 
-  <!-- ══════════════════════════════════════════════════════════
-       HEADER
-  ═══════════════════════════════════════════════════════════ -->
+  <!-- HEADER -->
   <div class="apd-header">
     <div class="apd-header-left">
       <div class="apd-icon-badge">
@@ -19,24 +16,6 @@
     </button>
   </div>
 
-  <!-- ── Step indicator ──────────────────────────────────────────────────── -->
-  <div class="apd-steps">
-    <div class="apd-step" [class.active]="step() === 'select'" [class.done]="step() === 'review' || step() === 'done'">
-      <span class="step-dot"><mat-icon *ngIf="step() !== 'select'">check</mat-icon><span *ngIf="step() === 'select'">1</span></span>
-      <span class="step-label">Sélection</span>
-    </div>
-    <div class="apd-step-line"></div>
-    <div class="apd-step" [class.active]="step() === 'review'" [class.done]="step() === 'done'">
-      <span class="step-dot"><mat-icon *ngIf="step() === 'done'">check</mat-icon><span *ngIf="step() !== 'done'">2</span></span>
-      <span class="step-label">Révision</span>
-    </div>
-    <div class="apd-step-line"></div>
-    <div class="apd-step" [class.active]="step() === 'done'">
-      <span class="step-dot">3</span>
-      <span class="step-label">Confirmation</span>
-    </div>
-  </div>
-
   <!-- ══════════════════════════════════════════════════════════
        STEP 1 — SELECTION
   ═══════════════════════════════════════════════════════════ -->
@@ -45,9 +24,18 @@
     <!-- Top bar -->
     <div class="apd-topbar">
       <div class="apd-stats">
-        <span class="stat-chip"><mat-icon>layers</mat-icon>{{ phasesSelected() }} phase{{ phasesSelected() > 1 ? 's' : '' }}</span>
-        <span class="stat-chip"><mat-icon>task_alt</mat-icon>{{ totalSelected() }} tâche{{ totalSelected() > 1 ? 's' : '' }}</span>
-        <span class="stat-chip"><mat-icon>schedule</mat-icon>{{ totalHeures() }}h estimées</span>
+        <span class="stat-chip">
+          <mat-icon>layers</mat-icon>
+          {{ phasesSelected() }} phase{{ phasesSelected() > 1 ? 's' : '' }}
+        </span>
+        <span class="stat-chip">
+          <mat-icon>task_alt</mat-icon>
+          {{ totalSelected() }} tâche{{ totalSelected() > 1 ? 's' : '' }}
+        </span>
+        <span class="stat-chip">
+          <mat-icon>schedule</mat-icon>
+          {{ totalHeures() }}h estimées
+        </span>
       </div>
       <div class="apd-bulk-btns">
         <button class="bulk-btn" (click)="selectAll()">Tout sélectionner</button>
@@ -59,11 +47,12 @@
     <div class="apd-phases">
       <div
         class="apd-phase-card"
-        *ngFor="let phase of phases"
+        *ngFor="let phase of phases(); trackBy: trackByNumero"
         [class.selected]="phase.selected"
         [attr.data-color]="phase.color">
 
-        <!-- Phase header row -->
+        <!-- Phase header -->
+        <!-- ✅ FIX : stopPropagation sur le header pour éviter double toggle -->
         <div class="apd-phase-header" (click)="togglePhase(phase)">
           <div class="phase-header-left">
             <div class="phase-checkbox" [class.checked]="phase.selected">
@@ -81,19 +70,22 @@
             <span class="phase-count-badge" *ngIf="phase.selected">
               {{ countSelected(phase) }} tâche{{ countSelected(phase) > 1 ? 's' : '' }}
             </span>
-            <button class="expand-btn" (click)="toggleExpand(phase, $event)" [matTooltip]="phase.expanded ? 'Réduire' : 'Développer'">
+            <!-- ✅ FIX : $event bien passé pour stopPropagation -->
+            <button
+              class="expand-btn"
+              (click)="toggleExpand(phase, $event)"
+              [matTooltip]="phase.expanded ? 'Réduire' : 'Développer'">
               <mat-icon>{{ phase.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
             </button>
           </div>
         </div>
 
-        <!-- Phase description -->
+        <!-- Description -->
         <p class="phase-desc" *ngIf="!phase.expanded">{{ phase.description }}</p>
 
-        <!-- Expanded tache list -->
+        <!-- Tâches -->
         <div class="apd-tache-list" *ngIf="phase.expanded">
 
-          <!-- Select-all row -->
           <div class="tache-all-row">
             <button class="tache-all-btn" (click)="toggleAllTaches(phase)">
               <mat-icon>{{ allSelected(phase) ? 'deselect' : 'select_all' }}</mat-icon>
@@ -101,10 +93,10 @@
             </button>
           </div>
 
-          <!-- Template taches -->
+          <!-- ✅ FIX : trackBy pour éviter re-render inutile -->
           <div
             class="tache-row"
-            *ngFor="let tache of phase.taches"
+            *ngFor="let tache of phase.taches; trackBy: trackByNumeroTache"
             [class.selected]="tache.selected"
             (click)="toggleTache(phase, tache)">
             <div class="tache-check" [class.checked]="tache.selected">
@@ -113,29 +105,44 @@
             <span class="tache-num">{{ tache.numero }}</span>
             <span class="tache-titre">{{ tache.titre }}</span>
             <div class="tache-tags">
-              <span class="tache-tag hours"><mat-icon>schedule</mat-icon>{{ tache.heureEstimee }}h</span>
-              <span class="tache-tag" [ngClass]="prioriteClass(tache.priorite)">{{ prioriteLabel(tache.priorite) }}</span>
+              <span class="tache-tag hours">
+                <mat-icon>schedule</mat-icon>{{ tache.heureEstimee }}h
+              </span>
+              <span class="tache-tag" [ngClass]="prioriteClass(tache.priorite)">
+                {{ prioriteLabel(tache.priorite) }}
+              </span>
             </div>
           </div>
 
-          <!-- Custom taches -->
+          <!-- Tâches personnalisées -->
+          <!-- ✅ FIX : stopPropagation sur remove pour ne pas déclencher toggleTache -->
           <div
             class="tache-row custom"
-            *ngFor="let ct of phase.customTaches">
-            <div class="tache-check checked"><mat-icon>check</mat-icon></div>
+            *ngFor="let ct of phase.customTaches; trackBy: trackByCustomId">
+            <div class="tache-check checked">
+              <mat-icon>check</mat-icon>
+            </div>
             <span class="tache-num custom-badge">+</span>
             <span class="tache-titre">{{ ct.titre }}</span>
             <div class="tache-tags">
-              <span class="tache-tag hours"><mat-icon>schedule</mat-icon>{{ ct.heureEstimee }}h</span>
-              <span class="tache-tag" [ngClass]="prioriteClass(ct.priorite)">{{ prioriteLabel(ct.priorite) }}</span>
-              <button class="remove-custom-btn" (click)="removeCustomTask(phase, ct.id)" matTooltip="Supprimer">
+              <span class="tache-tag hours">
+                <mat-icon>schedule</mat-icon>{{ ct.heureEstimee }}h
+              </span>
+              <span class="tache-tag" [ngClass]="prioriteClass(ct.priorite)">
+                {{ prioriteLabel(ct.priorite) }}
+              </span>
+              <!-- ✅ FIX : $event.stopPropagation() pour ne pas remonter le click -->
+              <button
+                class="remove-custom-btn"
+                (click)="$event.stopPropagation(); removeCustomTask(phase, ct.id)"
+                matTooltip="Supprimer">
                 <mat-icon>close</mat-icon>
               </button>
             </div>
           </div>
 
-          <!-- Add custom task form -->
-          <div class="add-task-form" *ngIf="newTaskForms[phase.numero].open">
+          <!-- Formulaire tâche custom -->
+          <div class="add-task-form" *ngIf="newTaskForms[phase.numero]?.open">
             <input
               class="apd-input"
               placeholder="Nom de la tâche personnalisée…"
@@ -162,15 +169,23 @@
               </select>
             </div>
             <div class="form-actions">
-              <button class="btn-cancel-task" (click)="cancelNewTask(phase)">Annuler</button>
-              <button class="btn-add-task" (click)="addCustomTask(phase)" [disabled]="!newTaskForms[phase.numero].titre.trim()">
+              <button class="btn-cancel-task" (click)="cancelNewTask(phase)">
+                Annuler
+              </button>
+              <button
+                class="btn-add-task"
+                (click)="addCustomTask(phase)"
+                [disabled]="!newTaskForms[phase.numero].titre.trim()">
                 <mat-icon>add</mat-icon> Ajouter
               </button>
             </div>
           </div>
 
-          <!-- Add task trigger -->
-          <button class="add-task-trigger" *ngIf="!newTaskForms[phase.numero].open" (click)="openNewTaskForm(phase)">
+          <!-- ✅ FIX : guard sur newTaskForms[phase.numero]?.open -->
+          <button
+            class="add-task-trigger"
+            *ngIf="!newTaskForms[phase.numero]?.open"
+            (click)="openNewTaskForm(phase)">
             <mat-icon>add_circle_outline</mat-icon>
             Ajouter une tâche personnalisée
           </button>
@@ -179,54 +194,16 @@
       </div>
     </div>
 
-  </mat-dialog-content>
-
-  <!-- ══════════════════════════════════════════════════════════
-       STEP 2 — REVIEW
-  ═══════════════════════════════════════════════════════════ -->
-  <mat-dialog-content class="apd-body" *ngIf="step() === 'review'">
-    <div class="review-header">
-      <mat-icon>checklist</mat-icon>
-      <div>
-        <h3>Récapitulatif de la sélection</h3>
-        <p>{{ phasesSelected() }} phase(s) · {{ totalSelected() }} tâche(s) · {{ totalHeures() }}h estimées</p>
-      </div>
-    </div>
-
-    <div class="review-phases">
-      <div class="review-phase" *ngFor="let phase of phases" [class.hidden]="!phase.selected">
-        <ng-container *ngIf="phase.selected">
-          <div class="review-phase-title" [attr.data-color]="phase.color">
-            <mat-icon>{{ phase.icon }}</mat-icon>
-            <strong>Phase {{ phase.numero }} — {{ phase.titre }}</strong>
-            <span class="review-count">{{ countSelected(phase) }} tâche{{ countSelected(phase) > 1 ? 's' : '' }}</span>
-          </div>
-          <ul class="review-tache-list">
-            <li *ngFor="let t of phase.taches" [class.hidden]="!t.selected">
-              <ng-container *ngIf="t.selected">
-                <mat-icon class="rt-icon">radio_button_checked</mat-icon>
-                <span>{{ t.titre }}</span>
-                <span class="rt-hours">{{ t.heureEstimee }}h</span>
-              </ng-container>
-            </li>
-            <li *ngFor="let ct of phase.customTaches" class="custom">
-              <mat-icon class="rt-icon custom">add_circle</mat-icon>
-              <span>{{ ct.titre }}</span>
-              <span class="rt-hours">{{ ct.heureEstimee }}h</span>
-            </li>
-          </ul>
-        </ng-container>
-      </div>
-    </div>
-
+    <!-- ✅ FIX : Erreur bien visible avec icône -->
     <div class="save-error" *ngIf="saveError()">
       <mat-icon>error_outline</mat-icon>
       {{ saveError() }}
     </div>
+
   </mat-dialog-content>
 
   <!-- ══════════════════════════════════════════════════════════
-       STEP 3 — DONE
+       STEP 2 — DONE
   ═══════════════════════════════════════════════════════════ -->
   <mat-dialog-content class="apd-body centered" *ngIf="step() === 'done'">
     <div class="done-anim">
@@ -238,30 +215,16 @@
     </div>
   </mat-dialog-content>
 
-  <!-- ══════════════════════════════════════════════════════════
-       FOOTER ACTIONS
-  ═══════════════════════════════════════════════════════════ -->
+  <!-- FOOTER -->
   <mat-dialog-actions class="apd-footer">
-    <!-- Step 1 -->
+
+    <!-- Step select -->
     <ng-container *ngIf="step() === 'select'">
       <button mat-stroked-button (click)="close()">Annuler</button>
       <button
-        mat-flat-button color="primary"
-        [disabled]="phasesSelected() === 0"
-        (click)="goToReview()">
-        Réviser la sélection
-        <mat-icon>arrow_forward</mat-icon>
-      </button>
-    </ng-container>
-
-    <!-- Step 2 -->
-    <ng-container *ngIf="step() === 'review'">
-      <button mat-stroked-button (click)="backToSelect()" [disabled]="saving()">
-        <mat-icon>arrow_back</mat-icon> Modifier
-      </button>
-      <button
-        mat-flat-button color="primary"
-        [disabled]="saving()"
+        mat-flat-button
+        color="primary"
+        [disabled]="phasesSelected() === 0 || saving()"
         (click)="save()">
         <mat-icon *ngIf="!saving()">cloud_upload</mat-icon>
         <span *ngIf="saving()" class="spinner"></span>
@@ -269,10 +232,11 @@
       </button>
     </ng-container>
 
-    <!-- Step 3 -->
+    <!-- Step done -->
     <ng-container *ngIf="step() === 'done'">
       <button mat-flat-button color="primary" (click)="close()">Fermer</button>
     </ng-container>
+
   </mat-dialog-actions>
 
 </div>
