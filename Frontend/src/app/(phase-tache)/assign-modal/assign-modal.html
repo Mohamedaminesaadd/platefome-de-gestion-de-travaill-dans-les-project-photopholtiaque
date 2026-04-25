@@ -3,44 +3,60 @@
   <div class="modal" (click)="$event.stopPropagation()">
 
     <div class="modal-header">
-      <h2 class="modal-title">Assign Technician</h2>
+      <h2 class="modal-title">Assigner un technicien</h2>
       <p class="modal-subtitle">
-        Assigning <strong>{{ selectedCount }} task{{ selectedCount !== 1 ? 's' : '' }}</strong>
+        Assignation de
+        <strong>{{ selectedCount }} tâche{{ selectedCount !== 1 ? 's' : '' }}</strong>
       </p>
       <button class="modal-close" (click)="dismissed.emit()">✕</button>
     </div>
 
     <div class="modal-body">
+
+      <!-- ✅ État vide -->
+      <div *ngIf="technicians.length === 0" class="empty-tech">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="32" height="32">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+        <p>Aucun technicien disponible</p>
+      </div>
+
+      <!-- ✅ Liste des techniciens -->
       <div
         *ngFor="let t of technicians"
         class="tech-row"
         [class.tech-row--active]="pickedTechnician?.id === t.id"
         (click)="pick(t)"
       >
-        <span class="avatar" [style.background]="t.avatarColor">{{ t.avatar }}</span>
+        <!-- ✅ FIX : initiales + couleur au lieu de avatar vide -->
+        <span class="avatar" [style.background]="getColor(t.name)">
+          {{ getInitials(t.name) }}
+        </span>
 
         <div class="tech-info">
           <span class="tech-name">{{ t.name }}</span>
           <span class="tech-role">{{ t.role }}</span>
         </div>
-        
+
         <div class="pick-indicator" [class.pick-indicator--on]="pickedTechnician?.id === t.id">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round"
-              stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                  stroke-width="2.5" d="M5 13l4 4L19 7"/>
           </svg>
         </div>
       </div>
+
     </div>
 
     <div class="modal-footer">
-      <button class="btn-cancel" (click)="dismissed.emit()">Cancel</button>
+      <button class="btn-cancel" (click)="dismissed.emit()">Annuler</button>
       <button
         class="btn-confirm"
         [disabled]="!pickedTechnician"
         (click)="confirm()"
       >
-        Assign to {{ pickedTechnician?.name ?? '…' }}
+        Assigner à {{ pickedTechnician?.name ?? '…' }}
       </button>
     </div>
 

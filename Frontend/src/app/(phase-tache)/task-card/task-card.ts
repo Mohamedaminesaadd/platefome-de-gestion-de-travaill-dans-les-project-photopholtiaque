@@ -1,4 +1,3 @@
-// task-card.ts
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task } from '../../core/models/task-filter.model';
@@ -19,34 +18,57 @@ export class TaskCardComponent {
   onCardClick(): void {
     if (this.multiSelectMode) this.selectionToggled.emit(this.task.id);
   }
- 
-  // Compute deadline label based on how many days are left until the deadline
-  get deadlineLabel(): string {
-    const diff = Math.ceil(
-      (this.task.deadline.getTime() - new Date().getTime()) / 86400000
-    );
-    if (diff < 0)  return `${Math.abs(diff)}d overdue`;
-    if (diff === 0) return 'Due today';
-    if (diff === 1) return 'Due tomorrow';
-    return `Due in ${diff}d`;
+
+  // ✅ FIX : génère les initiales si avatar est vide
+  get avatarInitials(): string {
+    const name = this.task.assignedTo?.name ?? '';
+    return name
+      .split(' ')
+      .map(w => w[0] ?? '')
+      .slice(0, 2)
+      .join('')
+      .toUpperCase();
   }
 
-  // Determine if the task is late (past deadline and not done)
+  // ✅ FIX : génère une couleur déterministe depuis le nom
+  get avatarColor(): string {
+    if (this.task.assignedTo?.avatarColor) return this.task.assignedTo.avatarColor;
+    const colors = [
+      '#6366f1','#8b5cf6','#ec4899','#f59e0b',
+      '#10b981','#3b82f6','#ef4444','#14b8a6'
+    ];
+    const name = this.task.assignedTo?.name ?? '';
+    const idx  = name.charCodeAt(0) % colors.length;
+    return colors[idx] ?? '#6366f1';
+  }
+
+  get deadlineLabel(): string {
+    const diff = Math.ceil(
+      (this.task.deadline.getTime() - Date.now()) / 86_400_000
+    );
+    if (diff < 0)  return `${Math.abs(diff)}j de retard`;
+    if (diff === 0) return 'Aujourd\'hui';
+    if (diff === 1) return 'Demain';
+    return `Dans ${diff}j`;
+  }
+
   get isLate(): boolean {
     return this.task.deadline < new Date() && this.task.status !== 'done';
   }
 
-    // Map priority and status to display labels and CSS classes
   get priorityConfig(): { label: string; cls: string } {
-    return { low: { label:'Low', cls:'low' }, medium: { label:'Medium', cls:'medium' }, high: { label:'High', cls:'high' } }[this.task.priority];
+    return {
+      low    : { label: 'Faible',  cls: 'low'    },
+      medium : { label: 'Moyen',   cls: 'medium' },
+      high   : { label: 'Urgent',  cls: 'high'   },
+    }[this.task.priority] ?? { label: 'Inconnu', cls: 'unknown' };
   }
 
-    // Map status to display labels and CSS classes
   get statusConfig(): { label: string; cls: string } {
     return {
-      'todo':        { label: 'To Do',       cls: 'todo'        },
-      'in-progress': { label: 'In Progress', cls: 'in-progress' },
-      'done':        { label: 'Done',        cls: 'done'        },
-    }[this.task.status];
+      'todo'        : { label: 'À faire',     cls: 'todo'        },
+      'in-progress' : { label: 'En cours',    cls: 'in-progress' },
+      'done'        : { label: 'Terminé',     cls: 'done'        },
+    }[this.task.status] ?? { label: 'Inconnu', cls: 'unknown' };
   }
 }

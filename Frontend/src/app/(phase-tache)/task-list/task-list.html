@@ -1,11 +1,10 @@
-<!-- task-list.html -->
 <div class="task-grid" *ngIf="tasks.length > 0; else emptyState">
   <app-task-card
     *ngFor="let task of tasks; trackBy: trackById"
     [task]="task"
     [multiSelectMode]="multiSelectMode"
     [selected]="isSelected(task.id)"
-    (selectionToggled)="selectionToggled.emit($event)"
+    (selectionToggled)="onToggle($event)"
   />
 </div>
 
@@ -13,7 +12,8 @@
   <div class="empty-state">
     <svg viewBox="0 0 64 64" fill="none">
       <circle cx="32" cy="32" r="30" fill="#f1f5f9"/>
-      <path d="M22 32h20M32 22v20" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
+      <path d="M22 32h20M32 22v20"
+            stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
     </svg>
     <h3>No tasks found</h3>
     <p>Try adjusting your filters or search query.</p>

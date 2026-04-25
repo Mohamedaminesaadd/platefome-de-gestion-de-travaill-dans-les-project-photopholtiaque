@@ -6,45 +6,44 @@ import User from "../models/user.model.js";
 export const createTache = async (req, res) => {
   try {
     const {
-      titre,
+      title,          // ✅ MongoDB: "title"
       description,
-      dateEcheance,
-      heureEstimees,
-      priorite,
-      complexite,
-      cout,
-      idPhase,
-      idUtilisateur
+      deadline,       // ✅ MongoDB: "deadline"
+      estimatedHours, // ✅ MongoDB: "estimatedHours"
+      priority,       // ✅ MongoDB: "priority"
+      complexity,     // ✅ MongoDB: "complexity"
+      cost,
+      phase,          // ✅ MongoDB: "phase"
+      assignedTo      // ✅ MongoDB: "assignedTo"
     } = req.body;
 
-    if (!titre || !dateEcheance || !idPhase) {
+    if (!title || !deadline || !phase) {
       return res.status(400).json({ message: "Champs obligatoires manquants" });
     }
 
-    const phase = await Phase.findById(idPhase);
-    if (!phase) {
+    const phaseDoc = await Phase.findById(phase);
+    if (!phaseDoc) {
       return res.status(404).json({ message: "Phase introuvable" });
     }
 
-    let user = null;
-    if (idUtilisateur) {
-      user = await User.findById(idUtilisateur);
+    if (assignedTo) {
+      const user = await User.findById(assignedTo);
       if (!user) {
         return res.status(404).json({ message: "Utilisateur introuvable" });
       }
     }
 
     const tache = await Tache.create({
-      titre,
+      title,
       description,
-      dateEcheance,
-      heureEstimees: heureEstimees || 0,
-      heureRelles: 0,
-      priorite,
-      complexite,
-      cout: cout || 0,
-      idPhase,
-      idUtilisateur: idUtilisateur || null
+      deadline,
+      estimatedHours: estimatedHours || 0,
+      actualHours: 0,
+      priority,
+      complexity,
+      cost: cost || 0,
+      phase,
+      assignedTo: assignedTo || null
     });
 
     res.status(201).json(tache);
@@ -54,12 +53,12 @@ export const createTache = async (req, res) => {
   }
 };
 
-// ================= READ =================
+/* ================= READ ALL ================= */
 export const getAllTaches = async (req, res) => {
   try {
     const taches = await Tache.find()
-      .populate("idPhase", "nom")
-      .populate("idUtilisateur", "name");
+      .populate("phase", "nom")        // ✅ MongoDB: "phase"
+      .populate("assignedTo", "name"); // ✅ MongoDB: "assignedTo"
 
     res.json(taches);
   } catch (error) {
@@ -67,13 +66,12 @@ export const getAllTaches = async (req, res) => {
   }
 };
 
-
-//================== READ BY ID =================
+/* ================= READ BY ID ================= */
 export const getTacheById = async (req, res) => {
   try {
     const tache = await Tache.findById(req.params.id)
-      .populate("idPhase", "nom")
-      .populate("idUtilisateur", "name");
+      .populate("phase", "nom")
+      .populate("assignedTo", "name");
 
     if (!tache) {
       return res.status(404).json({ message: "Tache introuvable" });
@@ -85,7 +83,7 @@ export const getTacheById = async (req, res) => {
   }
 };
 
-//================== UPDATE =================
+/* ================= UPDATE ================= */
 export const updateTache = async (req, res) => {
   try {
     const updated = await Tache.findByIdAndUpdate(
@@ -104,7 +102,7 @@ export const updateTache = async (req, res) => {
   }
 };
 
-//================== DELETE =================
+/* ================= DELETE ================= */
 export const deleteTache = async (req, res) => {
   try {
     const deleted = await Tache.findByIdAndDelete(req.params.id);
@@ -119,8 +117,7 @@ export const deleteTache = async (req, res) => {
   }
 };
 
-//==================Assigner une tâche à un utilisateur =================
-
+/* ================= ASSIGNER ================= */
 export const assignTaches = async (req, res) => {
   try {
     const { taskIds, technicianId } = req.body;
@@ -136,7 +133,7 @@ export const assignTaches = async (req, res) => {
 
     await Tache.updateMany(
       { _id: { $in: taskIds } },
-      { idUtilisateur: technicianId }
+      { assignedTo: technicianId } // ✅ MongoDB: "assignedTo"
     );
 
     res.json({ message: "Taches assignées avec succès" });
@@ -146,7 +143,7 @@ export const assignTaches = async (req, res) => {
   }
 };
 
-//================Delete all task ================
+/* ================= DELETE MANY ================= */
 export const deleteManyTaches = async (req, res) => {
   try {
     const { taskIds } = req.body;
@@ -160,11 +157,11 @@ export const deleteManyTaches = async (req, res) => {
   }
 };
 
-//==================Gettache by phase by phaseId =================
+/* ================= GET BY PHASE ================= */
 export const getTachesByPhase = async (req, res) => {
   try {
-    const taches = await Tache.find({ idPhase: req.params.phaseId })
-      .populate("idUtilisateur", "name");
+    const taches = await Tache.find({ phase: req.params.phaseId }) // ✅ MongoDB: "phase"
+      .populate("assignedTo", "name");
 
     res.json(taches);
   } catch (error) {
@@ -172,11 +169,11 @@ export const getTachesByPhase = async (req, res) => {
   }
 };
 
-//==================Gettache by user by userId =================
+/* ================= GET BY USER ================= */
 export const getTachesByUser = async (req, res) => {
   try {
-    const taches = await Tache.find({ idUtilisateur: req.params.userId })
-      .populate("idPhase", "nom");
+    const taches = await Tache.find({ assignedTo: req.params.userId }) // ✅ MongoDB: "assignedTo"
+      .populate("phase", "nom");
 
     res.json(taches);
   } catch (error) {
@@ -184,16 +181,17 @@ export const getTachesByUser = async (req, res) => {
   }
 };
 
-//==================GET BY PTOJECT ID =================
+/* ================= GET BY PROJECT ================= */
 export const getTachesByProject = async (req, res) => {
   try {
+    // Cherche les phases du projet — vérifie que ton modèle Phase utilise bien "idProject" ou "project"
     const phases = await Phase.find({ idProject: req.params.projectId });
 
     const phaseIds = phases.map(p => p._id);
 
     const taches = await Tache.find({
-      idPhase: { $in: phaseIds }
-    }).populate("idUtilisateur", "name");
+      phase: { $in: phaseIds } // ✅ MongoDB: "phase"
+    }).populate("assignedTo", "name");
 
     res.json(taches);
   } catch (error) {

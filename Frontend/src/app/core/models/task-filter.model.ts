@@ -1,16 +1,13 @@
-// ============================================================
-// task-filter.model.ts — Interfaces métier
-// ============================================================
-export type TaskStatus   = 'todo' | 'in-progress' | 'done';
+export type TaskStatus = 'todo' | 'in-progress' | 'done';
 export type TaskPriority = 'low' | 'medium' | 'high';
 export type DeadlineFilter = 'today' | 'this-week' | 'late' | null;
 
 export interface Technician {
   id: string;
   name: string;
-  avatar: string;       // initiales
-  avatarColor: string;  // couleur de fond
   role: string;
+  avatar: string;
+  avatarColor: string;
 }
 
 export interface Task {
@@ -19,17 +16,21 @@ export interface Task {
   description: string;
   status: TaskStatus;
   priority: TaskPriority;
+  complexity?: string;
+  estimatedHours?: number;
+  actualHours?: number;
   deadline: Date;
   assignedTo: Technician | null;
-  phaseId: string;
-  phaseName: string;
-  projectId: string;
+  phaseId?: string;
+  phaseName?: string;
+  projectId?: string;
 }
 
 export interface TaskFilters {
   search: string;
   technicianId: string | null;
   status: TaskStatus | null;
+  projectId    : string | null;  
   priority: TaskPriority | null;
   deadline: DeadlineFilter;
 }
@@ -37,5 +38,5 @@ export interface TaskFilters {
 export interface ActiveChip {
   key: keyof TaskFilters;
   label: string;
-  value: string;
+  value: any;
 }

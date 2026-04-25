@@ -18,6 +18,49 @@
   <!-- Dropdowns -->
   <div class="dropdowns">
 
+    <!-- ✅ NOUVEAU : Project -->
+    <div class="dropdown" [class.active]="filters.projectId">
+      <button class="dropdown-btn">
+        <ng-container *ngIf="!filters.projectId">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+          Project
+        </ng-container>
+        <ng-container *ngIf="filters.projectId">
+          <span class="selected-label">
+            {{ getProjectById(filters.projectId)?.name }}
+          </span>
+        </ng-container>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+      </button>
+      <div class="dropdown-menu">
+        <div *ngIf="projects.length === 0" class="dropdown-item dropdown-item--empty">
+          No projects available
+        </div>
+        <div
+          *ngFor="let p of projects"
+          class="dropdown-item"
+          [class.selected]="filters.projectId === p.id"
+          (click)="setFilter('projectId', p.id)"
+        >
+          <span class="project-dot"></span>
+          <span class="item-info">
+            <span class="item-name">{{ p.name }}</span>
+          </span>
+          <svg *ngIf="filters.projectId === p.id" class="check"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
     <!-- Technician -->
     <div class="dropdown" [class.active]="filters.technicianId">
       <button class="dropdown-btn">

@@ -10,47 +10,39 @@ export class TacheService {
 
   constructor(private http: HttpClient) {}
 
-  // GET /api/taches
   getAll(): Observable<Tache[]> {
     return this.http.get<Tache[]>(this.API);
   }
 
-  // GET /api/taches/:id
   getById(id: string): Observable<Tache> {
     return this.http.get<Tache>(`${this.API}/${id}`);
   }
 
-  // GET /api/taches/phase/:phaseId
   getByPhase(phaseId: string): Observable<Tache[]> {
     return this.http.get<Tache[]>(`${this.API}/phase/${phaseId}`);
   }
 
-  // GET /api/taches/project/:projectId
   getByProject(projectId: string): Observable<Tache[]> {
     return this.http.get<Tache[]>(`${this.API}/project/${projectId}`);
   }
 
-  // GET /api/taches/user/:userId
   getByUser(userId: string): Observable<Tache[]> {
     return this.http.get<Tache[]>(`${this.API}/user/${userId}`);
   }
 
-  // POST /api/taches
   create(tache: Partial<Tache>): Observable<Tache> {
     return this.http.post<Tache>(this.API, tache);
   }
 
-  // PUT /api/taches/:id
   update(id: string, tache: Partial<Tache>): Observable<Tache> {
     return this.http.put<Tache>(`${this.API}/${id}`, tache);
   }
 
-  // DELETE /api/taches/:id
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.API}/${id}`);
   }
 
-  // POST /api/taches/assign
+  // ✅ Persiste l'assignation en base
   assign(taskIds: string[], technicianId: string): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.API}/assign`, {
       taskIds,
@@ -58,7 +50,6 @@ export class TacheService {
     });
   }
 
-  // DELETE /api/taches/many
   deleteMany(taskIds: string[]): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.API}/many`, {
       body: { taskIds }

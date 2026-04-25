@@ -20,6 +20,21 @@ export interface DialogData {
   techniciens:   Technician[];
 }
 
+type TacheForm = {
+  titre:         string;
+  description?:  string;
+  statut:        StatutTache;
+  priorite:      PrioriteTache;
+  complexite?:   Complexite;
+  heureEstimees: number;
+  dateEcheance?: string;
+  idPhase:       string;
+  idProject?:    string;
+  idUtilisateur?: string;
+  assigneNom?:   string;
+  assigneEmail?: string;
+};
+
 @Component({
   selector: 'app-tache-form-dialog',
   standalone: true,
@@ -35,7 +50,7 @@ export class TacheFormDialogComponent implements OnInit {
 
   isEdit = false;
 
-  form: Partial<Tache> = {
+  form: TacheForm = {
     titre:         '',
     description:   '',
     statut:        'A FAIRE',
@@ -99,6 +114,12 @@ export class TacheFormDialogComponent implements OnInit {
   }
 
   prioriteColor(p: PrioriteTache): string {
-    return { CRITIQUE: '#EF4444', HAUTE: '#F59E0B', MOYENNE: '#2563EB', BASSE: '#94A3B8' }[p] ?? '';
+    const colors: Record<PrioriteTache, string> = {
+      CRITIQUE: '#EF4444',
+      HAUTE:    '#F59E0B',
+      MOYENNE:  '#2563EB',
+      BASSE:    '#94A3B8',
+    };
+    return colors[p];
   }
 }

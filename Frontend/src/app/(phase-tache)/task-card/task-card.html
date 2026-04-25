@@ -1,4 +1,3 @@
-<!-- task-card.html -->
 <div
   class="card"
   [class.card--selected]="selected"
@@ -12,7 +11,7 @@
     <span class="checkbox" [class.checkbox--checked]="selected">
       <svg *ngIf="selected" viewBox="0 0 24 24" fill="none" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round"
-          stroke-width="3" d="M5 13l4 4L19 7"/>
+              stroke-width="3" d="M5 13l4 4L19 7"/>
       </svg>
     </span>
   </div>
@@ -20,7 +19,7 @@
   <div class="card-body">
     <!-- Header -->
     <div class="card-header">
-      <span class="phase-tag">{{ task.phaseName }}</span>
+      <span class="phase-tag" *ngIf="task.phaseName">{{ task.phaseName }}</span>
       <div class="badges">
         <span class="badge" [class]="'badge--' + priorityConfig.cls">
           {{ priorityConfig.label }}
@@ -33,20 +32,21 @@
 
     <!-- Titre + Description -->
     <h3 class="card-title">{{ task.title }}</h3>
-    <p class="card-desc">{{ task.description }}</p>
+    <p class="card-desc" *ngIf="task.description">{{ task.description }}</p>
 
     <!-- Footer -->
     <div class="card-footer">
       <div class="tech-wrap">
         <ng-container *ngIf="task.assignedTo; else unassigned">
-          <span class="tech-avatar" [style.background]="task.assignedTo.avatarColor">
-            {{ task.assignedTo.avatar }}
+          <!-- ✅ FIX : initiales au lieu de avatar vide -->
+          <span class="tech-avatar" [style.background]="avatarColor">
+            {{ avatarInitials }}
           </span>
           <span class="tech-name">{{ task.assignedTo.name }}</span>
         </ng-container>
         <ng-template #unassigned>
           <span class="tech-avatar tech-avatar--empty">?</span>
-          <span class="tech-name tech-name--empty">Unassigned</span>
+          <span class="tech-name tech-name--empty">Non assigné</span>
         </ng-template>
       </div>
 

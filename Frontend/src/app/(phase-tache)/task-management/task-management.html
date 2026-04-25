@@ -1,4 +1,3 @@
-
 <!-- task-management.html -->
 <div class="page">
 
@@ -7,14 +6,14 @@
     <div class="header-left">
       <h1 class="page-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <rect x="3" y="3" width="7" height="7" rx="1"/>
-          <rect x="14" y="3" width="7" height="7" rx="1"/>
-          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="3"  y="3"  width="7" height="7" rx="1"/>
+          <rect x="14" y="3"  width="7" height="7" rx="1"/>
+          <rect x="3"  y="14" width="7" height="7" rx="1"/>
           <rect x="14" y="14" width="7" height="7" rx="1"/>
         </svg>
         Task Management
       </h1>
-      <span class="task-count">{{ allTasks.length }} tasks</span>
+      <span class="task-count">{{ allTasks().length }} tasks</span>
     </div>
 
     <div class="stat-pills">
@@ -29,25 +28,23 @@
 
   <!-- Filter Bar -->
   <app-filter-bar
-    [technicians]="technicians"
+    [technicians]="technicians()"
+    [projects]="projects()"
     [filters]="filters()"
     (filtersChange)="onFiltersChange($event)"
   />
 
   <!-- Toolbar -->
   <div class="toolbar">
-
     <span class="results-info">
-      Showing <strong>{{ filteredTasks().length }}</strong> 
-      of {{ allTasks.length }} tasks
+      Showing <strong>{{ filteredTasks().length }}</strong>
+      of {{ allTasks().length }} tasks
     </span>
 
     <div class="toolbar-actions">
-
-      <!-- Bouton Multi Select -->
-      <button 
-        class="btn" 
-        [class.btn--active]="multiSelectMode()" 
+      <button
+        class="btn"
+        [class.btn--active]="multiSelectMode()"
         (click)="toggleMultiSelect()"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -56,35 +53,28 @@
         </svg>
         {{ multiSelectMode() ? 'Exit Multi-Select' : 'Multi-Select' }}
       </button>
-
     </div>
   </div>
 
-  <!-- 🔥 MULTI SELECT BAR FIXE -->
+  <!-- Multi-Select Bar -->
   <div class="multi-select-bar" *ngIf="multiSelectMode()">
-    
-    <!-- LEFT -->
     <div class="multi-left">
-      <span class="selected-count">
-        {{ selectedCount }} selected
-      </span>
+      <span class="selected-count">{{ selectedCount }} selected</span>
 
       <button class="btn btn--ghost" (click)="selectAll()">
         Select all ({{ filteredTasks().length }})
       </button>
 
-      <button 
-        class="btn btn--ghost" 
-        (click)="clearSelection()" 
+      <button
+        class="btn btn--ghost"
+        (click)="clearSelection()"
         *ngIf="selectedCount > 0"
       >
         Clear
       </button>
     </div>
 
-    <!-- RIGHT -->
     <div class="multi-actions">
-
       <button
         class="btn btn--primary"
         [disabled]="selectedCount === 0"
@@ -93,25 +83,20 @@
         Assign ({{ selectedCount }})
       </button>
 
-      <button 
-        class="btn btn--danger" 
+      <button
+        class="btn btn--danger"
         [disabled]="selectedCount === 0"
       >
         Delete
       </button>
 
-      <button 
-        class="btn btn--ghost" 
-        (click)="toggleMultiSelect()"
-      >
+      <button class="btn btn--ghost" (click)="toggleMultiSelect()">
         Exit
       </button>
-
     </div>
-
   </div>
 
-  <!-- Liste des tâches -->
+  <!-- Task List -->
   <app-task-list
     [tasks]="filteredTasks()"
     [multiSelectMode]="multiSelectMode()"
@@ -119,16 +104,16 @@
     (selectionToggled)="toggleTaskSelection($event)"
   />
 
-  <!-- Modal -->
+  <!-- Assign Modal -->
   <app-assign-modal
     *ngIf="showModal()"
-    [technicians]="technicians"
+    [technicians]="technicians()"
     [selectedCount]="selectedCount"
     (confirmed)="onAssignConfirmed($event)"
     (dismissed)="onModalDismissed()"
   />
 
-  <!-- Toasts -->
+  <!-- Toast -->
   <app-toast-container />
 
 </div>
