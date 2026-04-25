@@ -86,28 +86,57 @@
               </div>
             </div>
 
+            <!-- ✅ Compteurs réels de tâches -->
+            <div class="task-counters">
+              <div class="counter counter--total">
+                <mat-icon>assignment</mat-icon>
+                <span class="counter-value">{{ t.totalTaches }}</span>
+                <span class="counter-label">Total</span>
+              </div>
+              <div class="counter counter--todo">
+                <mat-icon>radio_button_unchecked</mat-icon>
+                <span class="counter-value">{{ t.tachesTodo }}</span>
+                <span class="counter-label">À faire</span>
+              </div>
+              <div class="counter counter--inprogress">
+                <mat-icon>pending</mat-icon>
+                <span class="counter-value">{{ t.tachesEnCours }}</span>
+                <span class="counter-label">En cours</span>
+              </div>
+              <div class="counter counter--done">
+                <mat-icon>check_circle</mat-icon>
+                <span class="counter-value">{{ t.tachesTerminees }}</span>
+                <span class="counter-label">Terminées</span>
+              </div>
+              <div class="counter counter--late" *ngIf="t.tachesEnRetard > 0">
+                <mat-icon>warning</mat-icon>
+                <span class="counter-value">{{ t.tachesEnRetard }}</span>
+                <span class="counter-label">En retard</span>
+              </div>
+            </div>
+
             <!-- Charge de travail -->
             <div class="charge-block">
               <div class="charge-header">
                 <span class="charge-label">Charge de travail</span>
-                <span class="charge-tag" [ngClass]="chargeClass(t.tachesEnCours ?? 0)">
-                  {{ chargeLabel(t.tachesEnCours ?? 0) }}
+                <span class="charge-tag" [ngClass]="chargeClass(t)">
+                  {{ chargeLabel(t) }}
                 </span>
               </div>
               <div class="charge-track">
                 <div
                   class="charge-fill"
-                  [ngClass]="chargeClass(t.tachesEnCours ?? 0)"
-                  [style.width.%]="((t.tachesEnCours ?? 0) / 6) * 100"
+                  [ngClass]="chargeClass(t)"
+                  [style.width.%]="chargePct(t)"
                 ></div>
               </div>
               <div class="charge-count">
                 <mat-icon>assignment</mat-icon>
-                {{ t.tachesEnCours ?? 0 }} tâche{{ (t.tachesEnCours ?? 0) > 1 ? 's' : '' }} en cours
+                {{ t.tachesEnCours }} tâche{{ t.tachesEnCours > 1 ? 's' : '' }} en cours
               </div>
             </div>
 
-            <!-- Sparkline -->
+            <!-- ✅ Sparkline — toujours affiché grâce au mock -->
             <div class="sparkline-block">
               <div class="sparkline-header">
                 <span class="sparkline-label">Efficacité (7 derniers jours)</span>
@@ -120,8 +149,7 @@
               </div>
             </div>
 
-            <!-- Actions -->  
-            <!-- ✅ matRipple retiré de la card, gardé uniquement sur les boutons -->
+            <!-- Actions -->
             <div class="tech-actions">
               <button
                 class="action-btn view-btn"
@@ -132,7 +160,7 @@
                 <mat-icon>assignment</mat-icon>
                 Tâches
               </button>
-             
+
               <button
                 class="action-btn profile-btn"
                 matRipple
@@ -147,13 +175,6 @@
         </div>
 
         <!-- ── NO DATA ── -->
-        <ng-template #noData>
-          <div class="no-data" *ngIf="!isLoading">
-            <mat-icon>search_off</mat-icon>
-            <span>Aucun technicien trouvé</span>
-          </div>
-        </ng-template>
-
         <div class="no-data" *ngIf="!isLoading && filtered.length === 0">
           <mat-icon>search_off</mat-icon>
           <span>Aucun technicien trouvé</span>

@@ -1,29 +1,26 @@
 /* ============================================================
-   technician-list.css — CORRIGÉ
-   Corrections :
-    1. .tech-role : style ajouté (manquait dans le CSS original)
-    2. .loading    : style ajouté (utilisé dans le template mais absent du CSS)
-    3. .charge-fill combinaison [ngClass + classe de base] :
-       le sélecteur .charge-fill.charge-* a besoin d'être après .charge-fill
-    4. grid-template-columns en 3 colonnes sur 1280px+ (inchangé)
-   ============================================================ */
-
-/* ============================================================
-   technician-list.css
+   technician-list.css  — fixed layout
    ============================================================ */
 
 /* ── LAYOUT SHELL ──────────────────────────────────────────── */
 .shell {
   display: flex;
   height: 100vh;
+  width: 100%;
   overflow: hidden;
   font-family: 'DM Sans', 'Inter', sans-serif;
+  background: #F8FAFC;
 }
 
+/* ── SIDEBAR ──────────────────────────────────────────────── */
 app-sidebar {
   width: 250px;
   min-width: 250px;
+  height: 100vh;
+  flex-shrink: 0;
+  overflow: hidden;
   transition: width 0.3s ease, min-width 0.3s ease;
+  z-index: 100;
 }
 
 app-sidebar.collapsed {
@@ -31,25 +28,41 @@ app-sidebar.collapsed {
   min-width: 70px;
 }
 
+/* ── MAIN AREA ────────────────────────────────────────────── */
 .main {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   min-width: 0;
+  height: 100vh;
   background: #F8FAFC;
 }
 
+/* ── TOP BAR ──────────────────────────────────────────────── */
+app-topbar {
+  width: 100%;
+  flex-shrink: 0;
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+}
+
+/* ── CONTENT (SCROLLABLE) ─────────────────────────────────── */
 .content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   min-height: 0;
 }
 
+/* ── SECTION INTERNE ─────────────────────────────────────── */
 section {
   padding: 24px;
-  flex: 1;
-  min-height: 0;
 }
 
 /* ── HEADER ────────────────────────────────────────────────── */
@@ -75,6 +88,7 @@ section {
   padding: 4px 12px;
   border-radius: 20px;
 }
+
 /* ── TOOLBAR ───────────────────────────────────────────────── */
 .toolbar {
   display: flex;
@@ -119,11 +133,8 @@ section {
   font-family: inherit;
 }
 
-.search-input::placeholder {
-  color: #94A3B8;
-}
+.search-input::placeholder { color: #94A3B8; }
 
-/* Filter tabs */
 .filter-tabs {
   display: flex;
   align-items: center;
@@ -150,27 +161,14 @@ section {
   font-family: inherit;
 }
 
-.filter-tab:hover {
-  background: #fff;
-  color: #334155;
-}
+.filter-tab:hover        { background: #fff; color: #334155; }
+.filter-tab.active       { background: #fff; color: #0F172A; box-shadow: 0 1px 4px rgba(15,23,42,0.08); }
 
-.filter-tab.active {
-  background: #fff;
-  color: #0F172A;
-  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
-}
+.dot               { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot-green         { background: #22C55E; }
+.dot-red           { background: #EF4444; }
 
-.dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.dot-green { background: #22C55E; }
-.dot-red   { background: #EF4444; }
-
-/* ── LOADING — AJOUTÉ (manquait) ───────────────────────────── */
+/* ── LOADING ───────────────────────────────────────────────── */
 .loading {
   display: flex;
   align-items: center;
@@ -229,7 +227,7 @@ section {
   transform: translateY(-2px);
 }
 
-/* Badge disponibilité */
+/* ── BADGE DISPO ───────────────────────────────────────────── */
 .dispo-badge {
   position: absolute;
   top: 14px;
@@ -255,12 +253,12 @@ section {
   background: currentColor;
 }
 
-/* Avatar + Infos */
+/* ── AVATAR + INFOS ────────────────────────────────────────── */
 .tech-top {
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  padding-right: 90px; /* laisse la place au badge dispo */
+  padding-right: 90px;
 }
 
 .tech-avatar {
@@ -319,7 +317,6 @@ section {
   color: #94A3B8;
 }
 
-/* CORRECTION : .tech-role manquait dans le CSS original */
 .tech-role {
   display: inline-block;
   font-size: 11px;
@@ -332,6 +329,82 @@ section {
   text-transform: capitalize;
   letter-spacing: 0.02em;
 }
+
+/* ── TASK COUNTERS ─────────────────────────────────────────── */
+.task-counters {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  background: #F8FAFC;
+  border: 1px solid #F1F5F9;
+  border-radius: 10px;
+  padding: 10px 8px;
+}
+
+.counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex: 1;
+  padding: 4px 2px;
+  border-radius: 8px;
+  min-width: 0;
+  transition: background 0.15s ease;
+}
+
+.counter mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+.counter-value {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.counter-label {
+  font-size: 9.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.counter + .counter {
+  border-left: 1px solid #E2E8F0;
+}
+
+.counter--total { color: #475569; }
+.counter--total mat-icon         { color: #94A3B8; }
+.counter--total .counter-value   { color: #0F172A; }
+
+.counter--todo { color: #64748B; }
+.counter--todo mat-icon          { color: #94A3B8; }
+.counter--todo .counter-value    { color: #334155; }
+
+.counter--inprogress { color: #2563EB; }
+.counter--inprogress mat-icon        { color: #3B82F6; }
+.counter--inprogress .counter-value  { color: #1D4ED8; }
+
+.counter--done { color: #059669; }
+.counter--done mat-icon          { color: #10B981; }
+.counter--done .counter-value    { color: #047857; }
+
+.counter--late {
+  color: #DC2626;
+  background: #FFF5F5;
+  border-radius: 8px;
+}
+.counter--late mat-icon          { color: #EF4444; }
+.counter--late .counter-value    { color: #B91C1C; }
 
 /* ── CHARGE TRAVAIL ────────────────────────────────────────── */
 .charge-block {
@@ -361,7 +434,6 @@ section {
   letter-spacing: 0.04em;
 }
 
-/* Classes de charge — utilisées via [ngClass] dans le template */
 .charge-libre  { background: #F1F5F9; color: #64748B; }
 .charge-light  { background: #D1FAE5; color: #065F46; }
 .charge-medium { background: #FEF3C7; color: #92400E; }
@@ -374,12 +446,11 @@ section {
   overflow: hidden;
 }
 
-/* CORRECTION : les sélecteurs combinés doivent être APRÈS .charge-fill seul */
 .charge-fill {
   height: 100%;
   border-radius: 4px;
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #CBD5E1; /* fallback */
+  background: #CBD5E1;
 }
 
 .charge-fill.charge-libre  { background: #CBD5E1; }
@@ -426,7 +497,6 @@ section {
   font-weight: 700;
 }
 
-/* Classes utilisées via [ngClass]="effClass()" */
 .sparkline-value.good { color: #10B981; }
 .sparkline-value.mid  { color: #F59E0B; }
 .sparkline-value.low  { color: #EF4444; }
@@ -452,6 +522,7 @@ section {
   gap: 6px;
   padding-top: 10px;
   border-top: 1px solid #F1F5F9;
+  margin-top: auto;
 }
 
 .action-btn {
@@ -483,12 +554,8 @@ section {
   pointer-events: none;
 }
 
-.view-btn {
-  background: #EFF6FF;
-  color: #2563EB;
-  flex: 1;
-}
-.view-btn:hover { background: #DBEAFE; }
+.view-btn              { background: #EFF6FF; color: #2563EB; flex: 1; }
+.view-btn:hover        { background: #DBEAFE; }
 
 .assign-btn {
   background: #2563EB;
@@ -502,13 +569,7 @@ section {
   box-shadow: 0 4px 10px rgba(37, 99, 235, 0.30);
 }
 
-.profile-btn {
-  background: #F8FAFC;
-  color: #64748B;
-  width: 32px;
-  padding: 0;
-  flex-shrink: 0;
-}
+.profile-btn       { background: #F8FAFC; color: #64748B; width: 32px; padding: 0; flex-shrink: 0; }
 .profile-btn:hover { background: #F1F5F9; color: #334155; }
 
 /* ── PAS DE DONNÉES ────────────────────────────────────────── */
@@ -536,28 +597,10 @@ section {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── RESPONSIVE ────────────────────────────────────────────── */
-@media (max-width: 1280px) {
-  .tech-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 1024px) {
-  app-sidebar { width: 70px; min-width: 70px; }
-  .tech-grid  { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 640px) {
-  .tech-grid  { grid-template-columns: 1fr; }
-  .toolbar    { flex-direction: column; align-items: stretch; }
-  .filter-tabs { justify-content: center; }
-  section     { padding: 16px; }
-}
-
-
-/* ── SKELETON ── */
+/* ── SKELETON ──────────────────────────────────────────────── */
 @keyframes shimmer {
   0%   { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
+  100% { background-position:  400px 0; }
 }
 
 .sk {
@@ -579,4 +622,27 @@ section {
 .skeleton-card {
   pointer-events: none;
   opacity: 0.85;
+}
+
+/* ── RESPONSIVE ────────────────────────────────────────────── */
+@media (max-width: 1280px) {
+  .tech-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 1024px) {
+  app-sidebar {
+    width: 70px;
+    min-width: 70px;
+  }
+  .tech-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .tech-grid     { grid-template-columns: 1fr; }
+  .toolbar       { flex-direction: column; align-items: stretch; }
+  .filter-tabs   { justify-content: center; }
+  section        { padding: 16px; }
+  .task-counters { gap: 4px; padding: 8px 6px; }
+  .counter-value { font-size: 14px; }
+  .counter-label { font-size: 9px; }
 }

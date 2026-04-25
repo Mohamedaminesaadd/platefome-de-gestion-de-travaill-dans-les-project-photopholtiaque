@@ -96,8 +96,37 @@
     </div>
   </div>
 
+  <!-- ── SKELETON ── -->
+  <div class="task-grid skeleton-grid" *ngIf="loading()">
+    <div class="card skeleton-card" *ngFor="let s of skeletonItems">
+      <!-- header -->
+      <div class="sk-row">
+        <div class="sk sk-tag"></div>
+        <div class="sk-badges">
+          <div class="sk sk-badge"></div>
+          <div class="sk sk-badge"></div>
+        </div>
+      </div>
+      <!-- title -->
+      <div class="sk sk-title"></div>
+      <div class="sk sk-title sk-title--short"></div>
+      <!-- desc -->
+      <div class="sk sk-desc"></div>
+      <div class="sk sk-desc sk-desc--short"></div>
+      <!-- footer -->
+      <div class="sk-footer">
+        <div class="sk-tech">
+          <div class="sk sk-avatar"></div>
+          <div class="sk sk-name"></div>
+        </div>
+        <div class="sk sk-deadline"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Task List -->
   <app-task-list
+    *ngIf="!loading()"
     [tasks]="filteredTasks()"
     [multiSelectMode]="multiSelectMode()"
     [selectedIds]="selectedIds()"

@@ -48,6 +48,9 @@ export class TaskManagementComponent implements OnInit {
   projects    = signal<ProjectOption[]>([]);
   loading     = signal(true);
 
+  // ✅ Skeleton : 6 cartes fantômes pendant le chargement
+  skeletonItems = Array(6);
+
   // Map phaseId → projectId
   private phaseProjectMap = new Map<string, string>();
 
@@ -71,7 +74,6 @@ export class TaskManagementComponent implements OnInit {
 
   // ── INIT ───────────────────────────────────────────────────────────────────
   ngOnInit(): void {
-    // ✅ Charger techniciens + phases + projets en parallèle, puis les tâches
     forkJoin({
       techs   : this.techSvc.getTechniciens(),
       phases  : this.phaseSvc.getAll(),
@@ -79,7 +81,6 @@ export class TaskManagementComponent implements OnInit {
     }).subscribe({
       next: ({ techs, phases, projects }) => {
 
-        // ✅ Alimenter le signal technicians
         this.technicians.set((techs as any[]).map(t => ({
           id          : t._id      ?? '',
           name        : t.username ?? 'Inconnu',
@@ -88,7 +89,6 @@ export class TaskManagementComponent implements OnInit {
           avatarColor : ''
         })));
 
-        // ✅ Construire map phaseId → projectId
         this.phaseProjectMap.clear();
         (phases as any[]).forEach((phase: any) => {
           const phaseId   = phase._id ?? '';
@@ -102,13 +102,11 @@ export class TaskManagementComponent implements OnInit {
           }
         });
 
-        // ✅ Alimenter le signal projects
         this.projects.set((projects as any[]).map((p: any) => ({
           id  : p._id ?? '',
           name: p.nom ?? ''
         })));
 
-        // ✅ Charger les tâches une fois que tout est prêt
         this.loadTasks();
       },
       error: (err) => {
@@ -137,25 +135,19 @@ export class TaskManagementComponent implements OnInit {
   // ── MAPPING backend → frontend ─────────────────────────────────────────────
   private mapTask(t: any): Task {
 
-    // ✅ phase peut être objet populé { _id, nom } ou string id
     const phaseId   = typeof t.phase === 'object' && t.phase !== null
                         ? t.phase._id ?? ''
                         : t.phase     ?? '';
     const phaseName = t.phase?.nom ?? '';
 
-    // ✅ Résoudre projectId via la map phaseId → projectId
     const projectId = this.phaseProjectMap.get(phaseId) ?? '';
 
-    // ✅ Résoudre assignedTo depuis la liste des techniciens déjà chargés
-    // L'API retourne assignedTo = { _id: "..." } sans username
-    // On cherche le technicien dans la liste pour avoir son vrai nom
     const assignedTo: Technician | null = t.assignedTo
       ? (() => {
           const techId = typeof t.assignedTo === 'object'
             ? t.assignedTo._id ?? t.assignedTo.id ?? ''
             : t.assignedTo ?? '';
 
-          // Chercher dans la liste des techniciens chargés
           const found = this.technicians().find(tech => tech.id === techId);
 
           return found ?? {
