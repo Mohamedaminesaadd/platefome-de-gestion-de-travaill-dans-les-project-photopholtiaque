@@ -210,6 +210,24 @@ alors le class et active ajoute au ancien class avec une priorite */
   animation: fadeUp .4s ease both;
 }
 
+.empty-state {
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #64748B;
+}
+
+.empty-state mat-icon {
+  font-size: 28px !important;
+  color: #2563EB;
+}
+
+.empty-state h3 {
+  margin: 0 0 4px;
+  color: #0F172A;
+}
+
 /* ── GANTT GRID : label + timeline ─────────── */
 .gantt-grid {
   display: grid;
@@ -266,10 +284,24 @@ alors le class et active ajoute au ancien class avec une priorite */
 }
 
 .project-name {
-  flex: 1;
   font-size: 13px;
   font-weight: 700;
   color: #0F172A;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-label-group {
+  flex: 1;
+  min-width: 0;
+}
+
+.project-meta {
+  display: block;
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: #94A3B8;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -443,6 +475,40 @@ alors le class et active ajoute au ancien class avec une priorite */
   position: absolute;
   inset: 6px 0;
   border-radius: 4px;
+}
+
+.project-bar {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 26px;
+  border-radius: 999px;
+  border: 1.5px solid;
+  display: flex;
+  align-items: center;
+  min-width: 16px;
+  padding: 0 10px;
+  gap: 8px;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+}
+
+.project-bar-label {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.project-bar-pct {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 800;
+  color: #334155;
 }
 
 /* Task bar rows */
@@ -624,6 +690,11 @@ alors le class et active ajoute au ancien class avec une priorite */
   padding: 3px 8px;
 }
 
+.detail-project-chip.neutral {
+  color: #64748B;
+  border-color: #CBD5E1;
+}
+
 /* Progress section */
 .detail-progress-section {}
 
@@ -701,6 +772,12 @@ alors le class et active ajoute au ancien class avec une priorite */
 }
 
 .deps-list { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.detail-desc p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #475569;
+}
 
 .dep-chip {
   display: inline-flex;

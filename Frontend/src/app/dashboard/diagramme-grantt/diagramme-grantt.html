@@ -75,9 +75,16 @@
             GANTT TABLE
         ══════════════════════════════════════ -->
         <div class="gantt-card">
+          <div class="empty-state" *ngIf="projects().length === 0">
+            <mat-icon>timeline</mat-icon>
+            <div>
+              <h3>Aucune donnée planifiable</h3>
+              <p>Ajoute des projets, des phases et des tâches avec dates pour alimenter le diagramme.</p>
+            </div>
+          </div>
 
           <!-- GRID LAYOUT : label col + timeline col -->
-          <div class="gantt-grid">
+          <div class="gantt-grid" *ngIf="projects().length > 0">
 
             <!-- ── LABEL COLUMN (sticky left) ── -->
             <div class="label-col">
@@ -88,12 +95,15 @@
               </div>
 
               <!-- Project rows -->
-              <ng-container *ngFor="let project of projects; trackBy: trackById">
+              <ng-container *ngFor="let project of projects(); trackBy: trackById">
 
                 <!-- Project group header -->
                 <div class="project-row" (click)="toggleProject(project)" matRipple>
                   <span class="project-dot" [style.background]="project.color"></span>
-                  <span class="project-name">{{ project.name }}</span>
+                  <div class="project-label-group">
+                    <span class="project-name">{{ project.name }}</span>
+                    <span class="project-meta">{{ project.code }} · {{ project.startDate | date:'dd/MM/yy' }} → {{ project.endDate | date:'dd/MM/yy' }}</span>
+                  </div>
                   <mat-icon class="collapse-icon">
                     {{ project.collapsed ? 'expand_more' : 'expand_less' }}
                   </mat-icon>
@@ -104,7 +114,7 @@
                   <div
                     class="task-label-row"
                     *ngFor="let task of project.tasks; trackBy: trackById"
-                    [class.selected]="selectedTask?.id === task.id"
+                    [class.selected]="selectedTask()?.id === task.id"
                     (click)="selectTask(task)"
                     matRipple
                   >
@@ -114,7 +124,7 @@
                     <!-- Task name -->
                     <div class="task-label-info">
                       <span class="task-label-name">{{ task.name }}</span>
-                      <span class="task-label-meta">{{ task.duration }}j · {{ task.progress }}%</span>
+                      <span class="task-label-meta">{{ task.phaseName }} · {{ task.duration }}j · {{ task.progress }}%</span>
                     </div>
 
                     <!-- Assignee avatar -->
@@ -155,17 +165,28 @@
                 </div>
 
                 <!-- TODAY marker -->
-                <div class="today-marker" [style.left.%]="todayOffset()">
+                <div class="today-marker" *ngIf="isTodayVisible()" [style.left.%]="todayOffset()">
                   <div class="today-label">Aujourd'hui</div>
                   <div class="today-line"></div>
                 </div>
 
                 <!-- Project groups -->
-                <ng-container *ngFor="let project of projects; trackBy: trackById">
+                <ng-container *ngFor="let project of projects(); trackBy: trackById">
 
-                  <!-- Project row spacer -->
+                  <!-- Project row -->
                   <div class="project-spacer">
                     <div class="project-bar-bg" [style.background]="project.color + '18'"></div>
+                    <div
+                      class="project-bar"
+                      [style.left.%]="getProjectBarLeft(project)"
+                      [style.width.%]="getProjectBarWidth(project)"
+                      [style.background]="project.color + '14'"
+                      [style.border-color]="project.color"
+                      [matTooltip]="project.name + ' · ' + (project.startDate | date:'dd/MM/yyyy') + ' → ' + (project.endDate | date:'dd/MM/yyyy')"
+                    >
+                      <span class="project-bar-label">{{ project.code }} · {{ project.name }}</span>
+                      <span class="project-bar-pct">{{ project.progress }}%</span>
+                    </div>
                   </div>
 
                   <!-- Task bars -->
@@ -173,7 +194,7 @@
                     <div
                       class="task-bar-row"
                       *ngFor="let task of project.tasks; trackBy: trackById"
-                      [class.selected]="selectedTask?.id === task.id"
+                      [class.selected]="selectedTask()?.id === task.id"
                     >
                       <!-- Dependency lines (simplified visual) -->
 
@@ -217,11 +238,11 @@
         <!-- ══════════════════════════════════════
             TASK DETAIL PANEL (slide-in)
         ══════════════════════════════════════ -->
-        <div class="detail-panel" [class.open]="selectedTask !== null" *ngIf="selectedTask">
+        <div class="detail-panel" [class.open]="selectedTask() !== null" *ngIf="selectedTask() as task">
           <div class="detail-header">
             <div>
               <div class="detail-eyebrow">Détail de la tâche</div>
-              <h3 class="detail-title">{{ selectedTask.name }}</h3>
+              <h3 class="detail-title">{{ task.name }}</h3>
             </div>
             <button class="detail-close" (click)="closeDetail()">
               <mat-icon>close</mat-icon>
@@ -231,29 +252,30 @@
           <!-- Status badge -->
           <div class="detail-status-row">
             <span class="detail-badge"
-              [style.background]="statusColor(selectedTask.status) + '22'"
-              [style.color]="statusColor(selectedTask.status)"
-              [style.border-color]="statusColor(selectedTask.status) + '44'"
+              [style.background]="statusColor(task.status) + '22'"
+              [style.color]="statusColor(task.status)"
+              [style.border-color]="statusColor(task.status) + '44'"
             >
-              <span class="detail-badge-dot" [style.background]="statusColor(selectedTask.status)"></span>
-              {{ statusLabel(selectedTask.status) }}
+              <span class="detail-badge-dot" [style.background]="statusColor(task.status)"></span>
+              {{ statusLabel(task.status) }}
             </span>
             <span class="detail-project-chip"
-              [style.border-color]="projectOf(selectedTask).color + '55'"
-              [style.color]="projectOf(selectedTask).color"
-            >{{ projectOf(selectedTask).name }}</span>
+              [style.border-color]="projectOf(task).color + '55'"
+              [style.color]="projectOf(task).color"
+            >{{ projectOf(task).name }}</span>
+            <span class="detail-project-chip neutral">{{ task.phaseName }}</span>
           </div>
 
           <!-- Progress ring area -->
           <div class="detail-progress-section">
             <div class="detail-progress-label">
               <span>Avancement</span>
-              <strong>{{ selectedTask.progress }}%</strong>
+              <strong>{{ task.progress }}%</strong>
             </div>
             <div class="detail-progress-track">
               <div class="detail-progress-fill"
-                [style.width.%]="selectedTask.progress"
-                [style.background]="statusColor(selectedTask.status)"
+                [style.width.%]="task.progress"
+                [style.background]="statusColor(task.status)"
               ></div>
             </div>
           </div>
@@ -264,37 +286,56 @@
               <mat-icon>calendar_today</mat-icon>
               <div>
                 <div class="meta-key">Début</div>
-                <div class="meta-val">Jour {{ selectedTask.startDay + 1 }}</div>
+                <div class="meta-val">{{ task.startDate | date:'dd/MM/yyyy' }}</div>
               </div>
             </div>
             <div class="detail-meta-item">
               <mat-icon>event</mat-icon>
               <div>
                 <div class="meta-key">Fin estimée</div>
-                <div class="meta-val">Jour {{ selectedTask.startDay + selectedTask.duration }}</div>
+                <div class="meta-val">{{ task.endDate | date:'dd/MM/yyyy' }}</div>
               </div>
             </div>
             <div class="detail-meta-item">
               <mat-icon>schedule</mat-icon>
               <div>
                 <div class="meta-key">Durée</div>
-                <div class="meta-val">{{ selectedTask.duration }} jours</div>
+                <div class="meta-val">{{ task.duration }} jours</div>
               </div>
             </div>
             <div class="detail-meta-item">
               <mat-icon>person</mat-icon>
               <div>
                 <div class="meta-key">Responsable</div>
-                <div class="meta-val">{{ selectedTask.assignee }}</div>
+                <div class="meta-val">{{ task.assignee }}</div>
+              </div>
+            </div>
+            <div class="detail-meta-item">
+              <mat-icon>bolt</mat-icon>
+              <div>
+                <div class="meta-key">Charge estimée</div>
+                <div class="meta-val">{{ task.estimatedHours }} h</div>
+              </div>
+            </div>
+            <div class="detail-meta-item">
+              <mat-icon>insights</mat-icon>
+              <div>
+                <div class="meta-key">Charge réelle</div>
+                <div class="meta-val">{{ task.actualHours }} h</div>
               </div>
             </div>
           </div>
 
+          <div class="detail-desc" *ngIf="task.description">
+            <div class="deps-label">Description</div>
+            <p>{{ task.description }}</p>
+          </div>
+
           <!-- Dependencies -->
-          <div class="detail-deps" *ngIf="selectedTask.dependencies?.length">
+          <div class="detail-deps" *ngIf="task.dependencies?.length">
             <div class="deps-label">Dépendances</div>
             <div class="deps-list">
-              <span class="dep-chip" *ngFor="let dep of selectedTask.dependencies">
+              <span class="dep-chip" *ngFor="let dep of task.dependencies">
                 <mat-icon>link</mat-icon> {{ dep }}
               </span>
             </div>
