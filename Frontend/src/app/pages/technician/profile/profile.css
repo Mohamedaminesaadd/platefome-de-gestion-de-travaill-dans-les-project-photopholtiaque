@@ -1,0 +1,115 @@
+:host {
+  display: block;
+}
+
+.profile-page {
+  display: grid;
+  gap: var(--tech-space-4);
+}
+
+.profile-page__hero,
+.profile-page__stats,
+.profile-page__grid {
+  display: grid;
+  gap: var(--tech-space-3);
+}
+
+.profile-page__hero {
+  padding: var(--tech-space-5);
+  border-radius: var(--tech-radius-lg);
+  border: 1px solid var(--tech-border);
+}
+
+.profile-page__identity {
+  display: flex;
+  align-items: center;
+  gap: var(--tech-space-3);
+}
+
+.profile-page__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--tech-primary), #56a35c);
+}
+
+.profile-page__eyebrow {
+  color: var(--tech-text-muted);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  margin-bottom: var(--tech-space-1);
+}
+
+.profile-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tech-space-3);
+}
+
+.profile-page__actions a {
+  min-height: var(--tech-touch);
+}
+
+.profile-page__stats {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.profile-page__stats mat-card,
+.profile-page__grid mat-card {
+  padding: var(--tech-space-4);
+  border-radius: var(--tech-radius-md);
+  border: 1px solid var(--tech-border);
+}
+
+.profile-page__stats span {
+  color: var(--tech-text-muted);
+  font-size: 0.84rem;
+}
+
+.profile-page__stats strong {
+  display: block;
+  margin-top: var(--tech-space-2);
+  font-size: 1.5rem;
+  color: var(--tech-text);
+}
+
+.profile-page__section-head {
+  margin-bottom: var(--tech-space-3);
+}
+
+.profile-page__chart-canvas {
+  position: relative;
+  min-height: 280px;
+}
+
+.profile-page__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tech-space-2);
+}
+
+.profile-page__skills span {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: var(--tech-primary-soft);
+  color: var(--tech-primary);
+}
+
+@media (min-width: 900px) {
+  .profile-page__hero {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .profile-page__stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .profile-page__grid {
+    grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.5fr);
+  }
+}

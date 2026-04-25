@@ -1,14 +1,24 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import joblib
 import numpy as np
+import os
 
 # -------------------------------
-# Charger le modèle UNE SEULE FOIS
+# Chemins robustes (important)
 # -------------------------------
-path1 = "machineLearning/model_xgboost.pkl"
-model = joblib.load(path1)
-path="machineLearning/model_xgboost_tache1.pkl"
-model_tache1 = joblib.load(path)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+path1 = os.path.join(BASE_DIR, "model_xgboost.pkl")
+path2 = os.path.join(BASE_DIR, "model_xgboost_tache1.pkl")
+
+# -------------------------------
+# Charger les modèles UNE SEULE FOIS
+# -------------------------------
+try:
+    model = joblib.load(path1)
+    model_tache1 = joblib.load(path2)
+except Exception as e:
+    raise RuntimeError(f"Erreur chargement modèles: {e}")
 
 # -------------------------------
 # Initialiser API
@@ -23,50 +33,60 @@ def home():
     return {"message": "API ML PV fonctionne 🚀"}
 
 # -------------------------------
-# Endpoint de prédiction
+# Endpoint de prédiction principal
 # -------------------------------
 @app.post("/predict")
 def predict(data: dict):
+    try:
+        features = np.array([[
+            data["heure_estimee"],
+            data["complexite"],
+            data["priorite"],
+            data["phase"],
+            data["experience_technicien"],
+            data["meteo"],
+            data["saison"]
+        ]])
 
-    # Transformer input en tableau
-    features = np.array([[
-        data["heure_estimee"],
-        data["complexite"],
-        data["priorite"],
-        data["phase"],
-        data["experience_technicien"],
-        data["meteo"],
-        data["saison"]
-    ]])
+        prediction = model.predict(features)[0]
 
-    # Prédiction
-    prediction = model.predict(features)[0]
+        return {
+            "valeurPredite": round(float(prediction), 2),
+            "unite": "heures"
+        }
 
-    return {
-        "valeurPredite": round(float(prediction), 2),
-        "unite": "heures"
-    }
+    except KeyError as e:
+        raise HTTPException(status_code=400, detail=f"Champ manquant: {e}")
 
 # -------------------------------
-# Endpoint de prédiction pour la tâche 1
+# Endpoint de prédiction tâche 1
 # -------------------------------
 @app.post("/predict_tache1")
 def predict_tache1(data: dict):
-    # Transformer input en tableau
-    features = np.array([[
-        data["heure_estimee"],
-        data["complexite"],
-        data["priorite"],
-        data["tache"],
-        data["experience_technicien"],
-        data["meteo"],
-        data["saison"]
-    ]])
+    try:
+        features = np.array([[
+            data["heure_estimee"],
+            data["complexite"],
+            data["priorite"],
+            data["tache"],
+            data["experience_technicien"],
+            data["meteo"],
+            data["saison"]
+        ]])
 
-    # Prédiction
-    prediction = model_tache1.predict(features)[0]
+        prediction = model_tache1.predict(features)[0]
 
-    return {
-        "valeurPredite": round(float(prediction), 2),
-        "unite": "heures"
-    }
+        return {
+            "valeurPredite": round(float(prediction), 2),
+            "unite": "heures"
+        }
+
+    except KeyError as e:
+        raise HTTPException(status_code=400, detail=f"Champ manquant: {e}")
+
+# -------------------------------
+# Lancement serveur (optionnel)
+# -------------------------------
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("api:app", host="127.0.0.1", port=8000, reload=True)

@@ -20,7 +20,9 @@ export const authGuard: CanActivateFn = () => {
   try {
     // Le JWT est composé de 3 parties séparées par des points. La 2ème [1] est le payload.
     const payloadBase64 = token.split('.')[1];
-    const payloadJson = atob(payloadBase64);
+    const payloadJson = typeof window !== 'undefined'
+      ? window.atob(payloadBase64)
+      : Buffer.from(payloadBase64, 'base64').toString('utf-8');
     const payload = JSON.parse(payloadJson);
 
     // payload.exp est en secondes, Date.now() est en millisecondes

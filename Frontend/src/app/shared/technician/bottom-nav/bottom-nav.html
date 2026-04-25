@@ -1,0 +1,12 @@
+<nav class="bottom-nav" aria-label="Navigation technicien">
+  <a
+    *ngFor="let item of items"
+    [routerLink]="item.link"
+    routerLinkActive="is-active"
+    class="bottom-nav__item"
+    [attr.aria-label]="item.label"
+  >
+    <mat-icon>{{ item.icon }}</mat-icon>
+    <span>{{ item.label }}</span>
+  </a>
+</nav>

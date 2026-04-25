@@ -1,0 +1,182 @@
+/* ═══════════════════════════════════════════════════════════════
+   TIMER FOCUS — Mode plein écran immersif
+   ═══════════════════════════════════════════════════════════════ */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% -5%, rgba(46, 125, 50, 0.30), transparent 55%),
+    linear-gradient(180deg, #040a05 0%, #071008 50%, #030703 100%);
+}
+
+.focus-screen {
+  min-height: 100vh;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--tech-space-6);
+  padding: var(--tech-space-6) var(--tech-space-4);
+  color: #f0faf0;
+  text-align: center;
+  position: relative;
+}
+
+/* Grain overlay */
+.focus-screen::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── META ────────────────────────────────────────────────────── */
+.focus-screen__meta {
+  display: grid;
+  gap: var(--tech-space-2);
+  max-width: 680px;
+  position: relative;
+  z-index: 1;
+}
+
+.focus-screen__state {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tech-space-1);
+  font-family: var(--tech-font-mono);
+  font-size: 0.70rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(180, 255, 180, 0.60);
+  margin-bottom: var(--tech-space-2);
+}
+
+.focus-screen__state::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4CAF50;
+  animation: tech-pulse-green 1.8s ease-in-out infinite;
+}
+
+.focus-screen__meta h2 {
+  font-family: var(--tech-font-display);
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.focus-screen__project {
+  font-size: 0.92rem;
+  color: rgba(180, 255, 180, 0.55);
+}
+
+/* ── CLOCK ───────────────────────────────────────────────────── */
+.focus-screen__clock {
+  font-family: var(--tech-font-mono);
+  font-size: clamp(5rem, 18vw, 10rem);
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+
+  /* Glow effect */
+  text-shadow:
+    0 0 60px rgba(76, 175, 80, 0.30),
+    0 0 120px rgba(76, 175, 80, 0.10);
+}
+
+/* ── ACTIONS ─────────────────────────────────────────────────── */
+.focus-screen__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--tech-space-2);
+  width: min(100%, 640px);
+  position: relative;
+  z-index: 1;
+}
+
+.focus-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--tech-space-2);
+  padding: 0 var(--tech-space-4);
+  min-height: 52px;
+  border-radius: var(--tech-radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: var(--tech-font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--tech-transition);
+  backdrop-filter: blur(8px);
+}
+
+.focus-btn mat-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.focus-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.13);
+  border-color: rgba(255,255,255,0.22);
+  transform: translateY(-2px);
+}
+
+.focus-btn:disabled {
+  opacity: 0.30;
+  cursor: not-allowed;
+}
+
+.focus-btn--back {
+  color: rgba(255,255,255,0.55);
+  border-color: rgba(255,255,255,0.08);
+}
+
+.focus-btn--primary {
+  background: rgba(46, 125, 50, 0.60);
+  border-color: rgba(76, 175, 80, 0.40);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(46, 125, 50, 0.30);
+}
+
+.focus-btn--primary:hover:not(:disabled) {
+  background: rgba(46, 125, 50, 0.75);
+  box-shadow: 0 6px 28px rgba(46, 125, 50, 0.40);
+}
+
+.focus-btn--stop {
+  background: rgba(183, 28, 28, 0.30);
+  border-color: rgba(183, 28, 28, 0.35);
+  color: #ffb3b3;
+}
+
+.focus-btn--finish {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.20);
+  color: #fff;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .focus-screen__actions {
+    flex-wrap: nowrap;
+  }
+
+  .focus-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,158 @@
+<!-- task-detail.html -->
+<section class="task-detail" *ngIf="task() as currentTask">
+
+  <!-- ── HERO ──────────────────────────────────────────────── -->
+  <mat-card class="task-detail__hero">
+    <div>
+      <p class="task-detail__eyebrow">{{ currentTask.projectName || 'Projet PV' }}</p>
+      <h2>{{ currentTask.title }}</h2>
+      <p>{{ currentTask.phaseName || 'Phase chantier' }}</p>
+
+      <!-- Status switch -->
+      <div class="task-detail__status-switch">
+        <button class="status-switch-btn" [class.is-active]="currentTask.status === 'todo'"        (click)="setStatus('todo')"        type="button">À faire</button>
+        <button class="status-switch-btn" [class.is-active]="currentTask.status === 'in_progress'" (click)="setStatus('in_progress')" type="button">En cours</button>
+        <button class="status-switch-btn" [class.is-active]="currentTask.status === 'done'"        (click)="setStatus('done')"        type="button">Terminée</button>
+      </div>
+    </div>
+
+    <!-- Timer -->
+    <div class="task-detail__timer">
+      <span class="task-detail__elapsed">{{ timerState.elapsedLabel() }}</span>
+      <div class="task-detail__actions">
+        <button
+          class="timer-btn timer-btn--primary"
+          type="button"
+          (click)="startTimer()"
+          [disabled]="timerState.hasActiveTimer() && !canControlTimer()"
+        >
+          <mat-icon>play_arrow</mat-icon> Start
+        </button>
+        <button
+          class="timer-btn"
+          type="button"
+          (click)="pauseTimer()"
+          [disabled]="!canControlTimer() || !timerState.isRunning()"
+        >
+          <mat-icon>pause</mat-icon> Pause
+        </button>
+        <button
+          class="timer-btn"
+          type="button"
+          (click)="resumeTimer()"
+          [disabled]="!canResume()"
+        >
+          <mat-icon>timer</mat-icon> Reprendre
+        </button>
+        <button
+          class="timer-btn timer-btn--danger"
+          type="button"
+          (click)="stopTimer()"
+          [disabled]="!canControlTimer()"
+        >
+          <mat-icon>stop</mat-icon> Stop
+        </button>
+        <button
+          class="timer-btn timer-btn--finish"
+          type="button"
+          (click)="finishTask()"
+        >
+          <mat-icon>task_alt</mat-icon> Finir
+        </button>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- ── GRID ───────────────────────────────────────────────── -->
+  <div class="task-detail__grid">
+
+    <!-- Infos chantier -->
+    <div class="detail-card">
+      <h3><mat-icon>info</mat-icon> Informations chantier</h3>
+      <dl>
+        <div>
+          <dt>Deadline</dt>
+          <dd>{{ currentTask.deadline | date: 'fullDate' : '' : 'fr' }}</dd>
+        </div>
+        <div>
+          <dt>Temps prévu</dt>
+          <dd>{{ currentTask.estimatedHours }} h</dd>
+        </div>
+        <div *ngIf="currentTask.projectAddress">
+          <dt>Adresse site</dt>
+          <dd>{{ currentTask.projectAddress }}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Checklist -->
+    <div class="detail-card">
+      <h3><mat-icon>checklist</mat-icon> Checklist matériel</h3>
+      <div class="checklist">
+        <label
+          class="checklist-item"
+          [class.is-done]="item.done"
+          *ngFor="let item of currentTask.checklist"
+        >
+          <mat-checkbox
+            [checked]="item.done"
+            (change)="toggleChecklist(item.id, $event)"
+            (click)="$event.stopPropagation()"
+          ></mat-checkbox>
+          {{ item.label }}
+        </label>
+      </div>
+    </div>
+
+    <!-- Photos -->
+    <div class="detail-card">
+      <h3><mat-icon>photo_camera</mat-icon> Photos chantier</h3>
+      <label class="upload-box" aria-label="Ajouter des photos">
+        <mat-icon>add_a_photo</mat-icon>
+        <span>Ajouter des photos</span>
+        <input type="file" accept="image/*" multiple (change)="onPhotoSelection($event)" />
+      </label>
+      <div class="photo-grid" *ngIf="currentTask.photos.length > 0">
+        <figure *ngFor="let photo of currentTask.photos">
+          <img *ngIf="photo.previewUrl" [src]="photo.previewUrl" [alt]="photo.name" />
+          <figcaption>{{ photo.name }}</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="detail-card">
+      <h3><mat-icon>edit_note</mat-icon> Notes de chantier</h3>
+      <textarea
+        class="notes-textarea"
+        rows="6"
+        [ngModel]="notesDraft()"
+        (ngModelChange)="notesDraft.set($event)"
+        placeholder="Ajouter vos notes ici…"
+        aria-label="Notes de chantier"
+      ></textarea>
+      <button class="save-btn" type="button" (click)="saveNotes()">
+        <mat-icon>save</mat-icon>
+        Enregistrer
+      </button>
+    </div>
+
+    <!-- Blocage -->
+    <div class="detail-card issue-card">
+      <h3><mat-icon>warning</mat-icon> Signaler un blocage</h3>
+      <textarea
+        class="notes-textarea"
+        rows="4"
+        [ngModel]="issueMessage()"
+        (ngModelChange)="issueMessage.set($event)"
+        placeholder="Décrire le problème rencontré…"
+        aria-label="Description du blocage"
+      ></textarea>
+      <button class="report-btn" type="button" (click)="reportIssue()">
+        <mat-icon>report_problem</mat-icon>
+        Signaler
+      </button>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,26 @@
+<header class="topbar">
+  <div class="topbar-greeting">
+    <div class="greeting-name">{{ title() }}</div>
+    <div class="greeting-date">{{ subtitle() }} · {{ today }}</div>
+  </div>
+
+  <button
+    class="notif-btn"
+    type="button"
+    matRipple
+    matTooltip="Tâches actives"
+    [matBadge]="activeTasks()"
+    matBadgeColor="primary"
+    [matBadgeHidden]="activeTasks() === 0"
+  >
+    <mat-icon>task_alt</mat-icon>
+  </button>
+
+  <div class="user-chip" matRipple>
+    <div class="user-avatar">{{ initials() }}</div>
+    <div>
+      <div class="user-info-name">{{ username() }}</div>
+      <div class="user-info-role">{{ role() }}</div>
+    </div>
+  </div>
+</header>

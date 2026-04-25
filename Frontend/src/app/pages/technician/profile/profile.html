@@ -1,0 +1,70 @@
+<section class="profile-page" *ngIf="profile() as currentProfile">
+  <mat-card class="profile-page__hero">
+    <div class="profile-page__identity">
+      <div class="profile-page__avatar">{{ currentProfile.avatarInitials }}</div>
+      <div>
+        <p class="profile-page__eyebrow">Technicien</p>
+        <h2>{{ currentProfile.username }}</h2>
+        <p>{{ currentProfile.specialite || 'Technicien photovoltaïque' }}</p>
+      </div>
+    </div>
+
+    <div class="profile-page__actions">
+      <a mat-stroked-button [href]="mailtoLink()" aria-label="Contacter par email">
+        <mat-icon>mail</mat-icon>
+        Email
+      </a>
+      <a mat-stroked-button [href]="'tel:' + (currentProfile.phone || '')" aria-label="Appeler le technicien">
+        <mat-icon>call</mat-icon>
+        Appeler
+      </a>
+    </div>
+  </mat-card>
+
+  <div class="profile-page__stats">
+    <mat-card>
+      <span>Complétion</span>
+      <strong>{{ stats().completionRate }}%</strong>
+    </mat-card>
+    <mat-card>
+      <span>En cours</span>
+      <strong>{{ stats().inProgress }}</strong>
+    </mat-card>
+    <mat-card>
+      <span>Retard</span>
+      <strong>{{ stats().overdue }}</strong>
+    </mat-card>
+    <mat-card>
+      <span>Focus</span>
+      <strong>{{ stats().focusHours }} h</strong>
+    </mat-card>
+  </div>
+
+  <div class="profile-page__grid">
+    <mat-card class="profile-page__chart">
+      <div class="profile-page__section-head">
+        <div>
+          <p class="profile-page__eyebrow">Performance</p>
+          <h3>Semaine courante</h3>
+        </div>
+      </div>
+
+      <div class="profile-page__chart-canvas">
+        <canvas #chartRef aria-label="Performance hebdomadaire"></canvas>
+      </div>
+    </mat-card>
+
+    <mat-card>
+      <div class="profile-page__section-head">
+        <div>
+          <p class="profile-page__eyebrow">Compétences</p>
+          <h3>Skills terrain</h3>
+        </div>
+      </div>
+
+      <div class="profile-page__skills">
+        <span *ngFor="let skill of currentProfile.skills">{{ skill }}</span>
+      </div>
+    </mat-card>
+  </div>
+</section>

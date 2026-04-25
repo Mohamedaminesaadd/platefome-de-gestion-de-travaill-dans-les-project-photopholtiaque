@@ -1,0 +1,60 @@
+/* ═══════════════════════════════════════════════════════════════
+   FILTER BAR — Shared technicien
+   ═══════════════════════════════════════════════════════════════ */
+
+:host { display: block; }
+
+.filter-bar {
+  display: flex;
+  gap: var(--tech-space-2);
+  padding: var(--tech-space-1);
+  background: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  border-radius: 999px;
+  box-shadow: var(--tech-shadow);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filter-bar::-webkit-scrollbar { display: none; }
+
+.filter-btn {
+  flex: 1;
+  min-width: 90px;
+  height: 40px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--tech-text-muted);
+  font-family: var(--tech-font-mono);
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background var(--tech-transition),
+    color var(--tech-transition),
+    box-shadow var(--tech-transition);
+}
+
+.filter-btn:hover:not(.is-active) {
+  background: var(--tech-surface-muted);
+  color: var(--tech-text);
+}
+
+.filter-btn.is-active {
+  background: var(--tech-primary);
+  color: #fff;
+  box-shadow: 0 4px 12px var(--tech-primary-glow);
+}
+
+@media (min-width: 768px) {
+  .filter-bar {
+    width: fit-content;
+  }
+
+  .filter-btn {
+    min-width: 110px;
+  }
+}

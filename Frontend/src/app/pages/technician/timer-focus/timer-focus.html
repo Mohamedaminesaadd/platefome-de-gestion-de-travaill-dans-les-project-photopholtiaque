@@ -1,0 +1,65 @@
+<!-- timer-focus.html -->
+<section class="focus-screen" aria-label="Mode focus technicien">
+
+  <!-- ── META ───────────────────────────────────────────────── -->
+  <div class="focus-screen__meta">
+    <span class="focus-screen__state">{{ stateLabel() }}</span>
+    <h2>{{ task()?.title || 'Aucune tâche active' }}</h2>
+    <p class="focus-screen__project">
+      {{ task()?.projectName || 'Sélectionnez une tâche depuis le dashboard.' }}
+      <ng-container *ngIf="task()?.phaseName"> · {{ task()?.phaseName }}</ng-container>
+    </p>
+  </div>
+
+  <!-- ── HORLOGE ────────────────────────────────────────────── -->
+  <div class="focus-screen__clock" aria-live="polite" aria-atomic="true">
+    {{ timerState.elapsedLabel() }}
+  </div>
+
+  <!-- ── ACTIONS ────────────────────────────────────────────── -->
+  <div class="focus-screen__actions">
+    <button
+      class="focus-btn focus-btn--back"
+      type="button"
+      (click)="router.navigate(['/technician/dashboard'])"
+      aria-label="Retour au dashboard"
+    >
+      <mat-icon>arrow_back</mat-icon>
+      Retour
+    </button>
+
+    <button
+      class="focus-btn focus-btn--primary"
+      type="button"
+      (click)="togglePause()"
+      [disabled]="!timerState.hasActiveTimer()"
+      aria-label="Pause ou reprise du chronomètre"
+    >
+      <mat-icon>{{ timerState.isRunning() ? 'pause' : 'play_arrow' }}</mat-icon>
+      {{ timerState.isRunning() ? 'Pause' : 'Reprendre' }}
+    </button>
+
+    <button
+      class="focus-btn focus-btn--stop"
+      type="button"
+      (click)="stop()"
+      [disabled]="!timerState.hasActiveTimer()"
+      aria-label="Arrêter le chronomètre"
+    >
+      <mat-icon>stop</mat-icon>
+      Stop
+    </button>
+
+    <button
+      class="focus-btn focus-btn--finish"
+      type="button"
+      (click)="finishTask()"
+      [disabled]="!timerState.hasActiveTimer()"
+      aria-label="Terminer la tâche"
+    >
+      <mat-icon>task_alt</mat-icon>
+      Finir
+    </button>
+  </div>
+
+</section>

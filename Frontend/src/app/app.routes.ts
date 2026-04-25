@@ -4,9 +4,9 @@ import { PasswordForget } from './pages/auth/password-forget/password-forget';
 import { ResetPassword } from './pages/auth/reset-password/reset-password';
 import { authGuard } from './guards/auth-guard';
 import { roleGuard } from './guards/role-guard';
+import { technicianChildGuard, technicianGuard } from './guards/technician-guard';
 import { Profiladmin } from './pages/admin/profileadmin/profileadmin';
 import { Profildirector } from './pages/director/profildirector/profildirector';
-import { Profiltechnician } from './pages/technincian/profiltechnician/profiltechnician';
 import { ProjectManager } from './pages/project-manager/project-manager';
 import { ListProject } from './dashboard/list-project/list-project';
 import { IaDahsborad } from './dashboard/ia-dahsborad/ia-dahsborad';
@@ -63,10 +63,16 @@ export const routes: Routes = [
 
   // ── Technician ───────────────────────────────────────────────────────────
   {
+    path: 'technician',
+    canActivate: [technicianGuard],
+    canActivateChild: [technicianChildGuard],
+    loadChildren: () =>
+      import('./pages/technician/technician.routes').then((m) => m.TECHNICIAN_ROUTES),
+  },
+  {
     path: 'technician-profil',
-    component: Profiltechnician,
-    canActivate: [authGuard, roleGuard],
-    data: { role: 'technician' }
+    redirectTo: 'technician',
+    pathMatch: 'full',
   },
 
   // ── Project Manager ──────────────────────────────────────────────────────

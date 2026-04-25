@@ -1,0 +1,159 @@
+<!-- dashboard.html -->
+<section class="dashboard-grid">
+
+  <!-- ── HERO CARD ────────────────────────────────────────── -->
+  <mat-card class="hero-card">
+    <div class="hero-card__content">
+      <div>
+        <p class="hero-card__eyebrow">Tâche en cours</p>
+        <h2>{{ activeTask()?.title || 'Aucune tâche active' }}</h2>
+        <p>
+          {{ activeTask()?.projectName || 'Le planning apparaîtra ici dès qu\'une tâche est assignée.' }}
+          <ng-container *ngIf="activeTask()?.phaseName">
+            · {{ activeTask()?.phaseName }}
+          </ng-container>
+        </p>
+      </div>
+
+      <div class="hero-card__timer">
+        <span>⏱ Timer live</span>
+        <strong>{{ timerState.elapsedLabel() }}</strong>
+        <button
+          mat-flat-button
+          type="button"
+          (click)="startOrResumeTask()"
+          [disabled]="!activeTask()"
+          aria-label="Démarrer ou reprendre la tâche active"
+        >
+          <mat-icon>{{ timerState.isPaused() ? 'play_arrow' : 'bolt' }}</mat-icon>
+          {{ timerState.hasActiveTimer() ? 'Continuer' : 'Démarrer' }}
+        </button>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- ── STATS ROW ─────────────────────────────────────────── -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-card__icon">
+        <mat-icon>assignment</mat-icon>
+      </div>
+      <span class="stat-card__label">Assignées</span>
+      <span class="stat-card__value">{{ completion().assigned }}</span>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card__icon">
+        <mat-icon>pending</mat-icon>
+      </div>
+      <span class="stat-card__label">En cours</span>
+      <span class="stat-card__value">{{ completion().inProgress }}</span>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card__icon">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <span class="stat-card__label">Terminées</span>
+      <span class="stat-card__value">{{ completion().completed }}</span>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card__icon">
+        <mat-icon>timer</mat-icon>
+      </div>
+      <span class="stat-card__label">Focus</span>
+      <span class="stat-card__value">{{ completion().focusHours }}<small>h</small></span>
+    </div>
+  </div>
+
+  <!-- ── PROCHAINES TÂCHES ─────────────────────────────────── -->
+  <section class="section-block">
+    <div class="section-block__header">
+      <div>
+        <p class="section-eyebrow">Prochaines tâches</p>
+        <h3>Priorités terrain</h3>
+      </div>
+      <button mat-button type="button" (click)="router.navigate(['/technician/tasks'])">
+        Tout voir →
+      </button>
+    </div>
+
+    <div class="task-stack">
+      <app-technician-task-card
+        *ngFor="let task of nextTasks()"
+        [task]="task"
+        [showStatusActions]="false"
+        (open)="openTask(task.id)"
+        (focus)="openFocus(task.id)"
+      />
+    </div>
+
+    <div *ngIf="nextTasks().length === 0" style="
+      padding: 32px;
+      text-align: center;
+      border: 1px dashed var(--tech-border);
+      border-radius: var(--tech-radius-lg);
+      color: var(--tech-text-muted);
+      font-size: 0.9rem;
+    ">
+      Aucune tâche active — tout est à jour ✓
+    </div>
+  </section>
+
+  <!-- ── PROJETS ───────────────────────────────────────────── -->
+  <section class="section-block" *ngIf="projects().length > 0">
+    <div class="section-block__header">
+      <div>
+        <p class="section-eyebrow">Projets assignés</p>
+        <h3>Sites PV</h3>
+      </div>
+      <button mat-button type="button" (click)="router.navigate(['/technician/projects'])">
+        Tous les projets →
+      </button>
+    </div>
+
+    <div class="project-grid">
+      <button
+        *ngFor="let project of projects().slice(0, 2)"
+        type="button"
+        class="project-card"
+        (click)="openProject(project._id)"
+        [attr.aria-label]="project.nom"
+      >
+        <div>
+          <p class="project-card__code">{{ project.codeProject }}</p>
+          <strong class="project-card__name">{{ project.nom }}</strong>
+        </div>
+        <span class="project-card__badge">{{ project.activeTaskCount }} active(s)</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ── QUICK ACTIONS ─────────────────────────────────────── -->
+  <section class="section-block">
+    <div class="section-block__header">
+      <div>
+        <p class="section-eyebrow">Raccourcis</p>
+        <h3>Actions rapides</h3>
+      </div>
+    </div>
+
+    <div class="action-grid">
+      <button
+        *ngFor="let action of quickActions"
+        class="action-card"
+        type="button"
+        (click)="action.action()"
+        [attr.aria-label]="action.title"
+      >
+        <div class="action-card__icon">
+          <mat-icon>{{ action.icon }}</mat-icon>
+        </div>
+        <strong class="action-card__title">{{ action.title }}</strong>
+        <span class="action-card__desc">{{ action.description }}</span>
+      </button>
+    </div>
+  </section>
+
+</section>

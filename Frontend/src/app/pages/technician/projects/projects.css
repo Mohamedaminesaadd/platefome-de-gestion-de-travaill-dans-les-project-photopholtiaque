@@ -1,0 +1,116 @@
+:host {
+  display: block;
+}
+
+.projects-page {
+  display: grid;
+  gap: var(--tech-space-4);
+}
+
+.projects-page__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--tech-space-3);
+}
+
+.projects-page__eyebrow {
+  color: var(--tech-text-muted);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--tech-space-1);
+}
+
+.projects-page__badge {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: var(--tech-primary-soft);
+  color: var(--tech-primary);
+  white-space: nowrap;
+}
+
+.projects-page__grid {
+  display: grid;
+  gap: var(--tech-space-3);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.project-tile {
+  padding: var(--tech-space-4);
+  border-radius: var(--tech-radius-md);
+  border: 1px solid var(--tech-border);
+  display: grid;
+  gap: var(--tech-space-4);
+  background: linear-gradient(180deg, #fff, #f9fcf9);
+}
+
+.project-tile__head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--tech-space-3);
+}
+
+.project-tile__head p {
+  color: var(--tech-text-muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  margin-bottom: var(--tech-space-1);
+}
+
+.project-tile__head span {
+  align-self: start;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--tech-border);
+  color: var(--tech-text-muted);
+  font-size: 0.76rem;
+}
+
+.project-tile__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--tech-space-2);
+}
+
+.project-tile__stats div {
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--tech-surface-muted);
+  text-align: center;
+}
+
+.project-tile__stats strong {
+  display: block;
+  color: var(--tech-text);
+}
+
+.project-tile__stats span {
+  color: var(--tech-text-muted);
+  font-size: 0.74rem;
+}
+
+.project-tile__meta {
+  display: grid;
+  gap: var(--tech-space-2);
+  color: var(--tech-text-muted);
+}
+
+.project-tile__meta span {
+  display: flex;
+  gap: var(--tech-space-2);
+}
+
+.project-tile button {
+  min-height: var(--tech-touch);
+}
+
+.projects-page__empty {
+  padding: var(--tech-space-6);
+  border: 1px dashed var(--tech-border);
+  border-radius: var(--tech-radius-lg);
+  text-align: center;
+  color: var(--tech-text-muted);
+  background: rgba(255, 255, 255, 0.65);
+}

@@ -1,0 +1,64 @@
+<section class="projects-page">
+  <header class="projects-page__header">
+    <div>
+      <p class="projects-page__eyebrow">Projects</p>
+      <h2>Sites photovoltaïques assignés</h2>
+    </div>
+    <span class="projects-page__badge">{{ projects().length }} projet(s)</span>
+  </header>
+
+  <div class="projects-page__grid" *ngIf="projects().length > 0; else emptyState">
+    <mat-card class="project-tile" *ngFor="let project of projects()" [attr.id]="project._id || null">
+      <div class="project-tile__head">
+        <div>
+          <p>{{ project.codeProject }}</p>
+          <h3>{{ project.nom }}</h3>
+        </div>
+
+        <span>{{ project.statut || 'EN COURS' }}</span>
+      </div>
+
+      <div class="project-tile__stats">
+        <div>
+          <strong>{{ project.taskCount }}</strong>
+          <span>Tâches</span>
+        </div>
+        <div>
+          <strong>{{ project.activeTaskCount }}</strong>
+          <span>Actives</span>
+        </div>
+        <div>
+          <strong>{{ project.completedTaskCount }}</strong>
+          <span>Finies</span>
+        </div>
+        <div>
+          <strong>{{ project.overdueTaskCount }}</strong>
+          <span>Retard</span>
+        </div>
+      </div>
+
+      <div class="project-tile__meta">
+        <span>
+          <mat-icon>location_on</mat-icon>
+          {{ project.adresse || 'Adresse non disponible' }}
+        </span>
+        <span *ngIf="project.nextDeadline">
+          <mat-icon>event</mat-icon>
+          {{ project.nextDeadline | date: 'EEE d MMM, HH:mm' : '' : 'fr' }}
+        </span>
+      </div>
+
+      <button mat-flat-button type="button" (click)="router.navigate(['/technician/tasks'])">
+        <mat-icon>task_alt</mat-icon>
+        Ouvrir les tâches
+      </button>
+    </mat-card>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="projects-page__empty">
+      <h3>Aucun projet assigné</h3>
+      <p>Les sites apparaîtront ici dès qu’une tâche technicien sera affectée.</p>
+    </div>
+  </ng-template>
+</section>

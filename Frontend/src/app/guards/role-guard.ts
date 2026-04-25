@@ -6,8 +6,8 @@ import { Auth } from '../services/auth';
 const ROLE_ROUTES: Record<string, string> = {
   'admin':           '/admin-profil',
   'director':        '/director-profil',
-  'technician':      '/technician-profil',
-  'project_manager': '/manager-profil',
+  'technician':      '/technician/dashboard',
+  'project_manager': '/projectManager-profil',
 };
 
 export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {

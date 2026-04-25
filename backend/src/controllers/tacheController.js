@@ -57,8 +57,8 @@ export const createTache = async (req, res) => {
 export const getAllTaches = async (req, res) => {
   try {
     const taches = await Tache.find()
-      .populate("phase", "nom")        // ✅ MongoDB: "phase"
-      .populate("assignedTo", "name"); // ✅ MongoDB: "assignedTo"
+      .populate("phase", "nom idProject")                 // ✅ MongoDB: "phase"
+      .populate("assignedTo", "username email status");   // ✅ MongoDB: "assignedTo"
 
     res.json(taches);
   } catch (error) {
@@ -70,8 +70,8 @@ export const getAllTaches = async (req, res) => {
 export const getTacheById = async (req, res) => {
   try {
     const tache = await Tache.findById(req.params.id)
-      .populate("phase", "nom")
-      .populate("assignedTo", "name");
+      .populate("phase", "nom idProject")
+      .populate("assignedTo", "username email status");
 
     if (!tache) {
       return res.status(404).json({ message: "Tache introuvable" });
@@ -161,7 +161,7 @@ export const deleteManyTaches = async (req, res) => {
 export const getTachesByPhase = async (req, res) => {
   try {
     const taches = await Tache.find({ phase: req.params.phaseId }) // ✅ MongoDB: "phase"
-      .populate("assignedTo", "name");
+      .populate("assignedTo", "username email status");
 
     res.json(taches);
   } catch (error) {
@@ -173,7 +173,7 @@ export const getTachesByPhase = async (req, res) => {
 export const getTachesByUser = async (req, res) => {
   try {
     const taches = await Tache.find({ assignedTo: req.params.userId }) // ✅ MongoDB: "assignedTo"
-      .populate("phase", "nom");
+      .populate("phase", "nom idProject");
 
     res.json(taches);
   } catch (error) {
@@ -191,7 +191,7 @@ export const getTachesByProject = async (req, res) => {
 
     const taches = await Tache.find({
       phase: { $in: phaseIds } // ✅ MongoDB: "phase"
-    }).populate("assignedTo", "name");
+    }).populate("assignedTo", "username email status");
 
     res.json(taches);
   } catch (error) {

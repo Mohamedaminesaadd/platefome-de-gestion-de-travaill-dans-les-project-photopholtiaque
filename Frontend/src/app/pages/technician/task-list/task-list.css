@@ -1,0 +1,91 @@
+/* ═══════════════════════════════════════════════════════════════
+   TASK LIST PAGE
+   ═══════════════════════════════════════════════════════════════ */
+
+:host { display: block; }
+
+.task-list-page {
+  display: grid;
+  gap: var(--tech-space-4);
+  animation: tech-fade-up 0.4s ease both;
+}
+
+/* ── HEADER ─────────────────────────────────────────────────── */
+.task-list-page__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--tech-space-3);
+}
+
+.task-list-page__eyebrow {
+  font-family: var(--tech-font-mono);
+  font-size: 0.70rem;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: var(--tech-primary-light);
+  margin-bottom: 2px;
+}
+
+.task-list-page__header h2 {
+  font-family: var(--tech-font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--tech-text);
+  letter-spacing: -0.03em;
+}
+
+/* ── SUMMARY PILLS ───────────────────────────────────────────── */
+.task-list-page__summary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--tech-space-2);
+}
+
+.summary-pill {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  font-family: var(--tech-font-mono);
+  font-size: 0.74rem;
+  color: var(--tech-text-muted);
+  white-space: nowrap;
+  box-shadow: var(--tech-shadow);
+}
+
+.summary-pill--warn {
+  background: var(--tech-warn-soft);
+  border-color: rgba(230, 81, 0, 0.20);
+  color: var(--tech-warn);
+}
+
+/* ── CARDS ───────────────────────────────────────────────────── */
+.task-list-page__cards {
+  display: grid;
+  gap: var(--tech-space-3);
+}
+
+/* ── EMPTY ───────────────────────────────────────────────────── */
+.task-list-page__empty {
+  padding: var(--tech-space-7) var(--tech-space-5);
+  border-radius: var(--tech-radius-xl);
+  border: 1px dashed var(--tech-border);
+  text-align: center;
+  color: var(--tech-text-muted);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.task-list-page__empty h3 {
+  font-family: var(--tech-font-display);
+  color: var(--tech-text);
+  margin-bottom: var(--tech-space-2);
+}
+
+.task-list-page__empty p {
+  font-size: 0.88rem;
+  max-width: 360px;
+  margin: 0 auto;
+  line-height: 1.6;
+}

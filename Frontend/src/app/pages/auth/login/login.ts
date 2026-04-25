@@ -8,8 +8,8 @@ import { Auth } from '../../../services/auth';
 const ROLE_ROUTES: Record<string, string> = {
   'admin':           '/admin-profil',
   'director':        '/director-profil',
-  'technician':      '/technician-profil',
-  'project_manager': '/manager-profil',
+  'technician':      '/technician/dashboard',
+  'project_manager': '/projectManager-profil',
 };
 
 @Component({
@@ -142,7 +142,7 @@ onSubmit(loginForm: NgForm) {
           this.router.navigate(['/director-profil']);
           break;
         case 'technician':
-          this.router.navigate(['/technician-profil']); // Attention à l'orthographe ici
+          this.router.navigate(['/technician/dashboard']);
           break;
         case 'project_manager':
           this.router.navigate(['/projectManager-profil']); 

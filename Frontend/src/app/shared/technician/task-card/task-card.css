@@ -1,0 +1,238 @@
+/* ═══════════════════════════════════════════════════════════════
+   TASK CARD — Composant shared
+   ═══════════════════════════════════════════════════════════════ */
+
+:host { display: block; }
+
+.task-card {
+  border-radius: var(--tech-radius-lg) !important;
+  border: 1px solid var(--tech-border) !important;
+  box-shadow: var(--tech-shadow) !important;
+  padding: var(--tech-space-4) !important;
+  cursor: pointer;
+  transition:
+    transform var(--tech-transition),
+    box-shadow var(--tech-transition),
+    border-color var(--tech-transition) !important;
+  background: var(--tech-surface) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.task-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--tech-primary-light);
+  border-radius: 0 2px 2px 0;
+  opacity: 0;
+  transition: opacity var(--tech-transition);
+}
+
+.task-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--tech-border-strong) !important;
+  box-shadow: var(--tech-shadow-md) !important;
+}
+
+.task-card:hover::before {
+  opacity: 1;
+}
+
+.task-card.is-late {
+  border-color: rgba(183, 28, 28, 0.25) !important;
+  background: linear-gradient(to right, rgba(183, 28, 28, 0.02), var(--tech-surface)) !important;
+}
+
+.task-card.is-late::before {
+  background: var(--tech-danger);
+  opacity: 1;
+}
+
+/* ── HEAD ────────────────────────────────────────────────────── */
+.task-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--tech-space-3);
+  margin-bottom: var(--tech-space-3);
+}
+
+.task-card__eyebrow {
+  font-family: var(--tech-font-mono);
+  font-size: 0.70rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--tech-text-muted);
+  margin-bottom: 4px;
+}
+
+.task-card h3 {
+  font-family: var(--tech-font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--tech-text);
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+/* ── CHIPS ───────────────────────────────────────────────────── */
+.task-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tech-space-1);
+  flex-shrink: 0;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--tech-font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  border: 1px solid transparent;
+}
+
+.chip--status-todo       { background: var(--tech-surface-muted); color: var(--tech-text-muted); border-color: var(--tech-border); }
+.chip--status-in_progress{ background: var(--tech-info-soft);     color: var(--tech-info);       border-color: rgba(2,119,189,0.20); }
+.chip--status-done       { background: var(--tech-success-soft);  color: var(--tech-success);    border-color: rgba(46,125,50,0.20); }
+.chip--priority-low      { background: var(--tech-surface-muted); color: var(--tech-text-muted); }
+.chip--priority-medium   { background: var(--tech-warn-soft);     color: var(--tech-warn); }
+.chip--priority-high     { background: var(--tech-danger-soft);   color: var(--tech-danger); }
+
+/* ── DESCRIPTION ─────────────────────────────────────────────── */
+.task-card__description {
+  font-size: 0.88rem;
+  color: var(--tech-text-muted);
+  margin-bottom: var(--tech-space-3);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── META ────────────────────────────────────────────────────── */
+.task-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tech-space-3);
+  margin-bottom: var(--tech-space-3);
+  color: var(--tech-text-muted);
+  font-family: var(--tech-font-mono);
+  font-size: 0.74rem;
+}
+
+.task-card__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.task-card__meta-item mat-icon {
+  font-size: 0.9rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  color: var(--tech-text-subtle);
+}
+
+/* ── PROGRESS BAR ────────────────────────────────────────────── */
+.task-card__progress-track {
+  height: 5px;
+  background: var(--tech-surface-muted);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: var(--tech-space-3);
+}
+
+.task-card__progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--tech-primary), var(--tech-primary-light));
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── STATUS BAR ──────────────────────────────────────────────── */
+.task-card__status-bar {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--tech-space-1);
+  margin-bottom: var(--tech-space-3);
+}
+
+.status-btn {
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--tech-border);
+  background: var(--tech-surface-muted);
+  color: var(--tech-text-muted);
+  font-family: var(--tech-font-mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition:
+    background var(--tech-transition),
+    color var(--tech-transition),
+    border-color var(--tech-transition);
+}
+
+.status-btn:hover:not(.is-active) {
+  background: var(--tech-surface);
+  border-color: var(--tech-border-strong);
+  color: var(--tech-text);
+}
+
+.status-btn.is-active {
+  background: var(--tech-primary-soft);
+  border-color: rgba(46, 125, 50, 0.30);
+  color: var(--tech-primary);
+  font-weight: 600;
+}
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+.task-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tech-space-3);
+}
+
+.task-card__progress-label {
+  font-family: var(--tech-font-mono);
+  font-size: 0.72rem;
+  color: var(--tech-text-muted);
+}
+
+.focus-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--tech-border);
+  background: var(--tech-surface);
+  color: var(--tech-primary);
+  font-family: var(--tech-font-mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--tech-transition), border-color var(--tech-transition), transform var(--tech-transition);
+}
+
+.focus-btn mat-icon {
+  font-size: 0.9rem;
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.focus-btn:hover {
+  background: var(--tech-primary-soft);
+  border-color: rgba(46, 125, 50, 0.30);
+  transform: translateY(-1px);
+}

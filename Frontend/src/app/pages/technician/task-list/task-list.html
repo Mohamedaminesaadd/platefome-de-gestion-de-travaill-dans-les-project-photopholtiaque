@@ -1,0 +1,42 @@
+<!-- task-list.html -->
+<section class="task-list-page">
+
+  <!-- ── HEADER ───────────────────────────────────────────── -->
+  <header class="task-list-page__header">
+    <div>
+      <p class="task-list-page__eyebrow">Task list</p>
+      <h2>Vue opérationnelle</h2>
+    </div>
+
+    <div class="task-list-page__summary">
+      <span class="summary-pill">{{ counters().assigned }} assignées</span>
+      <span class="summary-pill summary-pill--warn" *ngIf="counters().overdue > 0">
+        ⚠ {{ counters().overdue }} en retard
+      </span>
+    </div>
+  </header>
+
+  <!-- ── FILTRE ────────────────────────────────────────────── -->
+  <app-technician-filter-bar
+    [activeFilter]="activeFilter()"
+    (filterChange)="activeFilter.set($event)"
+  />
+
+  <!-- ── LISTE ─────────────────────────────────────────────── -->
+  <div class="task-list-page__cards">
+    <app-technician-task-card
+      *ngFor="let task of filteredTasks()"
+      [task]="task"
+      (open)="openTask(task.id)"
+      (focus)="openFocus(task.id)"
+      (statusChange)="updateTaskStatus(task.id, $event)"
+    />
+  </div>
+
+  <!-- ── EMPTY STATE ────────────────────────────────────────── -->
+  <div class="task-list-page__empty" *ngIf="filteredTasks().length === 0">
+    <h3>Aucune tâche pour ce filtre</h3>
+    <p>Le planning se mettra à jour automatiquement quand de nouvelles affectations arrivent.</p>
+  </div>
+
+</section>

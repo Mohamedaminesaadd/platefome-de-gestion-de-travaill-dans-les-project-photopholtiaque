@@ -1,0 +1,38 @@
+<section class="schedule-page">
+  <header class="schedule-page__header">
+    <button mat-icon-button type="button" (click)="previousWeek()" aria-label="Semaine précédente">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <div>
+      <p class="schedule-page__eyebrow">Planning hebdo</p>
+      <h2>{{ weekDays()[0].date | date: 'd MMM' : '' : 'fr' }} - {{ weekDays()[6].date | date: 'd MMM' : '' : 'fr' }}</h2>
+    </div>
+
+    <button mat-icon-button type="button" (click)="nextWeek()" aria-label="Semaine suivante">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </header>
+
+  <mat-card class="schedule-board">
+    <div class="schedule-board__days">
+      <div class="schedule-board__day" *ngFor="let day of weekDays()">
+        <h3>{{ day.label }}</h3>
+
+        <div class="schedule-board__timeline">
+          <div class="schedule-board__hour" *ngFor="let hour of hours">{{ hour }}:00</div>
+
+          <article
+            *ngFor="let slot of slots().filter((entry) => entry.dayKey === day.key)"
+            class="schedule-board__slot"
+            [style.top.px]="(slot.startMinute - 420) / 2"
+            [style.height.px]="slotHeight(slot.startMinute, slot.endMinute)"
+          >
+            <strong>{{ slot.title }}</strong>
+            <span>{{ slot.projectName || 'Projet PV' }}</span>
+          </article>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</section>

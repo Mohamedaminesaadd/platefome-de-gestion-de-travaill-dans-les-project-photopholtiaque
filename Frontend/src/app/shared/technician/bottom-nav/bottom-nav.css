@@ -1,0 +1,125 @@
+/* ═══════════════════════════════════════════════════════════════
+   BOTTOM NAV — Navigation technicien mobile-first
+   ═══════════════════════════════════════════════════════════════ */
+
+:host {
+  display: block;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  padding:
+    var(--tech-space-2)
+    var(--tech-space-3)
+    calc(var(--tech-space-3) + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  border-top: 1px solid var(--tech-border);
+  box-shadow: 0 -8px 32px rgba(13, 27, 15, 0.08);
+}
+
+/* ── ITEM ────────────────────────────────────────────────────── */
+.bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: var(--tech-touch);
+  border-radius: var(--tech-radius-md);
+  text-decoration: none;
+  color: var(--tech-text-subtle);
+  font-family: var(--tech-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  transition:
+    color var(--tech-transition),
+    background var(--tech-transition),
+    transform var(--tech-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.bottom-nav__item mat-icon {
+  font-size: 1.3rem;
+  width: 1.3rem;
+  height: 1.3rem;
+  transition: transform var(--tech-transition);
+}
+
+.bottom-nav__item:active {
+  transform: scale(0.93);
+}
+
+/* ── ACTIVE ──────────────────────────────────────────────────── */
+.bottom-nav__item.is-active {
+  color: var(--tech-primary);
+}
+
+.bottom-nav__item.is-active mat-icon {
+  transform: translateY(-2px);
+}
+
+.bottom-nav__item.is-active::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--tech-primary-soft);
+  z-index: -1;
+}
+
+/* ── DESKTOP : pill flottant ─────────────────────────────────── */
+@media (min-width: 1024px) {
+  .bottom-nav {
+    position: fixed;
+    bottom: var(--tech-space-4);
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: auto;
+    min-width: 560px;
+    padding: var(--tech-space-2) var(--tech-space-3);
+    border-radius: 999px;
+    border: 1px solid var(--tech-border);
+    box-shadow: var(--tech-shadow-lg);
+    gap: var(--tech-space-1);
+  }
+
+  .bottom-nav__item {
+    padding: var(--tech-space-2) var(--tech-space-3);
+    border-radius: 999px;
+    flex-direction: row;
+    gap: var(--tech-space-1);
+    font-size: 0.78rem;
+  }
+
+  .bottom-nav__item.is-active {
+    background: var(--tech-primary-soft);
+  }
+
+  .bottom-nav__item.is-active::before {
+    display: none;
+  }
+
+  .bottom-nav__item mat-icon {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .bottom-nav__item.is-active mat-icon {
+    transform: none;
+  }
+}

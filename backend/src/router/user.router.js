@@ -6,6 +6,7 @@ import {
   forgotPassword,
   getUsersByRole,
   getAllTechnicians,
+  getCurrentUserProfile,
 } from "../controllers/user.controllers.js";
 import { verifyToken } from "../middlewares/auth.js";
 
@@ -18,12 +19,7 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 
 // ================= PROTECTED ROUTES =================
-router.get("/profile", verifyToken, (req, res) => {
-  res.json({
-    message: "This is a protected route",
-    user: req.user,
-  });
-});
+router.get("/profile", verifyToken, getCurrentUserProfile);
 
 router.get("/technicians", getAllTechnicians);
 router.get("/role/:role", getUsersByRole);

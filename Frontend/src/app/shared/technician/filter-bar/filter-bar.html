@@ -1,0 +1,14 @@
+<!-- filter-bar.html -->
+<div class="filter-bar" role="group" aria-label="Filtres des tâches">
+  <button
+    *ngFor="let filter of filters"
+    class="filter-btn"
+    [class.is-active]="activeFilter() === filter.value"
+    (click)="filterChange.emit(filter.value)"
+    type="button"
+    [attr.aria-pressed]="activeFilter() === filter.value"
+    [attr.aria-label]="filter.label"
+  >
+    {{ filter.label }}
+  </button>
+</div>

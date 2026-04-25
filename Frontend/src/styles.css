@@ -5,6 +5,7 @@
 *{
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 :root {
   /* ===== DIMENSIONS ===== */
@@ -59,6 +60,34 @@
   
   /* ===== POLICES ===== */
   --font-family: 'DM Sans', sans-serif;
+
+  /* ===== TECHNICIAN DESIGN SYSTEM ===== */
+  --tech-primary: #2E7D32;
+  --tech-primary-strong: #1F5A23;
+  --tech-primary-soft: #E8F5E9;
+  --tech-surface: #FFFFFF;
+  --tech-surface-muted: #F6FBF6;
+  --tech-text: #16311A;
+  --tech-text-muted: #58705C;
+  --tech-border: #D7E7D9;
+  --tech-success: #2E7D32;
+  --tech-warning: #E69A00;
+  --tech-danger: #C62828;
+  --tech-dark: #050705;
+  --tech-dark-soft: #0E130F;
+  --tech-space-1: 4px;
+  --tech-space-2: 8px;
+  --tech-space-3: 12px;
+  --tech-space-4: 16px;
+  --tech-space-5: 20px;
+  --tech-space-6: 24px;
+  --tech-space-8: 32px;
+  --tech-radius-sm: 10px;
+  --tech-radius-md: 16px;
+  --tech-radius-lg: 24px;
+  --tech-touch: 48px;
+  --tech-shadow: 0 16px 40px rgba(24, 52, 28, 0.10);
+  --tech-transition: 240ms ease-out;
 }
 
 body {
@@ -67,4 +96,12 @@ body {
   font-family: 'Inter', sans-serif; /* Assure-toi d'importer Inter dans ton index.html */
   background-color: var(--bg-light);
   color: var(--text-dark);
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }

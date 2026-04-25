@@ -1,0 +1,90 @@
+<!-- task-card.html -->
+<mat-card class="task-card" [class.is-late]="isLate()" (click)="open.emit()">
+
+  <!-- ── HEAD ──────────────────────────────────────────────── -->
+  <div class="task-card__head">
+    <div>
+      <p class="task-card__eyebrow">{{ task().projectName || 'Projet PV' }}</p>
+      <h3>{{ task().title }}</h3>
+    </div>
+
+    <div class="task-card__chips" (click)="$event.stopPropagation()">
+      <span class="chip" [class]="'chip--status-' + task().status">
+        {{ statusLabel() }}
+      </span>
+      <span class="chip" [class]="'chip--priority-' + task().priority">
+        {{ priorityLabel() }}
+      </span>
+    </div>
+  </div>
+
+  <!-- ── DESCRIPTION ────────────────────────────────────────── -->
+  <p class="task-card__description">{{ task().description }}</p>
+
+  <!-- ── META ──────────────────────────────────────────────── -->
+  <div class="task-card__meta">
+    <span class="task-card__meta-item">
+      <mat-icon>schedule</mat-icon>
+      {{ task().deadline | date: 'EEE d MMM, HH:mm' : '' : 'fr' }}
+    </span>
+    <span class="task-card__meta-item">
+      <mat-icon>bolt</mat-icon>
+      {{ task().estimatedHours }} h prévues
+    </span>
+    <span class="task-card__meta-item" *ngIf="task().phaseName">
+      <mat-icon>layers</mat-icon>
+      {{ task().phaseName }}
+    </span>
+  </div>
+
+  <!-- ── PROGRESS ───────────────────────────────────────────── -->
+  <div class="task-card__progress-track">
+    <div
+      class="task-card__progress-fill"
+      [style.width.%]="task().progressPercent"
+    ></div>
+  </div>
+
+  <!-- ── STATUS ACTIONS ─────────────────────────────────────── -->
+  <div
+    class="task-card__status-bar"
+    *ngIf="showStatusActions()"
+    (click)="$event.stopPropagation()"
+  >
+    <button
+      class="status-btn"
+      [class.is-active]="task().status === 'todo'"
+      (click)="updateStatus('todo', $event)"
+      type="button"
+    >À faire</button>
+    <button
+      class="status-btn"
+      [class.is-active]="task().status === 'in_progress'"
+      (click)="updateStatus('in_progress', $event)"
+      type="button"
+    >En cours</button>
+    <button
+      class="status-btn"
+      [class.is-active]="task().status === 'done'"
+      (click)="updateStatus('done', $event)"
+      type="button"
+    >Terminée</button>
+  </div>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────── -->
+  <div class="task-card__footer">
+    <span class="task-card__progress-label">
+      {{ task().progressPercent }}% du temps prévu consommé
+    </span>
+    <button
+      class="focus-btn"
+      type="button"
+      (click)="$event.stopPropagation(); focus.emit()"
+      aria-label="Ouvrir le mode focus"
+    >
+      <mat-icon>timer</mat-icon>
+      Focus
+    </button>
+  </div>
+
+</mat-card>

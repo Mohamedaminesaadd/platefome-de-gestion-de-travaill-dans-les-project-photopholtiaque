@@ -1,0 +1,30 @@
+<div class="technician-shell" [class.technician-shell--focus]="hideChrome()">
+  <ng-container *ngIf="!hideChrome(); else focusLayout">
+    <app-technician-sidebar class="technician-shell__sidebar" [activeTasks]="activeTaskCount()" />
+
+    <div class="technician-shell__main">
+      <app-technician-topbar
+        [title]="title()"
+        [subtitle]="subtitle()"
+        [initials]="profile()?.avatarInitials || 'PV'"
+        [username]="profile()?.username || 'Technician'"
+        [role]="profile()?.specialite || 'Technician'"
+        [activeTasks]="activeTaskCount()"
+      />
+
+      <main class="technician-shell__content technician-shell__content--mobile">
+        <router-outlet></router-outlet>
+      </main>
+
+      <app-technician-bottom-nav></app-technician-bottom-nav>
+    </div>
+  </ng-container>
+
+  <ng-template #focusLayout>
+    <main class="technician-shell__content technician-shell__content--focus">
+      <router-outlet></router-outlet>
+    </main>
+  </ng-template>
+
+  <app-toast-container></app-toast-container>
+</div>

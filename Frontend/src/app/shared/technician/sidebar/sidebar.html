@@ -1,0 +1,48 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed">
+  <div class="sidebar-logo">
+    <button type="button" class="toggle-btn" matRipple (click)="toggleSidebar()" aria-label="Réduire la sidebar">
+      <mat-icon>solar_power</mat-icon>
+    </button>
+
+    @if (!isCollapsed) {
+      <div class="logo-copy">
+        <span class="logo-text">PV Manager</span>
+        <small>Technician workspace</small>
+      </div>
+    }
+  </div>
+
+  <nav class="sidebar-nav">
+    <a
+      *ngFor="let item of items"
+      class="nav-item"
+      matRipple
+      [routerLink]="item.link"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: item.link.endsWith('/dashboard') || item.link.endsWith('/profile') || item.link.endsWith('/schedule') || item.link.endsWith('/projects') }"
+    >
+      <mat-icon>{{ item.icon }}</mat-icon>
+      @if (!isCollapsed) { <span>{{ item.label }}</span> }
+    </a>
+  </nav>
+
+  <div class="sidebar-alert">
+    <div class="alert-header">
+      <mat-icon>bolt</mat-icon>
+      @if (!isCollapsed) { <span>Terrain</span> }
+    </div>
+
+    @if (!isCollapsed) {
+      <p class="alert-body">
+        {{ activeTasks() }} tâche(s) active(s) nécessitent un suivi aujourd’hui.
+      </p>
+    }
+  </div>
+
+  <div class="sidebar-logout">
+    <button type="button" class="logout-btn" matRipple (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      @if (!isCollapsed) { <span>Logout</span> }
+    </button>
+  </div>
+</aside>
