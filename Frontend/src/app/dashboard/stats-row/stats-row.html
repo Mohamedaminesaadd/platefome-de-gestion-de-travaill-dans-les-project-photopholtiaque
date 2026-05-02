@@ -1,174 +1,195 @@
-<!-- ── RANGÉE 1 ──────────────────────────────────────────────── -->
-<div class="stats-row">
-
-  <!-- KPI 1 · Projets actifs -->
-  <div class="stat-card" matRipple>
-    <div class="card-top">
-      <div class="stat-icon" style="background:#EFF6FF">
-        <mat-icon style="color:#2563EB">folder_open</mat-icon>
-      </div>
-      <span class="badge badge-blue">{{ plannedProjectsCount }}  planifiés</span>
-    </div>
-    <div class="stat-label">Projets actifs</div>
-    <div class="stat-value">{{ activeProjectsCount }}</div>
-    <div class="stat-divider"></div>
-    <div class="stat-mini-row">
-      <span class="mini-label">Critique</span>
-      <span class="badge badge-red">{{ criticalProjectsCount }} en cours</span>
-    </div>
-  </div>
-
-  <!-- KPI 2 · Taux de complétion -->
-  <div class="stat-card" matRipple>
-    <div class="card-top">
-      <div class="stat-icon" style="background:#F5F3FF">
-        <mat-icon style="color:#7C3AED">bolt</mat-icon>
-      </div>
-      <span class="trend" [ngClass]="completionRate >= 50 ? 'trend-up' : 'trend-down'">
-        {{ completionRate >= 50 ? '↑' : '↓' }} {{ completionTrend }}% vs S-1
-      </span>
-    </div>
-    <div class="stat-label">Complétion tâches</div>
-    <div class="stat-value">{{ completionRate }}%</div>
-    <div class="progress-wrap">
-      <div class="progress-bar"
-           [style.width.%]="completionRate"
-           [style.background]="completionRate >= 70 ? '#10B981' : completionRate >= 40 ? '#F59E0B' : '#EF4444'">
-      </div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-mini-row">
-      <span class="mini-label">Terminées</span>
-      <span class="mini-val">{{ completedCount }} / {{ totalTasks }}</span>
-    </div>
-  </div>
-
-  <!-- KPI 3 · Tâches en retard -->
-  <div class="stat-card" matRipple>
-    <div class="card-top">
-      <div class="stat-icon" style="background:#FEF2F2">
-        <mat-icon style="color:#EF4444">schedule</mat-icon>
-      </div>
-      <span class="trend" [ngClass]="overdueCount > 0 ? 'trend-down' : 'trend-up'">
-        {{ overdueCount > 0 ? 'Urgent' : 'OK' }}
-      </span>
-    </div>
-    <div class="stat-label">Tâches en retard</div>
-    <div class="stat-value">{{ overdueCount }}</div>
-    <div class="stat-divider"></div>
-    <div class="stat-mini-row">
-      <span class="mini-label">Haute priorité</span>
-      <span class="badge badge-amber">{{ highPriorityCount }} tâches</span>
-    </div>
-  </div>
-
-  <!-- KPI 4 · Avancement phases -->
-  <div class="stat-card" matRipple>
-    <div class="card-top">
-      <div class="stat-icon" style="background:#ECFDF5">
-        <mat-icon style="color:#10B981">layers</mat-icon>
-      </div>
-      <span class="trend trend-neutral">{{ completedPhasesCount }}/{{ totalPhasesCount }} phases</span>
-    </div>
-    <div class="stat-label">Avancement phases</div>
-    <div class="stat-value">{{ avgPhaseAvancement }}%</div>
-    <div class="progress-wrap">
-      <div class="progress-bar" [style.width.%]="avgPhaseAvancement" style="background:#10B981"></div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-mini-row">
-      <span class="mini-label">Terminées</span>
-      <span class="mini-val">{{ completedPhasesCount }}</span>
-    </div>
-  </div>
-
+<!-- ── LOADING STATE ─────────────────────────────────────────── -->
+<div class="stats-skeleton" *ngIf="isLoading">
+  <div class="skeleton-card" *ngFor="let i of [1,2,3,4]"></div>
+</div>
+<div class="stats-skeleton" *ngIf="isLoading">
+  <div class="skeleton-card" *ngFor="let i of [1,2,3,4]"></div>
 </div>
 
-<!-- ── RANGÉE 2 ──────────────────────────────────────────────── -->
-<div class="stats-row">
-
-  <!-- KPI 5 · Budget consommé -->
-  <div class="stat-card" matRipple>
-    <div class="card-top">
-      <div class="stat-icon" style="background:#FFFBEB">
-        <mat-icon style="color:#D97706">payments</mat-icon>
-      </div>
-      <span class="trend" [ngClass]="budgetAlert ? 'trend-down' : 'trend-neutral'">
-        {{ budgetConsommePct }}% utilisé
-      </span>
-    </div>
-    <div class="stat-label">Budget consommé</div>
-    <div class="stat-value">{{ formatBudget(totalBudgetConsomme) }}</div>
-    <div class="progress-wrap">
-      <div class="progress-bar"
-           [style.width.%]="budgetConsommePct"
-           [style.background]="budgetAlert ? '#EF4444' : '#F59E0B'">
-      </div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-mini-row">
-      <span class="mini-label">Total alloué</span>
-      <span class="mini-val">{{ formatBudget(totalBudget) }}</span>
-    </div>
-  </div>
-
-  <!-- KPI 6 · Charge horaire -->
-  <div class="stat-card" matRipple>
-    <div class="card-top">
-      <div class="stat-icon" style="background:#F0FDF4">
-        <mat-icon style="color:#16A34A">timer</mat-icon>
-      </div>
-      <span class="trend" [ngClass]="chargeAlert ? 'trend-down' : 'trend-up'">
-        {{ chargeRatio }}% consommé
-      </span>
-    </div>
-    <div class="stat-label">Charge horaire</div>
-    <div class="stat-value">{{ totalHeuresEstimees }}h est.</div>
-    <div class="progress-wrap">
-      <div class="progress-bar"
-           [style.width.%]="[chargeRatio > 100 ? 100 : chargeRatio]"
-           [style.background]="chargeAlert ? '#EF4444' : '#10B981'">
-      </div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-mini-row">
-      <span class="mini-label">Réelles</span>
-      <span class="mini-val">{{ totalHeuresReelles.toFixed(1) }}h / {{ totalHeuresEstimees }}h</span>
-    </div>
-  </div>
-
-  <!-- KPI 7 · Phases du projet -->
-  <div class="stat-card" matRipple>
-    <div class="card-top">
-      <div class="stat-icon" style="background:#FDF4FF">
-        <mat-icon style="color:#9333EA">account_tree</mat-icon>
-      </div>
-      <span class="trend trend-neutral">{{ completedPhasesCount }} terminée{{ completedPhasesCount > 1 ? 's' : '' }}</span>
-    </div>
-    <div class="stat-label">Phases du projet</div>
-    <div class="stat-value">{{ totalPhasesCount }}</div>
-    <div class="stat-divider"></div>
-    <div class="stat-mini-row">
-      <span class="mini-label">En cours</span>
-      <span class="badge badge-purple">{{ activePhasesCount }} actives</span>
-    </div>
-  </div>
-
-  <!-- KPI 8 · Vélocité équipe -->
-  <div class="stat-card" matRipple>
-    <div class="card-top">
-      <div class="stat-icon" style="background:#F0F9FF">
-        <mat-icon style="color:#0284C7">trending_up</mat-icon>
-      </div>
-      <span class="trend trend-up">↑ stable</span>
-    </div>
-    <div class="stat-label">Vélocité équipe</div>
-    <div class="stat-value">{{ velociteEquipe }} t/j</div>
-    <div class="stat-divider"></div>
-    <div class="stat-mini-row">
-      <span class="mini-label">En cours</span>
-      <span class="mini-val">{{ inProgressCount }} tâches</span>
-    </div>
-  </div>
-
+<!-- ── ERROR STATE ───────────────────────────────────────────── -->
+<div class="stats-error" *ngIf="hasError">
+  <mat-icon>error_outline</mat-icon>
+  Impossible de charger les statistiques
 </div>
+
+<!-- ── CONTENT ───────────────────────────────────────────────── -->
+<ng-container *ngIf="!isLoading && !hasError">
+
+  <!-- ── RANGÉE 1 ──────────────────────────────────────────── -->
+  <div class="stats-row">
+
+    <!-- KPI 1 · Projets actifs -->
+    <div class="stat-card" matRipple>
+      <div class="card-top">
+        <div class="stat-icon" style="background:#EFF6FF">
+          <mat-icon style="color:#2563EB">folder_open</mat-icon>
+        </div>
+        <span class="badge badge-blue">{{ plannedProjectsCount }} planifiés</span>
+      </div>
+      <div class="stat-label">Projets actifs</div>
+      <div class="stat-value">{{ activeProjectsCount }}</div>
+      <div class="stat-divider"></div>
+      <div class="stat-mini-row">
+        <span class="mini-label">Critique</span>
+        <span class="badge badge-red">{{ criticalProjectsCount }} en cours</span>
+      </div>
+    </div>
+
+    <!-- KPI 2 · Taux de complétion -->
+    <div class="stat-card" matRipple>
+      <div class="card-top">
+        <div class="stat-icon" style="background:#F5F3FF">
+          <mat-icon style="color:#7C3AED">bolt</mat-icon>
+        </div>
+        <span class="trend" [ngClass]="completionRate >= 50 ? 'trend-up' : 'trend-down'">
+          {{ completionRate >= 50 ? '↑' : '↓' }} {{ completionTrend }}% vs S-1
+        </span>
+      </div>
+      <div class="stat-label">Complétion tâches</div>
+      <div class="stat-value">{{ completionRate }}%</div>
+      <div class="progress-wrap">
+        <div class="progress-bar"
+             [style.width.%]="completionRate"
+             [style.background]="completionRate >= 70 ? '#10B981' : completionRate >= 40 ? '#F59E0B' : '#EF4444'">
+        </div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-mini-row">
+        <span class="mini-label">Terminées</span>
+        <span class="mini-val">{{ completedCount }} / {{ totalTasks }}</span>
+      </div>
+    </div>
+
+    <!-- KPI 3 · Tâches en retard -->
+    <div class="stat-card" matRipple>
+      <div class="card-top">
+        <div class="stat-icon" style="background:#FEF2F2">
+          <mat-icon style="color:#EF4444">schedule</mat-icon>
+        </div>
+        <span class="trend" [ngClass]="overdueCount > 0 ? 'trend-down' : 'trend-up'">
+          {{ overdueCount > 0 ? 'Urgent' : 'OK' }}
+        </span>
+      </div>
+      <div class="stat-label">Tâches en retard</div>
+      <div class="stat-value">{{ overdueCount }}</div>
+      <div class="stat-divider"></div>
+      <div class="stat-mini-row">
+        <span class="mini-label">Haute priorité</span>
+        <span class="badge badge-amber">{{ highPriorityCount }} tâches</span>
+      </div>
+    </div>
+
+    <!-- KPI 4 · Avancement phases -->
+    <div class="stat-card" matRipple>
+      <div class="card-top">
+        <div class="stat-icon" style="background:#ECFDF5">
+          <mat-icon style="color:#10B981">layers</mat-icon>
+        </div>
+        <span class="trend trend-neutral">{{ completedPhasesCount }}/{{ totalPhasesCount }} phases</span>
+      </div>
+      <div class="stat-label">Avancement phases</div>
+      <div class="stat-value">{{ avgPhaseAvancement }}%</div>
+      <div class="progress-wrap">
+        <div class="progress-bar" [style.width.%]="avgPhaseAvancement" style="background:#10B981"></div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-mini-row">
+        <span class="mini-label">Terminées</span>
+        <span class="mini-val">{{ completedPhasesCount }}</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── RANGÉE 2 ──────────────────────────────────────────── -->
+  <div class="stats-row">
+
+    <!-- KPI 5 · Budget consommé -->
+    <div class="stat-card" matRipple>
+      <div class="card-top">
+        <div class="stat-icon" style="background:#FFFBEB">
+          <mat-icon style="color:#D97706">payments</mat-icon>
+        </div>
+        <span class="trend" [ngClass]="budgetAlert ? 'trend-down' : 'trend-neutral'">
+          {{ budgetConsommePct }}% utilisé
+        </span>
+      </div>
+      <div class="stat-label">Budget consommé</div>
+      <div class="stat-value">{{ formatBudget(totalBudgetConsomme) }}</div>
+      <div class="progress-wrap">
+        <div class="progress-bar"
+             [style.width.%]="budgetConsommePct"
+             [style.background]="budgetAlert ? '#EF4444' : '#F59E0B'">
+        </div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-mini-row">
+        <span class="mini-label">Total alloué</span>
+        <span class="mini-val">{{ formatBudget(totalBudget) }}</span>
+      </div>
+    </div>
+
+    <!-- KPI 6 · Charge horaire -->
+    <div class="stat-card" matRipple>
+      <div class="card-top">
+        <div class="stat-icon" style="background:#F0FDF4">
+          <mat-icon style="color:#16A34A">timer</mat-icon>
+        </div>
+        <span class="trend" [ngClass]="chargeAlert ? 'trend-down' : 'trend-up'">
+          {{ chargeRatio }}% consommé
+        </span>
+      </div>
+      <div class="stat-label">Charge horaire</div>
+      <div class="stat-value">{{ totalHeuresEstimees }}h est.</div>
+      <div class="progress-wrap">
+        <div class="progress-bar"
+             [style.width.%]="chargeRatio > 100 ? 100 : chargeRatio"
+             [style.background]="chargeAlert ? '#EF4444' : '#10B981'">
+        </div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-mini-row">
+        <span class="mini-label">Réelles</span>
+        <span class="mini-val">{{ totalHeuresReelles.toFixed(1) }}h / {{ totalHeuresEstimees }}h</span>
+      </div>
+    </div>
+
+    <!-- KPI 7 · Phases du projet -->
+    <div class="stat-card" matRipple>
+      <div class="card-top">
+        <div class="stat-icon" style="background:#FDF4FF">
+          <mat-icon style="color:#9333EA">account_tree</mat-icon>
+        </div>
+        <span class="trend trend-neutral">
+          {{ completedPhasesCount }} terminée{{ completedPhasesCount > 1 ? 's' : '' }}
+        </span>
+      </div>
+      <div class="stat-label">Phases du projet</div>
+      <div class="stat-value">{{ totalPhasesCount }}</div>
+      <div class="stat-divider"></div>
+      <div class="stat-mini-row">
+        <span class="mini-label">En cours</span>
+        <span class="badge badge-purple">{{ activePhasesCount }} actives</span>
+      </div>
+    </div>
+
+    <!-- KPI 8 · Vélocité équipe -->
+    <div class="stat-card" matRipple>
+      <div class="card-top">
+        <div class="stat-icon" style="background:#F0F9FF">
+          <mat-icon style="color:#0284C7">trending_up</mat-icon>
+        </div>
+        <span class="trend trend-up">↑ stable</span>
+      </div>
+      <div class="stat-label">Vélocité équipe</div>
+      <div class="stat-value">{{ velociteEquipe }} t/j</div>
+      <div class="stat-divider"></div>
+      <div class="stat-mini-row">
+        <span class="mini-label">En cours</span>
+        <span class="mini-val">{{ inProgressCount }} tâches</span>
+      </div>
+    </div>
+
+  </div>
+
+</ng-container>

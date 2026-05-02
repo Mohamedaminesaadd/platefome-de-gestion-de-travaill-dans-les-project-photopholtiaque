@@ -4,6 +4,11 @@ export type StatutTache   = 'A FAIRE' | 'EN COURS' | 'TERMINEE';
 export type PrioriteTache = 'BASSE' | 'MOYENNE' | 'HAUTE' | 'CRITIQUE';
 export type Complexite    = 'BASSE' | 'MOYENNE' | 'ELEVEE';
 
+export interface TimeTracking {
+  startTime?:   string;
+  pauseTotal?:  number;
+  pauseHistory?: { debut: string; fin: string }[];
+}
 export interface Tache {
   _id:            string;
   titre:          string;
@@ -26,3 +31,4 @@ export interface Tache {
   createdAt?:     string;
   updatedAt?:     string;
 }
+

@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
 
   // 🔥 AJOUTS FRONTEND
   specialite: { type: String },
+  experience_technicien: { type: Number, default: 0 },
 
   disponible: { type: Boolean, default: true },
 

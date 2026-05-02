@@ -4,63 +4,27 @@ import numpy as np
 import os
 
 # -------------------------------
-# Chemins robustes (important)
+# Chemins robustes
 # -------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-path1 = os.path.join(BASE_DIR, "model_xgboost.pkl")
+# ❌ SUPPRIMÉ model_xgboost.pkl (il n'existe pas)
 path2 = os.path.join(BASE_DIR, "model_xgboost_tache1.pkl")
 
 # -------------------------------
-# Charger les modèles UNE SEULE FOIS
-# -------------------------------
-try:
-    model = joblib.load(path1)
-    model_tache1 = joblib.load(path2)
-except Exception as e:
-    raise RuntimeError(f"Erreur chargement modèles: {e}")
-
-# -------------------------------
-# Initialiser API
+# API
 # -------------------------------
 app = FastAPI()
 
 # -------------------------------
-# Endpoint de test
+# Charger modèle
 # -------------------------------
-@app.get("/")
-def home():
-    return {"message": "API ML PV fonctionne 🚀"}
+try:
+    model_tache1 = joblib.load(path2)
+except Exception as e:
+    raise RuntimeError(f"Erreur chargement modèle: {e}")
 
-# -------------------------------
-# Endpoint de prédiction principal
-# -------------------------------
-@app.post("/predict")
-def predict(data: dict):
-    try:
-        features = np.array([[
-            data["heure_estimee"],
-            data["complexite"],
-            data["priorite"],
-            data["phase"],
-            data["experience_technicien"],
-            data["meteo"],
-            data["saison"]
-        ]])
 
-        prediction = model.predict(features)[0]
-
-        return {
-            "valeurPredite": round(float(prediction), 2),
-            "unite": "heures"
-        }
-
-    except KeyError as e:
-        raise HTTPException(status_code=400, detail=f"Champ manquant: {e}")
-
-# -------------------------------
-# Endpoint de prédiction tâche 1
-# -------------------------------
 @app.post("/predict_tache1")
 def predict_tache1(data: dict):
     try:
@@ -84,8 +48,9 @@ def predict_tache1(data: dict):
     except KeyError as e:
         raise HTTPException(status_code=400, detail=f"Champ manquant: {e}")
 
+
 # -------------------------------
-# Lancement serveur (optionnel)
+# Lancement serveur
 # -------------------------------
 if __name__ == "__main__":
     import uvicorn

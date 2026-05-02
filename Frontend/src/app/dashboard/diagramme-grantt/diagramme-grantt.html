@@ -1,13 +1,13 @@
+<!-- diagramme-grantt.html -->
 <div class="shell">
   <app-sidebar></app-sidebar>
   <div class="main">
-       <app-topbar></app-topbar>
-    <div class="content">
-        <div class="gantt-page">
+    <app-topbar></app-topbar>
 
-        <!-- ══════════════════════════════════════
-            HEADER
-        ══════════════════════════════════════ -->
+    <div class="content">
+      <div class="gantt-page">
+
+        <!-- ══════════════ HEADER ══════════════ -->
         <div class="gantt-header">
           <div class="header-left">
             <h1 class="gantt-title">
@@ -36,23 +36,17 @@
 
             <!-- View switcher -->
             <div class="view-switcher">
-
               <button class="view-btn" [class.active]="viewMode() === 'week'"
                 (click)="setViewMode('week')" matRipple>Semaine</button>
-
               <button class="view-btn" [class.active]="viewMode() === 'month'"
                 (click)="setViewMode('month')" matRipple>Mois</button>
-
               <button class="view-btn" [class.active]="viewMode() === 'quarter'"
                 (click)="setViewMode('quarter')" matRipple>Trimestre</button>
             </div>
-
           </div>
         </div>
 
-        <!-- ══════════════════════════════════════
-            LEGEND
-        ══════════════════════════════════════ -->
+        <!-- ══════════════ LEGEND ══════════════ -->
         <div class="legend-row">
           <div class="legend-item">
             <span class="legend-dot" style="background:#10B981"></span> Terminé
@@ -71,10 +65,69 @@
           </div>
         </div>
 
-        <!-- ══════════════════════════════════════
-            GANTT TABLE
-        ══════════════════════════════════════ -->
-        <div class="gantt-card">
+        <!-- ══════════════ SKELETON ══════════════ -->
+        <div class="gantt-card" *ngIf="isLoading()">
+          <div class="gantt-scroll-wrapper">
+            <div class="gantt-grid">
+
+              <!-- Label col skeleton -->
+              <div class="label-col">
+                <div class="label-header"><span>Tâche / Projet</span></div>
+
+                <ng-container *ngFor="let p of skeletonProjects">
+                  <div class="project-row sk-project-row">
+                    <div class="sk sk-dot"></div>
+                    <div class="sk-label-group">
+                      <div class="sk sk-project-name"></div>
+                      <div class="sk sk-project-meta"></div>
+                    </div>
+                  </div>
+                  <div class="task-label-row sk-task-row" *ngFor="let t of skeletonTasks">
+                    <div class="sk sk-status-dot"></div>
+                    <div class="sk-task-info">
+                      <div class="sk sk-task-name" [style.width]="t.nameW"></div>
+                      <div class="sk sk-task-meta" [style.width]="t.metaW"></div>
+                    </div>
+                    <div class="sk sk-avatar-circle"></div>
+                  </div>
+                </ng-container>
+              </div>
+
+              <!-- Timeline skeleton -->
+              <div class="timeline-col">
+                <div class="timeline-header">
+                  <div class="timeline-header-inner">
+                    <div class="col-header sk-col-header" *ngFor="let h of skeletonHeaders">
+                      <div class="sk sk-header-label"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="timeline-body sk-timeline-body">
+                  <ng-container *ngFor="let p of skeletonProjects">
+                    <div class="project-spacer">
+                      <div class="sk sk-project-bar"
+                           [style.left]="p.barLeft"
+                           [style.width]="p.barWidth">
+                      </div>
+                    </div>
+                    <div class="task-bar-row" *ngFor="let t of skeletonTasks">
+                      <div class="sk sk-task-bar"
+                           [style.left]="t.barLeft"
+                           [style.width]="t.barWidth">
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════ DONNÉES RÉELLES ══════════════ -->
+        <div class="gantt-card" *ngIf="!isLoading()">
+
+          <!-- Empty state -->
           <div class="empty-state" *ngIf="projects().length === 0">
             <mat-icon>timeline</mat-icon>
             <div>
@@ -83,161 +136,156 @@
             </div>
           </div>
 
-          <!-- GRID LAYOUT : label col + timeline col -->
-          <div class="gantt-grid" *ngIf="projects().length > 0">
+          <!-- ✅ SCROLL WRAPPER : contient le gantt-grid scrollable -->
+          <div class="gantt-scroll-wrapper" *ngIf="projects().length > 0">
+            <div class="gantt-grid">
 
-            <!-- ── LABEL COLUMN (sticky left) ── -->
-            <div class="label-col">
-
-              <!-- Header cell -->
-              <div class="label-header">
-                <span>Tâche / Projet</span>
-              </div>
-
-              <!-- Project rows -->
-              <ng-container *ngFor="let project of projects(); trackBy: trackById">
-
-                <!-- Project group header -->
-                <div class="project-row" (click)="toggleProject(project)" matRipple>
-                  <span class="project-dot" [style.background]="project.color"></span>
-                  <div class="project-label-group">
-                    <span class="project-name">{{ project.name }}</span>
-                    <span class="project-meta">{{ project.code }} · {{ project.startDate | date:'dd/MM/yy' }} → {{ project.endDate | date:'dd/MM/yy' }}</span>
-                  </div>
-                  <mat-icon class="collapse-icon">
-                    {{ project.collapsed ? 'expand_more' : 'expand_less' }}
-                  </mat-icon>
+              <!-- ── LABEL COLUMN (sticky left) ── -->
+              <div class="label-col">
+                <div class="label-header">
+                  <span>Tâche / Projet</span>
                 </div>
 
-                <!-- Task rows -->
-                <ng-container *ngIf="!project.collapsed">
-                  <div
-                    class="task-label-row"
-                    *ngFor="let task of project.tasks; trackBy: trackById"
-                    [class.selected]="selectedTask()?.id === task.id"
-                    (click)="selectTask(task)"
-                    matRipple
-                  >
-                    <!-- Status dot -->
-                    <span class="status-dot" [style.background]="statusColor(task.status)"></span>
-
-                    <!-- Task name -->
-                    <div class="task-label-info">
-                      <span class="task-label-name">{{ task.name }}</span>
-                      <span class="task-label-meta">{{ task.phaseName }} · {{ task.duration }}j · {{ task.progress }}%</span>
-                    </div>
-
-                    <!-- Assignee avatar -->
-                    <div class="task-avatar"
-                      [style.background]="task.assigneeColor"
-                      [matTooltip]="task.assignee"
-                    >{{ task.assigneeInitials }}</div>
-                  </div>
-                </ng-container>
-
-              </ng-container>
-            </div>
-
-            <!-- ── TIMELINE COLUMN ── -->
-            <div class="timeline-col">
-
-              <!-- Column headers -->
-              <div class="timeline-header">
-                <div class="timeline-header-inner">
-                  <div
-                    class="col-header"
-                    *ngFor="let h of columnHeaders(); let i = index; trackBy: trackById"
-                    [style.width.%]="100 / columnHeaders().length"
-                  >{{ h }}</div>
-                </div>
-              </div>
-
-              <!-- Timeline body (scrollable) -->
-              <div class="timeline-body">
-
-                <!-- Background grid lines -->
-                <div class="grid-lines">
-                  <div
-                    class="grid-line"
-                    *ngFor="let i of colRange(columnHeaders().length)"
-                    [style.left.%]="(i / columnHeaders().length) * 100"
-                  ></div>
-                </div>
-
-                <!-- TODAY marker -->
-                <div class="today-marker" *ngIf="isTodayVisible()" [style.left.%]="todayOffset()">
-                  <div class="today-label">Aujourd'hui</div>
-                  <div class="today-line"></div>
-                </div>
-
-                <!-- Project groups -->
                 <ng-container *ngFor="let project of projects(); trackBy: trackById">
 
-                  <!-- Project row -->
-                  <div class="project-spacer">
-                    <div class="project-bar-bg" [style.background]="project.color + '18'"></div>
-                    <div
-                      class="project-bar"
-                      [style.left.%]="getProjectBarLeft(project)"
-                      [style.width.%]="getProjectBarWidth(project)"
-                      [style.background]="project.color + '14'"
-                      [style.border-color]="project.color"
-                      [matTooltip]="project.name + ' · ' + (project.startDate | date:'dd/MM/yyyy') + ' → ' + (project.endDate | date:'dd/MM/yyyy')"
-                    >
-                      <span class="project-bar-label">{{ project.code }} · {{ project.name }}</span>
-                      <span class="project-bar-pct">{{ project.progress }}%</span>
+                  <!-- Ligne projet -->
+                  <div class="project-row" (click)="toggleProject(project)" matRipple>
+                    <span class="project-dot" [style.background]="project.color"></span>
+                    <div class="project-label-group">
+                      <span class="project-name">{{ project.name }}</span>
+                      <span class="project-meta">
+                        {{ project.code }} · {{ project.startDate | date:'dd/MM/yy' }} → {{ project.endDate | date:'dd/MM/yy' }}
+                      </span>
                     </div>
+                    <mat-icon class="collapse-icon">
+                      {{ project.collapsed ? 'expand_more' : 'expand_less' }}
+                    </mat-icon>
                   </div>
 
-                  <!-- Task bars -->
+                  <!-- Lignes tâches -->
                   <ng-container *ngIf="!project.collapsed">
                     <div
-                      class="task-bar-row"
+                      class="task-label-row"
                       *ngFor="let task of project.tasks; trackBy: trackById"
                       [class.selected]="selectedTask()?.id === task.id"
+                      (click)="selectTask(task)"
+                      matRipple
                     >
-                      <!-- Dependency lines (simplified visual) -->
-
-                      <!-- Main bar -->
-                      <div
-                        class="task-bar"
-                        [style.left.%]="getBarLeft(task)"
-                        [style.width.%]="getBarWidth(task)"
-                        [style.background]="statusColor(task.status) + '22'"
-                        [style.border-color]="statusColor(task.status)"
-                        [class.bar-delayed]="task.status === 'delayed'"
-                        (click)="selectTask(task)"
-                        [matTooltip]="task.name + ' · ' + task.progress + '%'"
-                        matRipple
-                      >
-                        <!-- Progress fill -->
-                        <div
-                          class="task-bar-fill"
-                          [style.width.%]="task.progress"
-                          [style.background]="statusColor(task.status)"
-                        ></div>
-
-                        <!-- Bar label -->
-                        <span class="task-bar-label">{{ task.name }}</span>
-
-                        <!-- % indicator -->
-                        <span class="task-bar-pct" *ngIf="task.progress > 0">
-                          {{ task.progress }}%
+                      <span class="status-dot" [style.background]="statusColor(task.status)"></span>
+                      <div class="task-label-info">
+                        <span class="task-label-name">{{ task.name }}</span>
+                        <span class="task-label-meta">
+                          {{ task.phaseName }} · {{ task.duration }}j · {{ task.progress }}%
                         </span>
                       </div>
+                      <div
+                        class="task-avatar"
+                        [style.background]="task.assigneeColor"
+                        [matTooltip]="task.assignee"
+                      >{{ task.assigneeInitials }}</div>
                     </div>
                   </ng-container>
 
                 </ng-container>
-              </div><!-- end timeline-body -->
-            </div><!-- end timeline-col -->
+              </div>
 
-          </div><!-- end gantt-grid -->
-        </div><!-- end gantt-card -->
+              <!-- ── TIMELINE COLUMN ── -->
+              <div class="timeline-col">
 
-        <!-- ══════════════════════════════════════
-            TASK DETAIL PANEL (slide-in)
-        ══════════════════════════════════════ -->
+                <!-- En-têtes colonnes -->
+                <div class="timeline-header">
+                  <div class="timeline-header-inner">
+                    <div
+                      class="col-header"
+                      *ngFor="let h of columnHeaders(); let i = index; trackBy: trackById"
+                      [style.width.%]="100 / columnHeaders().length"
+                    >{{ h }}</div>
+                  </div>
+                </div>
+
+                <!-- Corps timeline -->
+                <div class="timeline-body">
+
+                  <!-- Lignes de grille -->
+                  <div class="grid-lines">
+                    <div
+                      class="grid-line"
+                      *ngFor="let i of colRange(columnHeaders().length)"
+                      [style.left.%]="(i / columnHeaders().length) * 100"
+                    ></div>
+                  </div>
+
+                  <!-- Marqueur AUJOURD'HUI -->
+                  <div
+                    class="today-marker"
+                    *ngIf="isTodayVisible()"
+                    [style.left.%]="todayOffset()"
+                  >
+                    <div class="today-label">Aujourd'hui</div>
+                    <div class="today-line"></div>
+                  </div>
+
+                  <!-- Groupes projets -->
+                  <ng-container *ngFor="let project of projects(); trackBy: trackById">
+
+                    <!-- Barre projet -->
+                    <div class="project-spacer">
+                      <div class="project-bar-bg" [style.background]="project.color + '18'"></div>
+                      <div
+                        class="project-bar"
+                        [style.left.%]="getProjectBarLeft(project)"
+                        [style.width.%]="getProjectBarWidth(project)"
+                        [style.background]="project.color + '14'"
+                        [style.border-color]="project.color"
+                        [matTooltip]="project.name + ' · ' + (project.startDate | date:'dd/MM/yyyy') + ' → ' + (project.endDate | date:'dd/MM/yyyy')"
+                      >
+                        <span class="project-bar-label">{{ project.code }} · {{ project.name }}</span>
+                        <span class="project-bar-pct">{{ project.progress }}%</span>
+                      </div>
+                    </div>
+
+                    <!-- Barres tâches -->
+                    <ng-container *ngIf="!project.collapsed">
+                      <div
+                        class="task-bar-row"
+                        *ngFor="let task of project.tasks; trackBy: trackById"
+                        [class.selected]="selectedTask()?.id === task.id"
+                      >
+                        <div
+                          class="task-bar"
+                          [style.left.%]="getBarLeft(task)"
+                          [style.width.%]="getBarWidth(task)"
+                          [style.background]="statusColor(task.status) + '22'"
+                          [style.border-color]="statusColor(task.status)"
+                          [class.bar-delayed]="task.status === 'delayed'"
+                          (click)="selectTask(task)"
+                          [matTooltip]="task.name + ' · ' + task.progress + '%'"
+                          matRipple
+                        >
+                          <div
+                            class="task-bar-fill"
+                            [style.width.%]="task.progress"
+                            [style.background]="statusColor(task.status)"
+                          ></div>
+                          <span class="task-bar-label">{{ task.name }}</span>
+                          <span class="task-bar-pct" *ngIf="task.progress > 0">
+                            {{ task.progress }}%
+                          </span>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                  </ng-container>
+
+                </div><!-- /timeline-body -->
+              </div><!-- /timeline-col -->
+
+            </div><!-- /gantt-grid -->
+          </div><!-- /gantt-scroll-wrapper -->
+
+        </div><!-- /gantt-card données -->
+
+        <!-- ══════════════ DETAIL PANEL ══════════════ -->
         <div class="detail-panel" [class.open]="selectedTask() !== null" *ngIf="selectedTask() as task">
           <div class="detail-header">
             <div>
@@ -266,7 +314,7 @@
             <span class="detail-project-chip neutral">{{ task.phaseName }}</span>
           </div>
 
-          <!-- Progress ring area -->
+          <!-- Progress -->
           <div class="detail-progress-section">
             <div class="detail-progress-label">
               <span>Avancement</span>
@@ -342,8 +390,7 @@
           </div>
         </div>
 
-      </div><!-- end gantt-page -->
-    </div>
-  
+      </div><!-- /gantt-page -->
+    </div><!-- /content -->
   </div><!-- /main -->
 </div><!-- /shell -->

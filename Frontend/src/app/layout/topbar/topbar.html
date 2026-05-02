@@ -1,29 +1,46 @@
 <header class="topbar">
 
-
-
+  <!-- Greeting -->
   <div class="topbar-greeting">
-    <div class="greeting-name">Hello, Alex Rivera </div>
+    <div class="greeting-name">
+      <ng-container *ngIf="!isLoading; else skName">
+        Hello, {{ userName }}
+      </ng-container>
+      <ng-template #skName>
+        <span class="sk sk-name"></span>
+      </ng-template>
+    </div>
     <div class="greeting-date">{{ today }}</div>
   </div>
 
+  <!-- Notifications -->
   <button
     class="notif-btn"
     matRipple
     matTooltip="Notifications"
     [matBadge]="notifCount"
     matBadgeColor="warn"
-    [matBadgeHidden]="notifCount === 0">
-
+    [matBadgeHidden]="notifCount === 0"
+  >
     <mat-icon>notifications</mat-icon>
   </button>
 
+  <!-- User chip -->
   <div class="user-chip" matRipple>
-    <div class="user-avatar">AR</div>
-    <div>
-      <div class="user-info-name">Alex Rivera</div>
-      <div class="user-info-role">Project Manager</div>
-    </div>
+    <ng-container *ngIf="!isLoading; else skChip">
+      <div class="user-avatar">{{ userInitials }}</div>
+      <div>
+        <div class="user-info-name">{{ userName }}</div>
+        <div class="user-info-role">{{ userRole }}</div>
+      </div>
+    </ng-container>
+    <ng-template #skChip>
+      <div class="sk sk-avatar"></div>
+      <div class="sk-lines">
+        <div class="sk sk-line-name"></div>
+        <div class="sk sk-line-role"></div>
+      </div>
+    </ng-template>
   </div>
 
 </header>
