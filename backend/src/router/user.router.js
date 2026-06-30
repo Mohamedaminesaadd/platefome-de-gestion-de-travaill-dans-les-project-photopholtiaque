@@ -1,13 +1,15 @@
 import { Router } from "express";
+
 import {
   registerUser,
   loginUser,
-  resetPassword,
   forgotPassword,
+  resetPassword,
   getUsersByRole,
   getAllTechnicians,
   getCurrentUserProfile,
 } from "../controllers/user.controllers.js";
+
 import { verifyToken } from "../middlewares/auth.js";
 
 const router = Router();
@@ -21,6 +23,7 @@ router.post("/reset-password", resetPassword);
 // ================= PROTECTED ROUTES =================
 router.get("/profile", verifyToken, getCurrentUserProfile);
 
+// ================= ADMIN / USERS =================
 router.get("/technicians", getAllTechnicians);
 router.get("/role/:role", getUsersByRole);
 
