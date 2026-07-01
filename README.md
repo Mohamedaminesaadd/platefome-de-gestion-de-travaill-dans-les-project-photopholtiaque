@@ -8,7 +8,7 @@ A modern web platform for managing photovoltaic installation projects.
 
 B-Project is a complete photovoltaic project management platform that helps companies organize, monitor, and manage every phase of solar installation projects.
 
-The platform centralizes project information, customer management, task planning, documentation, equipment tracking, and team collaboration.
+The platform centralizes project information, customer management, task planning, documentation, equipment tracking, and team collaboration.and optimise the resource using machinelearning modeles 
 
 ---
 
@@ -33,6 +33,7 @@ The platform centralizes project information, customer management, task planning
 ## 🖥️ Dashboard
 
 ![Dashboard](images/dashAdmin1.png)
+![Dashboard](images/dashAdmin2.png)
 
 ---
 
@@ -51,8 +52,7 @@ The platform centralizes project information, customer management, task planning
 
 ---
 
-## 🗂️ 
-
+## Technicien plateforme
 ![Technicien_dashboard](images/dashtechnicien.png)
 
 ---
@@ -72,6 +72,11 @@ The platform centralizes project information, customer management, task planning
 - Node.js
 - Express.js
 - JWT Authentication
+- flask(fastapi)
+
+## machine learnig 
+  -scikit-learn
+  -pytorch
 
 ### Database
 
@@ -86,6 +91,7 @@ B-Project/
 │
 ├── frontend/
 ├── backend/
+├── MachineLearning
 ├── images/
 ├── README.md
 └── package.json
@@ -98,15 +104,15 @@ B-Project/
 Clone the repository
 
 ```bash
-git clone https://github.com/username/B-Project.git
+git clone https://github.com/Mohamedaminesaadd/platefome-de-gestion-de-travaill-dans-les-project-photopholtiaque.git
 ```
 
 Frontend
 
 ```bash
-cd frontend
+cd Frontend
 npm install
-ng serve
+ng serve -o
 ```
 
 Backend
@@ -114,37 +120,15 @@ Backend
 ```bash
 cd backend
 npm install
-npm start
+npm run dev
 ```
 
 ---
 
-## 📸 Screenshots
 
-### Login
-
-![Login](images/login.png)
-
-### Dashboard
-
-![Dashboard](images/dashboard.png)
-
-### Projects
-
-![Projects](images/projects.png)
-
-### Statistics
-
-![Statistics](images/statistics.png)
-
----
 
 ## 👨‍💻 Authors
 
 Developed as a university engineering project.
 
 ---
-
-## 📄 License
-
-MIT License.
